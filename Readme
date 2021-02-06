@@ -7,5 +7,16 @@ Premier fichier game jam 2021!
 
 Prérequis pour lancer le jeu:
 Python (préferable 3.9.1): https://www.python.org/downloads/
-Bibliothèque pygame: A venir
+Bibliothèque pygame : https://www.pygame.org/wiki/GettingStarted
+
+Conseil installation première fois: (WINDOWS)
+
+Télécharger python sur le site (penser à cocher le PATH)
+Créer dossier du jeu
+
+Dans ce dossier créer les librairies: py -3 -m venv librairie
+Puis les activer: librairie\scripts\activate
+
+Installer alors la Bibliothèque Pygame: py -m pip install -U pygame
+Faite le test de la librairie: py -m pygame.examples.aliens
 
