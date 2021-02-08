@@ -9,6 +9,9 @@ class Menu:
         self.buttonMenu = Boutton(290,400,245,80,"Settings")
         self.buttonQuit = Boutton(545,400,245,80,"Quit")
         self.background = pygame.transform.scale(pygame.image.load('../textures/mountain.jpg'),(screenWidth,screenHeight)) 
+        #Lancement de la musique
+        pygame.mixer.music.load('../sound/menu.wav')
+        pygame.mixer.music.play(-1) #pour tourner a l'infini
     
 
     def render(self,screen):
