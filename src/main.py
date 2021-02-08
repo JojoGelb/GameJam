@@ -11,8 +11,8 @@ from game import Game
 from menu import Menu
 
 #génération fenetre de jeu
-screenWidth = 1080
-screenHeight = 720
+screenWidth = 1024
+screenHeight = 768
 screen = pygame.display.set_mode((screenWidth,screenHeight))
 pygame.display.set_caption("Game")
 

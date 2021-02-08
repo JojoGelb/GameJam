@@ -12,12 +12,12 @@ class Player(pygame.sprite.Sprite):
         self.health = 100
         self.maxhealth = 100
         self.attack = 10
-        self.velocity = 5
+        self.velocity = 20
         self.playerXoffset = 0
         self.playerYoffset = 0
 
         #position du joueur par rapport à la carte [x,y] 0,0 = spawn
-        self.position = [0,0]
+        self.position = [2000,2000]
         
         #generation image
         try:
@@ -37,60 +37,39 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = screenHeight/2
 
     def render(self,screen):
-        screen.blit(self.image,(1080/2 -64 + self.playerXoffset,720/2 -64 + self.playerYoffset)) #affiche l'image du joueur à la position indiqué par le rectangle
+        screen.blit(self.image,(1080/2 -64+self.playerXoffset,720/2 -64)) #affiche l'image du joueur à la position indiqué par le rectangle
         print(self.position)
 
-    def move_left(self,mapBorderLeft,startOffset):
-        if(self.position[0] > startOffset):
-            self.changePlayerXOffset(-self.velocity)
-        
+    def move_left(self,mapBorderLeft):
         if(self.position[0] > mapBorderLeft):
-            if(self.position[0] < -startOffset):
-                self.changePlayerXOffset(-self.velocity)
             self.position[0] -= self.velocity
         else:
             print("can't left")
 
-
-    def move_right(self,mapBorderRight,startOffset):
-
-        if(self.position[0] < startOffset):
-            self.changePlayerXOffset(+self.velocity)
-        
+    def move_right(self,mapBorderRight):
         if(self.position[0] + self.rect.width/2 < mapBorderRight):
-            if(self.position[0] > -startOffset):
-                self.changePlayerXOffset(+self.velocity)
-
             self.position[0] += self.velocity
         else:
             print("can't right")
             
     
-    def move_up(self,mapBorderTop,startOffset):
-        if(self.position[1] < startOffset):
-            self.changePlayerYOffset(-self.velocity)
-            
+    def move_up(self,mapBorderTop):
+
         if(self.position[1] > mapBorderTop):
-            if(self.position[1] > -startOffset):
-                print("up")
-                self.changePlayerYOffset(-self.velocity)
+
             self.position[1] -= self.velocity
         else:
             print("can't up")
     
-    def move_down(self,mapBorderBottom,startOffset):
-        if(self.position[1] > startOffset):
-            self.changePlayerYOffset(+self.velocity)
+    def move_down(self,mapBorderBottom):
 
         if(self.position[1]+self.rect.height/2 < mapBorderBottom):
-            if(self.position[1] < -startOffset):
-                self.changePlayerYOffset(+self.velocity)
             self.position[1] += self.velocity
         else:
             print("can't down")
 
-    def changePlayerXOffset(self,value):
-        self.playerXoffset += value
+  #  def changePlayerXOffset(self,value):
+  #      self.playerXoffset += value
 
-    def changePlayerYOffset(self,value):
-        self.playerYoffset += value
+   # def changePlayerYOffset(self,value):
+   #     self.playerYoffset += value

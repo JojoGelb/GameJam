@@ -30,7 +30,7 @@ class SpriteSheet:
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size).convert()
         image.blit(self.sheet, (0, 0), rect)
-        image.set_colorkey((255,255,255))
+        image.set_colorkey((0,0,0))
         return image
 
     def images_at(self, rects, colorkey = None):
