@@ -28,8 +28,9 @@ GameState = "menu"
 clock = pygame.time.Clock() #très importantnb de frame par tick 
 
 while running:
+    
     clock.tick(80) #important
-
+    
     if(GameState == "menu"):
 
         menu.render(screen) #affichage menu

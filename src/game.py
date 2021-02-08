@@ -5,6 +5,8 @@ from entite import *
 class Game():
 
     def __init__(self,screenWidth,screenHeight):
+        
+
         #creation du stockage d'input
         self.pressed = {}
         
@@ -24,7 +26,10 @@ class Game():
         
         background = pygame.image.load("../textures/fondEcran.png")
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
-
+        #Lancement de la musique
+        pygame.mixer.music.load('../sound/music.wav')
+        pygame.mixer.music.play(-1) #pour tourner a l'infini
+    
 
 
 
