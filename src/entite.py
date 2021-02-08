@@ -90,7 +90,7 @@ class tomate(entite):
                 for j in range(4):
                     rect = (i*1120,j*1600,1120,1600)
                     tempSprite = sprite.image_at(rect)
-                    self.image.append(pygame.transform.scale(tempSprite,(80,160)))
+                    self.image.append(pygame.transform.scale(tempSprite,(128,256)))
 
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
@@ -101,6 +101,7 @@ class tomate(entite):
         self.rect.y = yy
         self.velocity = 3
 
+
     def render(self,screen,xOffset,yOffset):
 
         screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y)) #affiche l'image de l'entite à la position indiqué par ses coord
@@ -109,6 +110,11 @@ class tomate(entite):
 
         if(self.timer == 10):
             self.current=(self.current+1)%4
+
+            if self.current==2 or self.current==1:
+                self.velocity=5
+            else:
+                self.velocity=0
             self.timer = 0
         else:
             self.timer +=1
