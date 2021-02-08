@@ -15,6 +15,7 @@ class Game():
         self.player = Player(screenWidth,screenHeight)
 
         self.carot=carotte(2000,2000)
+        self.tomate=tomate(1000,1000)
         #Bordure de la map
         self.mapBorderLeft = 0
         self.mapBorderRight = 4000
@@ -42,6 +43,8 @@ class Game():
         self.keyPressed(screenWidth,screenHeight)
 
         self.carot.update(self.player.position[0],self.player.position[1])
+        self.tomate.update(self.player.position[0],self.player.position[1])
+
 
 
 
@@ -53,6 +56,7 @@ class Game():
         screen.blit(self.background,(self.xOffset,self.yOffset))
         
         self.carot.render(screen,self.xOffset,self.yOffset)
+        self.tomate.render(screen,self.xOffset,self.yOffset)
 
         self.player.render(screen)
     
