@@ -35,9 +35,7 @@ class Game():
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
 
-        #Lancement de la musique
-        pygame.mixer.music.load('../sound/music.wav')
-        pygame.mixer.music.play(-1) #pour tourner a l'infini
+        
     
     def update(self,screenWidth,screenHeight):
         #detection si la touche est enfoncé ou non => deplacement joueur
@@ -92,6 +90,9 @@ class Game():
             if event.type == pygame.QUIT:
                 return "Quit"
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                #Lancement de la musique
+                pygame.mixer.music.load('../sound/menu.wav')
+                pygame.mixer.music.play(-1) #pour tourner a l'infini
                 return "menu"
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_DOWN or event.key == pygame.K_UP):

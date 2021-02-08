@@ -32,8 +32,13 @@ class Menu:
             #if the mouse is clicked on the  
             # button the game is terminated  
                 if self.buttonPlay.click(mos_x,mos_y):  
+                    pygame.mixer.music.stop()
+                    #Lancement de la musique
+                    pygame.mixer.music.load('../sound/music.wav')
+                    pygame.mixer.music.play(-1) #pour tourner a l'infini
                     return "Play" #lance le jeu
                 if self.buttonMenu.click(mos_x,mos_y):
+                    pygame.mixer.music.stop()
                     return "Play"
                 if self.buttonQuit.click(mos_x,mos_y): 
                     return "Quit"
