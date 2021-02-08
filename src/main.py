@@ -41,7 +41,7 @@ while running:
 
     elif(GameState == "Play"):
         if(game == "null"):
-            game = Game(screenWidth, screenHeight)
+            game = Game(screenWidth, screenHeight,screen)
         
         game.render(screen,screenWidth,screenHeight)
         #detection si la touche est enfoncé ou non => deplacement joueur
