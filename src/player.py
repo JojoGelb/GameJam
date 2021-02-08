@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         self.health = 100
         self.maxhealth = 100
         self.attack = 10
-        self.velocity = 20
+        self.velocity = 10
         self.playerXoffset = 0
         self.playerYoffset = 0
 
@@ -37,34 +37,43 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = screenHeight/2
 
     def render(self,screen):
-        screen.blit(self.image,(1080/2 -64+self.playerXoffset,720/2 -64)) #affiche l'image du joueur à la position indiqué par le rectangle
-        print(self.position)
+        screen.blit(self.image,(1080/2 -64+self.playerXoffset,720/2 -64 + self.playerYoffset)) #affiche l'image du joueur à la position indiqué par le rectangle
+        #print(self.position)
 
-    def move_left(self,mapBorderLeft):
+    def move_left(self,mapBorderLeft,bord):
+        print(bord)
         if(self.position[0] > mapBorderLeft):
+            if(bord == True):
+                self.playerXoffset -= self.velocity
             self.position[0] -= self.velocity
         else:
             print("can't left")
 
-    def move_right(self,mapBorderRight):
+    def move_right(self,mapBorderRight,bord):
         if(self.position[0] + self.rect.width/2 < mapBorderRight):
+            if(bord == True):
+                self.playerXoffset += self.velocity
             self.position[0] += self.velocity
         else:
             print("can't right")
             
     
-    def move_up(self,mapBorderTop):
+    def move_up(self,mapBorderTop,bord):
 
         if(self.position[1] > mapBorderTop):
+            if(bord == True):
+                self.playerYoffset -= self.velocity
 
             self.position[1] -= self.velocity
         else:
             print("can't up")
     
-    def move_down(self,mapBorderBottom):
+    def move_down(self,mapBorderBottom,bord):
 
         if(self.position[1]+self.rect.height/2 < mapBorderBottom):
             self.position[1] += self.velocity
+            if(bord == True):
+                self.playerYoffset += self.velocity
         else:
             print("can't down")
 
