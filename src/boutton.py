@@ -4,7 +4,7 @@ import pygame
 class Boutton:
 
     def __init__(self,x,y,width,height,message):
-        self.image = pygame.transform.scale(pygame.image.load('textures/wood.jpg'),(width,height)) 
+        self.image = pygame.transform.scale(pygame.image.load('../textures/wood.jpg'),(width,height)) 
         smallfont = pygame.font.Font('freesansbold.ttf',50)
         self.text = smallfont.render(message , True , (250,250,250))
         self.rect = self.image.get_rect()

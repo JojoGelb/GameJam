@@ -8,7 +8,7 @@ class Menu:
         self.buttonPlay = Boutton(290,300,500,80,"Play")
         self.buttonMenu = Boutton(290,400,245,80,"Settings")
         self.buttonQuit = Boutton(545,400,245,80,"Quit")
-        self.background = pygame.transform.scale(pygame.image.load('textures/mountain.jpg'),(screenWidth,screenHeight)) 
+        self.background = pygame.transform.scale(pygame.image.load('../textures/mountain.jpg'),(screenWidth,screenHeight)) 
     
 
     def render(self,screen):

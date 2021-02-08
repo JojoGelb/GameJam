@@ -42,9 +42,9 @@ while running:
         if(game == "null"):
             game = Game(screenWidth, screenHeight)
         
-        game.render(screen)
+        game.render(screen,screenWidth,screenHeight)
         #detection si la touche est enfoncé ou non => deplacement joueur
-        game.keyPressed(screenWidth,screenHeight)
+        game.keyPressed()
 
         pygame.display.flip() #met à jour ce qu'il se trouve à l'écran
 
