@@ -14,6 +14,8 @@ class entite(pygame.sprite.Sprite):
         self.x = xx
         self.y = yy
         self.current=0
+        self.velocity = 1
+        self.timer = 0
 
 
                 
@@ -43,21 +45,41 @@ class carotte(entite):
         self.rect = self.image[0].get_rect()
         self.rect.x = xx
         self.rect.y = yy
+        self.velocity = 4
 
         
     def render(self,screen,xOffset,yOffset):
-        self.rect = self.image[self.current].get_rect()
-        self.rect.x = self.x
-        self.rect.y = self.y   
-        screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y)) #affiche l'image de l'entite à la position indiqué par ses coord
-        self.current=(self.current+1)%4
-            
 
+        screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y)) #affiche l'image de l'entite à la position indiqué par ses coord
+        
+            
+    def update(self,Xjoueur,Yjoueur):
+        
+        if(self.timer == 10):
+            self.current=(self.current+1)%4
+            self.timer = 0
+        else:
+            self.timer +=1
+
+        if(self.rect.x == Xjoueur and self.rect.y == Yjoueur):
+            None
+            #self.rect.x -= 400
+        else:
+
+            if(Xjoueur < self.rect.x):
+                self.rect.x -= self.velocity
+            elif(Xjoueur > self.rect.x):
+                self.rect.x += self.velocity
+            if(Yjoueur < self.rect.y):
+                self.rect.y -= self.velocity
+            elif(Yjoueur > self.rect.y):
+                self.rect.y += self.velocity
+            
 
 class tomate(entite):
 
-    def __init__(self,typeAttaque,vie,projectile,degats,typpe,x,y):
-        entite.__init__(self,typeAttaque,vie,projectile,degats,typpe,x,y)
+    def __init__(self,xx,yy):
+        entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy)
 
 
 

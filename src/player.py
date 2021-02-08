@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         self.health = 100
         self.maxhealth = 100
         self.attack = 10
-        self.velocity = 10
+        self.velocity = 20
         self.playerXoffset = 0
         self.playerYoffset = 0
 
@@ -41,7 +41,6 @@ class Player(pygame.sprite.Sprite):
         #print(self.position)
 
     def move_left(self,mapBorderLeft,bord):
-        print(bord)
         if(self.position[0] > mapBorderLeft):
             if(bord == True):
                 self.playerXoffset -= self.velocity

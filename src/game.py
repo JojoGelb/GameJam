@@ -19,39 +19,31 @@ class Game():
         self.mapBorderLeft = 0
         self.mapBorderRight = 4000
         self.mapBorderTop = 0
-        self.mapBorderBottom = 4000 #pbm
+        self.mapBorderBottom = 4000 
+
+        #décalage caméra
         self.xOffset = self.mapBorderLeft - self.player.position[0] + screenWidth/2
         self.yOffset = self.mapBorderTop - self.player.position[1] + screenHeight/2
+
+        #Pour gerer la camera du joueur
         self.bordVerticale=False
         self.bordHorizontale=False
         
         background = pygame.image.load("../textures/fondEcran.png")
-        lesDecors = SpriteSheet("../textures/decor.png")
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
+        #Chargement
+        #self.chargementGame(screen,screenWidth,screenHeight)
 
-
-        screen.fill((20,20,20))
-        compteur=0
-        font = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 36)
-        for undecor in range(1250):
-            rand=random.randrange(5)
-            if rand<2:
-                rand=random.randrange(4)
-            else:
-                rand=20-random.randrange(5,20)
-
-            self.background.blit(pygame.transform.scale(lesDecors.image_at((0,rand*1024,1024,1024)),(128,128)),(random.randrange(4000),random.randrange(4000)))
-            if undecor%12==0:
-                compteur+=1
-                text = font.render("chargement : "+str(compteur)+" % ", 1, (200,50,50))
-                screen.fill((20,20,20))
-                screen.blit(text, ((screenWidth/2)-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
-                pygame.display.flip()
         #Lancement de la musique
         pygame.mixer.music.load('../sound/music.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
     
+    def update(self,screenWidth,screenHeight):
+        #detection si la touche est enfoncé ou non => deplacement joueur
+        self.keyPressed(screenWidth,screenHeight)
+
+        self.carot.update(self.player.position[0],self.player.position[1])
 
 
 
@@ -109,3 +101,26 @@ class Game():
             elif event.type == pygame.KEYUP and (event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_DOWN or event.key == pygame.K_UP):
                 self.pressed[event.key] = False
         return "Play"
+
+    def chargementGame(self,screen,screenWidth,screenHeight):
+
+        lesDecors = SpriteSheet("../textures/decor.png")
+
+        screen.fill((20,20,20))
+        compteur=0
+        font = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 36)
+        for undecor in range(1250):
+            rand=random.randrange(5)
+            if rand<2:
+                rand=random.randrange(4)
+            else:
+                rand=20-random.randrange(5,20)
+
+            self.background.blit(pygame.transform.scale(lesDecors.image_at((0,rand*1024,1024,1024)),(128,128)),(random.randrange(4000),random.randrange(4000)))
+            if undecor%12==0:
+                compteur+=1
+                if compteur > 100 : compteur = 100
+                text = font.render("chargement : "+str(compteur)+" % ", 1, (200,50,50))
+                screen.fill((20,20,20))
+                screen.blit(text, ((screenWidth/2)-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+                pygame.display.flip()
