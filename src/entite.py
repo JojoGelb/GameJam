@@ -107,8 +107,8 @@ class tomate(entite):
 
 
             self.image=[]
-            for i in range(13):
-                rect = ((i+1)*350,0,350,500)
+            for i in range(14):
+                rect = (i*350,0,350,500)
                 tempSprite = sprite.image_at(rect)
                 self.image.append(pygame.transform.scale(tempSprite,(128,256)))
 
@@ -137,8 +137,10 @@ class tomate(entite):
     def update(self,Xjoueur,Yjoueur):
         if not self.alreadyKilled:
             if(self.timer == 10):
-                self.current=(self.current+1)%4
-
+                self.current=(self.current+1)%6
+                if self.current == 0:
+                    self.current += 1
+                    
                 if self.current>=2 and self.current<=6 or self.current>=9 and self.current<=12:
                     self.velocity=6
                 else:
@@ -146,6 +148,9 @@ class tomate(entite):
                 self.timer = 0
             else:
                 self.timer +=1
+                
+            self.mask = pygame.mask.from_surface(self.image[self.current])
+
 
             if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
                 None
