@@ -34,7 +34,7 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        #self.chargementGame(screen,screenWidth,screenHeight)
+        self.chargementGame(screen,screenWidth,screenHeight)
 
         
     
@@ -121,7 +121,7 @@ class Game():
             else:
                 rand=20-random.randrange(5,20)
 
-            self.background.blit(pygame.transform.scale(lesDecors.image_at((0,rand*1024,1024,1024)),(128,128)),(random.randrange(4000),random.randrange(4000)))
+                self.background.blit( pygame.transform.scale( pygame.transform.flip(lesDecors.image_at( (0,rand*1024,1024,1024) ),random.choice([True, False]),0) ,(128,128) ), (random.randrange(4000),random.randrange(4000)) )            
             if undecor%12==0:
                 compteur+=1
                 if compteur > 100 : compteur = 100
