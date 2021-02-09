@@ -49,6 +49,7 @@ class Game():
         self.keyPressed(screenWidth,screenHeight)
         for entite in range(len(self.entity)):
            self.entity[entite].update(self.player.position[0],self.player.position[1])
+        self.player.update()
 
 
 
@@ -79,14 +80,24 @@ class Game():
             self.bordVerticale = True
 
         #input de deplacement: on bouge le joueur
-        if(self.pressed.get(pygame.K_RIGHT)):
+        if(self.pressed.get(pygame.K_d)):
             self.player.move_right(self.mapBorderRight,self.bordHorizontale) #540 c'est screenWidth/2
-        if(self.pressed.get(pygame.K_LEFT)):
+        if(self.pressed.get(pygame.K_q)):
             self.player.move_left(self.mapBorderLeft,self.bordHorizontale)
-        if(self.pressed.get(pygame.K_DOWN)):
+        if(self.pressed.get(pygame.K_s)):
             self.player.move_down(self.mapBorderBottom,self.bordVerticale)
+        if(self.pressed.get(pygame.K_z)):
+            self.player.move_up(self.mapBorderTop,self.bordVerticale)
+
+        if(self.pressed.get(pygame.K_RIGHT)):
+            self.player.shoot_right(self.mapBorderRight)
+        if(self.pressed.get(pygame.K_LEFT)):
+            self.player.shoot_left(self.mapBorderLeft)
+        if(self.pressed.get(pygame.K_DOWN)):
+            self.player.shoot_down(self.mapBorderBottom)
         if(self.pressed.get(pygame.K_UP)):
-            self.player.move_up(self.mapBorderTop,self.bordVerticale) #-1640
+            self.player.shoot_up(self.mapBorderTop)
+        
         
         self.bordVerticale = False
         self.bordHorizontale = False
@@ -102,13 +113,13 @@ class Game():
                 #Lancement de la musique
                 pygame.mixer.music.load('../sound/menu.wav')
                 pygame.mixer.music.play(-1) #pour tourner a l'infini
+                pygame.mixer.music.set_volume(0.2)
                 return "menu"
             #enfoncement de touche
-            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_DOWN or event.key == pygame.K_UP):
+            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = True
-
             #Soulevement de touche
-            elif event.type == pygame.KEYUP and (event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_DOWN or event.key == pygame.K_UP):
+            elif event.type == pygame.KEYUP and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = False
         return "Play"
 
