@@ -1,6 +1,6 @@
 import pygame
 from spritesheet import SpriteSheet
-
+import random
 
 class entite(pygame.sprite.Sprite):
 
@@ -47,7 +47,9 @@ class carotte(entite):
         self.hitbox.x = xx
         self.hitbox.y = yy
         self.velocity = 4
-
+        self.drift = 10
+        self.driftdirx = 1
+        self.driftdiry = 1
         
     def render(self,screen,xOffset,yOffset):
         if self.orientation==1:
@@ -68,8 +70,16 @@ class carotte(entite):
             None
             #self.hitbox.x -= 400
         else:
-            
-            
+
+            if self.drift!=0:
+                self.hitbox.x += self.driftdirx*2
+                self.hitbox.y += self.driftdiry*2
+                self.drift-=1
+            else:
+                self.drift=random.randrange(20)
+                self.driftdirx = random.choice((-1,1))
+                self.driftdiry = random.choice((-1,1))
+
             if(Xjoueur < self.hitbox.x):
                 self.hitbox.x -= self.velocity
                 self.orientation=1
@@ -106,7 +116,8 @@ class tomate(entite):
         self.hitbox.x = xx
         self.hitbox.y = yy
         self.velocity = 3
-
+        self.drift = 10
+        self.driftdir = 1
 
     def render(self,screen,xOffset,yOffset):
         if self.orientation==0:
@@ -132,16 +143,31 @@ class tomate(entite):
             #self.hitbox.x -= 400
         else:
 
-            if(Xjoueur < self.hitbox.x):
-                self.hitbox.x -= self.velocity
-                self.orientation=1
-            elif(Xjoueur > self.hitbox.x):
-                self.hitbox.x += self.velocity
-                self.orientation=0
-            if(Yjoueur < self.hitbox.y):
-                self.hitbox.y -= self.velocity
-            elif(Yjoueur > self.hitbox.y):
-                self.hitbox.y += self.velocity
+            if self.drift==0:
+                self.drift=random.randrange(20)
+                self.driftdir = random.randrange(-5,5)
+            else:
+                self.drift-=1
+
+            if self.velocity != 0:
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.hitbox.y += self.driftdir
+
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.hitbox.y += self.driftdir
+
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                    self.hitbox.x += self.driftdir
+
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+                    self.hitbox.x += self.driftdir
+
 
 
 
