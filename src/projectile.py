@@ -48,8 +48,7 @@ class Projectile(pygame.sprite.Sprite):
             self.current += 1
         else:
             #print(self.distance,self.vitesse)
-            self.rect.x += self.vitesse
-            self.distance -= self.vitesse
+            self.move()
         if(self.current > 16):
             self.exist = False
             self.current = -1
@@ -58,4 +57,17 @@ class Projectile(pygame.sprite.Sprite):
     #Renvois l'entité si touché, False sinon
     def doesHit(self,entitie):
         return False
-                
+    
+    def move(self):
+        if(self.direction == "up"):
+            self.rect.y -= self.vitesse
+            self.distance -= self.vitesse
+        elif(self.direction == "down"):
+            self.rect.y += self.vitesse
+            self.distance -= self.vitesse
+        elif(self.direction == "left"):
+            self.rect.x -= self.vitesse
+            self.distance -= self.vitesse
+        elif(self.direction == "right"):
+            self.rect.x += self.vitesse
+            self.distance -= self.vitesse

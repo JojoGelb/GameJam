@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 10
         self.playerXoffset = 0
         self.playerYoffset = 0
+        self.cooldown = 30
 
         #variable de gestion de l'animation des sprites
         self.current = 0
@@ -39,7 +40,8 @@ class Player(pygame.sprite.Sprite):
         self.projectilPath = "../textures/OBUS.png"
 
         #Projectile
-        self.proj1 = Projectile(self.position[0],self.position[1],self.projectilPath,"up",1,10,1500)
+        self.projectiles = []
+        self.timer = 0
 
         
 
@@ -60,9 +62,40 @@ class Player(pygame.sprite.Sprite):
             self.moveRight = False
         #hitbox
         #pygame.draw.rect(screen,(250,250,250),(self.rect.x+self.playerXoffset,self.rect.y+self.playerYoffset,self.rect.width, self.rect.height))
-
-        self.proj1.render(screen,xOffset,yOffset)
+        for i in range(len(self.projectiles)):
+            self.projectiles[i].render(screen,xOffset,yOffset)
         
+
+    def update(self):
+        self.clearProjectiles()
+        self.timer +=1
+        
+
+    
+    def shoot_right(self,mapBorderRight):
+        if(self.timer >= self.cooldown):
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"right",10,10,1500)
+            self.projectiles.append(shoot)
+            self.timer = 0
+        
+    def shoot_left(self,mapBorderLeft):
+        if(self.timer >= self.cooldown):
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"left",10,10,1500)
+            self.projectiles.append(shoot)
+            self.timer = 0
+
+    def shoot_up(self,mapBorderDown):
+        if(self.timer >= self.cooldown):
+
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"up",10,10,1500)
+            self.projectiles.append(shoot)
+            self.timer = 0
+
+    def shoot_down(self,mapBorderUp):
+        if(self.timer >= self.cooldown):
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"down",10,10,1500)
+            self.projectiles.append(shoot)
+            self.timer = 0
 
     def move_left(self,mapBorderLeft,bord):
         self.moveSprite("Left")
@@ -115,6 +148,14 @@ class Player(pygame.sprite.Sprite):
                 self.playerYoffset = 0
         else:
             print("can't down")
+
+    def clearProjectiles(self):
+        #print(self.projectiles)
+        if (self.projectiles):
+            for i in range(len(self.projectiles)):
+                if(self.projectiles[i].exist == False):
+                    del self.projectiles[i]
+                    break
 
     def moveSprite(self,direction):
         if(direction == "Up"):
