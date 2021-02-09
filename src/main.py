@@ -8,7 +8,7 @@ import pygame
 pygame.init()
 
 from game import Game
-from menu import Menu
+from menu import *
 
 #génération fenetre de jeu
 screenWidth = 1024
@@ -22,7 +22,7 @@ running = True
 menu = Menu(screenWidth,screenHeight)
 #variable contenant le jeu
 game = "null"
-#etat du launcher : "Quit","menu","Play"
+#etat du launcher : "Quit","menu","Play",Bestiaire,Pause,Score,Credit
 GameState = "menu"
 
 clock = pygame.time.Clock() #très importantnb de frame par tick 
@@ -56,5 +56,14 @@ while running:
         #on ferme la fenetre si demande de quit
         running = False
         pygame.quit()
+    elif(GameState == "Bestiaire"):
+        bestiaire = bestiaire(screenWidth,screenHeight)
+        bestiaire.render(screen)
+        GameState = bestiaire.action(screenWidth,screenHeight)
+
+        pygame.display.flip()
+    elif(GameState == "Credit"):
+        credit = Credit(screenWidth,screenHeight)
+
 
     #print(GameState)

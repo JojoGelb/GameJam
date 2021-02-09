@@ -64,7 +64,7 @@ class Projectile(pygame.sprite.Sprite):
                 for entite in ennemisTouches:
                     entite.vie -= self.damage
                     if entite.vie <= 0:
-                        entite.killed = True
+                        entite.miseAMort() # tout va bien carotte n'a pas encore de mise à mort
                         print("Dead")
 
                 return True

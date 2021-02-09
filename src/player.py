@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
             self.projectiles[i].render(screen,xOffset,yOffset)
         
 
-    def update(self):
+    def update(self,entities):
         self.clearProjectiles()
         self.timer +=1
         for i in range(len(self.projectiles)):

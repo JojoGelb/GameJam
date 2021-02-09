@@ -18,8 +18,8 @@ class entite(pygame.sprite.Sprite):
         self.timer = 0
         self.orientation=0
         self.hitbox=None
-        self.killed = False
         self.alreadyKilled = False
+        self.exist = True
                 
 
 class carotte(entite):
@@ -128,6 +128,7 @@ class tomate(entite):
         self.mask = pygame.mask.from_surface(self.image[1])
 
 
+
     def render(self,screen,xOffset,yOffset):
         if self.orientation==0:
             screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
@@ -185,9 +186,14 @@ class tomate(entite):
             self.miseAMort()
 
     def miseAMort(self):
-
+        if(self.alreadyKilled == False):
+            self.alreadyKilled = True
+            self.timer = 0
         self.current= 0
-        self.alreadyKilled = False
+        self.timer += 1
+        if(self.timer >=50):
+            self.exist = False
+
 
 
 

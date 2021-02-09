@@ -252,7 +252,7 @@ class bestiaire:
             # button the game is terminated  
                 if self.buttonMenu.click(mos_x,mos_y):  
                     return "menu" #lance le jeu
-        return "bebes"
+        return "Bestiaire"
 
 class regles:
 

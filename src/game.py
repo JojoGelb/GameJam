@@ -36,19 +36,27 @@ class Game():
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
 
-        self.entity.append(carotte(2000,2000))
+        #self.entity.append(carotte(2000,2000))
         self.entity.append(tomate(1000,1000))
-        self.entity.append(carotte(500,500))
+        #self.entity.append(carotte(500,500))
         self.entity.append(tomate(600,600))
-        self.entity.append(carotte(3000,2000))
+        #self.entity.append(carotte(3000,2000))
         self.entity.append(tomate(1000,2000))
                
     
     def update(self,screenWidth,screenHeight):
         #detection si la touche est enfoncé ou non => deplacement joueur
         self.keyPressed(screenWidth,screenHeight)
-        for entite in range(len(self.entity)):
-           self.entity[entite].update(self.player.position[0],self.player.position[1])
+
+        for i in range(len(self.entity)):
+            if(self.entity[i].exist == False):
+                del self.entity[i]
+                break
+
+        for i in range(len(self.entity)):
+            self.entity[i].update(self.player.position[0],self.player.position[1])
+
+
         self.player.update(self.entity)
 
 
