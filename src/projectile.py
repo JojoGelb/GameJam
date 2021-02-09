@@ -32,7 +32,8 @@ class Projectile(pygame.sprite.Sprite):
         self.rect = self.image[0].get_rect()
         self.rect.x = x
         self.rect.y = y
-
+        self.mask = pygame.mask.from_surface(self.image[0])
+        
     def render(self,screen,xOffset,yOffset):
         if(self.exist != False):
             screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
@@ -40,6 +41,7 @@ class Projectile(pygame.sprite.Sprite):
 
     def update(self,entities):
         #for entities check si touché ou non temp = entitie touché
+        
         temp = self.doesHit(entities)
         if(temp != False):
             self.hasHit = True
