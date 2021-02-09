@@ -2,6 +2,7 @@
 
 import pygame
 from spritesheet import SpriteSheet
+from projectile import Projectile
 
 class Player(pygame.sprite.Sprite):
 
@@ -15,8 +16,11 @@ class Player(pygame.sprite.Sprite):
         self.velocity = 20
         self.playerXoffset = 0
         self.playerYoffset = 0
+
+        #variable de gestion de l'animation des sprites
         self.current = 0
 
+        #Variable d'enregistrement des actions joueurs: permet de reprendre les mouvements à current = 0
         self.moveRight = False
         self.moveLeft = False
         self.moveUp = False
@@ -25,16 +29,23 @@ class Player(pygame.sprite.Sprite):
         #position du joueur par rapport à la carte [x,y] 0,0 = spawn
         self.position = [2000,2000]
         
-        #generation image
+        #generation images
         self.generationSprite()
+        
+        self.rect = self.billy_Droite[0].get_rect()
+        self.rect.x = screenWidth/2 
+        self.rect.y = screenHeight/2
+
+        self.projectilPath = "../textures/OBUS.png"
+
+        #Projectile
+        self.proj1 = Projectile(self.position[0],self.position[1],self.projectilPath,1,5)
+
         
 
 
-        self.rect = self.billy_Droite[0].get_rect()
-        self.rect.x = screenWidth/2 + self.rect.width/2
-        self.rect.y = screenHeight/2 + self.rect.height/2
+    def render(self,screen,xOffset,yOffset):
 
-    def render(self,screen):
         if(self.moveRight ==False and self.moveDown==False and self.moveUp==False and self.moveLeft==False):
             self.current = 0
             screen.blit(self.billy_Gauche[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
@@ -47,28 +58,34 @@ class Player(pygame.sprite.Sprite):
         elif(self.moveRight == True):
             screen.blit(self.billy_Droite[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
             self.moveRight = False
-        
         #hitbox
         #pygame.draw.rect(screen,(250,250,250),(self.rect.x+self.playerXoffset,self.rect.y+self.playerYoffset,self.rect.width, self.rect.height))
 
+        self.proj1.render(screen,xOffset,yOffset)
         
 
     def move_left(self,mapBorderLeft,bord):
         self.moveSprite("Left")
         self.moveLeft = True
-        if(self.position[0] > mapBorderLeft - 30): #30 est une valeur arbitraire
+        if(self.position[0] > mapBorderLeft -10): #-10 est une valeur arbitraire
             if(bord == True):
                 self.playerXoffset -= self.velocity
+            else:
+                self.playerXoffset = 0
             self.position[0] -= self.velocity
         else:
             print("can't left")
+        
+        
 
     def move_right(self,mapBorderRight,bord):
         self.moveSprite("Right")
         self.moveRight = True
-        if(self.position[0] + self.rect.width*2 < mapBorderRight + 30): #30 est une valeur arbitraire
+        if(self.position[0] + self.rect.width*2 < mapBorderRight + 80): #80 est une valeur arbitraire
             if(bord == True):
                 self.playerXoffset += self.velocity
+            else:
+                self.playerXoffset = 0
             self.position[0] += self.velocity
         else:
             print("can't right")
@@ -78,9 +95,11 @@ class Player(pygame.sprite.Sprite):
 
         self.moveSprite("Up")
         self.moveUp = True
-        if(self.position[1] > mapBorderTop -30): # 30 est une valeur arbitraire
+        if(self.position[1] > mapBorderTop ):
             if(bord == True):
                 self.playerYoffset -= self.velocity
+            else:
+                self.playerYoffset = 0
 
             self.position[1] -= self.velocity
         else:
@@ -88,10 +107,12 @@ class Player(pygame.sprite.Sprite):
     
     def move_down(self,mapBorderBottom,bord):
 
-        if(self.position[1]+self.rect.height*2 < mapBorderBottom + 50 ): # 50 est une valeur arbitraire
+        if(self.position[1]+self.rect.height < mapBorderBottom -5): # 4 est une valeur arbitraire
             self.position[1] += self.velocity
             if(bord == True):
                 self.playerYoffset += self.velocity
+            else:
+                self.playerYoffset = 0
         else:
             print("can't down")
 
@@ -126,6 +147,9 @@ class Player(pygame.sprite.Sprite):
                 self.current +=1
             else:
                 self.current = 0
+
+
+    #generation des sprites et stockage 
     def generationSprite(self):
         try:
             sprite = SpriteSheet('../textures/BILLY_AVANCE.png')

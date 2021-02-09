@@ -58,7 +58,7 @@ class Game():
         self.carot.render(screen,self.xOffset,self.yOffset)
         self.tomate.render(screen,self.xOffset,self.yOffset)
 
-        self.player.render(screen)
+        self.player.render(screen,self.xOffset,self.yOffset)
     
     #Fonction de verification des inputs
     def keyPressed(self,screenWidth,screenHeight):

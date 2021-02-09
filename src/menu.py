@@ -36,6 +36,7 @@ class Menu:
                     #Lancement de la musique
                     pygame.mixer.music.load('../sound/music.wav')
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
+                    pygame.mixer.music.set_volume(0.05)
                     return "Play" #lance le jeu
                 if self.buttonMenu.click(mos_x,mos_y):
                     pygame.mixer.music.stop()
