@@ -69,7 +69,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.clearProjectiles()
         self.timer +=1
-        
+        for i in range(len(self.projectiles)):
+            self.projectiles[i].update(entities)
 
     
     def shoot_right(self,mapBorderRight):
