@@ -34,7 +34,7 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        self.chargementGame(screen,screenWidth,screenHeight)
+        #self.chargementGame(screen,screenWidth,screenHeight)
 
         
     
