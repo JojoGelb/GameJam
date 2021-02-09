@@ -14,8 +14,8 @@ class Game():
         #creation joueur
         self.player = Player(screenWidth,screenHeight)
 
-        self.carot=carotte(2000,2000)
-        self.tomate=tomate(1000,1000)
+        #array de mobs
+        self.entity=[]
         #Bordure de la map
         self.mapBorderLeft = 0
         self.mapBorderRight = 4000
@@ -34,16 +34,21 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        self.chargementGame(screen,screenWidth,screenHeight)
+        #self.chargementGame(screen,screenWidth,screenHeight)
 
-        
+        self.entity.append(carotte(2000,2000))
+        self.entity.append(tomate(1000,1000))
+        self.entity.append(carotte(500,500))
+        self.entity.append(tomate(600,600))
+        self.entity.append(carotte(3000,2000))
+        self.entity.append(tomate(1000,2000))
+               
     
     def update(self,screenWidth,screenHeight):
         #detection si la touche est enfoncé ou non => deplacement joueur
         self.keyPressed(screenWidth,screenHeight)
-
-        self.carot.update(self.player.position[0],self.player.position[1])
-        self.tomate.update(self.player.position[0],self.player.position[1])
+        for entite in range(len(self.entity)):
+           self.entity[entite].update(self.player.position[0],self.player.position[1])
 
 
 
@@ -55,8 +60,8 @@ class Game():
 
         screen.blit(self.background,(self.xOffset,self.yOffset))
         
-        self.carot.render(screen,self.xOffset,self.yOffset)
-        self.tomate.render(screen,self.xOffset,self.yOffset)
+        for entite in range(len(self.entity)):
+            self.entity[entite].render(screen,self.xOffset,self.yOffset)
 
         self.player.render(screen,self.xOffset,self.yOffset)
     

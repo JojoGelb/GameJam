@@ -17,7 +17,7 @@ class entite(pygame.sprite.Sprite):
         self.velocity = 1
         self.timer = 0
         self.orientation=0
-
+        self.hitbox=None
 
                 
 
@@ -43,17 +43,17 @@ class carotte(entite):
             raise SystemExit(e)
        
        
-        self.rect = self.image[0].get_rect()
-        self.rect.x = xx
-        self.rect.y = yy
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.x = xx
+        self.hitbox.y = yy
         self.velocity = 4
 
         
     def render(self,screen,xOffset,yOffset):
         if self.orientation==1:
-            screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.rect.x,yOffset+self.rect.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
 
             
     def update(self,Xjoueur,Yjoueur):
@@ -64,21 +64,22 @@ class carotte(entite):
         else:
             self.timer +=1
 
-        if(self.rect.x == Xjoueur and self.rect.y == Yjoueur):
+        if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
             None
-            #self.rect.x -= 400
+            #self.hitbox.x -= 400
         else:
-
-            if(Xjoueur < self.rect.x):
-                self.rect.x -= self.velocity
+            
+            
+            if(Xjoueur < self.hitbox.x):
+                self.hitbox.x -= self.velocity
                 self.orientation=1
-            elif(Xjoueur > self.rect.x):
-                self.rect.x += self.velocity
+            elif(Xjoueur > self.hitbox.x):
+                self.hitbox.x += self.velocity
                 self.orientation=0
-            if(Yjoueur < self.rect.y):
-                self.rect.y -= self.velocity
-            elif(Yjoueur > self.rect.y):
-                self.rect.y += self.velocity
+            if(Yjoueur < self.hitbox.y):
+                self.hitbox.y -= self.velocity
+            elif(Yjoueur > self.hitbox.y):
+                self.hitbox.y += self.velocity
 
 
 class tomate(entite):
@@ -100,47 +101,47 @@ class tomate(entite):
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
-        self.rect = self.image[0].get_rect()
-        self.rect.height = self.rect.height-150
-        self.rect.x = xx
-        self.rect.y = yy
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.height = self.hitbox.height-150
+        self.hitbox.x = xx
+        self.hitbox.y = yy
         self.velocity = 3
 
 
     def render(self,screen,xOffset,yOffset):
         if self.orientation==0:
-            screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.rect.x,yOffset+self.rect.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
 
     def update(self,Xjoueur,Yjoueur):
 
         if(self.timer == 10):
             self.current=(self.current+1)%4
 
-            if self.current>=3 and self.current<=6 or self.current>=9 and self.current<=12:
-                self.velocity=8
+            if self.current>=2 and self.current<=6 or self.current>=9 and self.current<=12:
+                self.velocity=6
             else:
                 self.velocity=0
             self.timer = 0
         else:
             self.timer +=1
 
-        if(self.rect.x == Xjoueur and self.rect.y == Yjoueur):
+        if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
             None
-            #self.rect.x -= 400
+            #self.hitbox.x -= 400
         else:
 
-            if(Xjoueur < self.rect.x):
-                self.rect.x -= self.velocity
+            if(Xjoueur < self.hitbox.x):
+                self.hitbox.x -= self.velocity
                 self.orientation=1
-            elif(Xjoueur > self.rect.x):
-                self.rect.x += self.velocity
+            elif(Xjoueur > self.hitbox.x):
+                self.hitbox.x += self.velocity
                 self.orientation=0
-            if(Yjoueur < self.rect.y):
-                self.rect.y -= self.velocity
-            elif(Yjoueur > self.rect.y):
-                self.rect.y += self.velocity
+            if(Yjoueur < self.hitbox.y):
+                self.hitbox.y -= self.velocity
+            elif(Yjoueur > self.hitbox.y):
+                self.hitbox.y += self.velocity
 
 
 
