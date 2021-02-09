@@ -25,17 +25,25 @@ game = "null"
 #etat du launcher : "Quit","menu","Play",Bestiaire,Pause,Score,Credit
 GameState = "menu"
 
+credit = Credit(screenWidth,screenHeight)
+
+menuRegle = regles(screenWidth,screenHeight)
+
+menuSoupe = Pause(screenWidth,screenHeight)
+
+bestiaire = bestiaire(screenWidth,screenHeight)
+
 clock = pygame.time.Clock() #très importantnb de frame par tick 
 
 while running:
+
+    pygame.display.flip() #met à jour ce qu'il se trouve à l'écran
     
     clock.tick(80) #important
     
     if(GameState == "menu"):
 
         menu.render(screen) #affichage menu
-
-        pygame.display.flip() #met à jour ce qu'il se trouve à l'écran
 
         GameState = menu.action(screenWidth,screenHeight)    
 
@@ -46,8 +54,6 @@ while running:
         game.render(screen,screenWidth,screenHeight)
 
         game.update(screenWidth,screenHeight)
-        
-        pygame.display.flip() #met à jour ce qu'il se trouve à l'écran
 
         #Ci dessous gestion des inputs
         GameState = game.action(screenWidth,screenHeight)
@@ -57,13 +63,21 @@ while running:
         running = False
         pygame.quit()
     elif(GameState == "Bestiaire"):
-        bestiaire = bestiaire(screenWidth,screenHeight)
         bestiaire.render(screen)
         GameState = bestiaire.action(screenWidth,screenHeight)
 
-        pygame.display.flip()
     elif(GameState == "Credit"):
-        credit = Credit(screenWidth,screenHeight)
+        credit.render(screen)
+        GameState=  credit.action()
+
+    elif(GameState == "Regles"):
+        menuRegle.render(screen)
+        GameState = menuRegle.action(screenWidth,screenHeight)
+    elif(GameState == "SoupeScreen"):
+        menuSoupe.render(screen)
+        GameState = menuSoupe.action(screenWidth,screenHeight)
 
 
+
+    
     #print(GameState)

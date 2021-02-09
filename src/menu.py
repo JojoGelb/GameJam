@@ -7,7 +7,7 @@ class Menu:
 
     def __init__(self,screenWidth, screenHeight):
         self.buttonPlay = Boutton(430,70,160,80,"Play")
-        self.buttonCredit = Boutton(0,708,120,60,"Credit")
+        self.buttonCredit = Boutton(0,708,120,60,"Credit") #possiblement retirable
         self.buttonRegles = Boutton(914,688,110,80,"regles")
         self.background = pygame.transform.scale(pygame.image.load('../textures/Menu1.png'),(screenWidth,screenHeight)) 
         #Lancement de la musique
@@ -17,9 +17,6 @@ class Menu:
 
     def render(self,screen):
         screen.blit(self.background, (0,0))
-        self.buttonPlay.render(screen)
-        self.buttonCredit.render(screen)
-        self.buttonRegles.render(screen)
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -38,9 +35,9 @@ class Menu:
                     pygame.mixer.music.load('../sound/music.wav')
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
                     pygame.mixer.music.set_volume(0.05)
-                    return "Play" #lance le jeu
+                    return "SoupeScreen" #return "Play" #lance le jeu
                 if self.buttonCredit.click(mos_x,mos_y):
-                    pygame.mixer.music.stop()
+                    #pygame.mixer.music.stop()
                     return "Credit"
                 if self.buttonRegles.click(mos_x,mos_y): 
                     return "Regles"
@@ -51,11 +48,6 @@ class Menu:
 class Pause:
 
     def __init__(self,screenWidth, screenHeight):
-        self.buttonBoire = Boutton(430,70,160,80,"Bu")
-        self.buttonPasBu = Boutton(415,180,190,50,"PasBu")
-        self.buttonQuit = Boutton(0,703,170,65,"Quit")
-        self.buttonUpgrade = Boutton(390,270,90,30,"Upgrade")
-        self.buttonBestiaire = Boutton(530,270,110,30,"Bestiare")
         self.background = pygame.transform.scale(pygame.image.load('../textures/Pause.png'),(screenWidth,screenHeight)) 
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
@@ -63,11 +55,6 @@ class Pause:
 
     def render(self,screen):
         screen.blit(self.background, (0,0))
-        self.buttonBestiaire.render(screen)
-        self.buttonBoire.render(screen)
-        self.buttonPasBu.render(screen)
-        self.buttonUpgrade.render(screen)
-        self.buttonQuit.render(screen)
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -80,30 +67,27 @@ class Pause:
             if event.type == pygame.MOUSEBUTTONDOWN:  
             #if the mouse is clicked on the  
             # button the game is terminated  
-                if self.buttonBoire.click(mos_x,mos_y):  
+                if mos_x> 430 and mos_x < 590 and mos_y > 70 and mos_y < 150:  
                     pygame.mixer.music.stop()
                     #Lancement de la musique
                     pygame.mixer.music.load('../sound/music.wav')
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
                     pygame.mixer.music.set_volume(0.05)
+                    print("rien ne se passe pour le moment: changement de jour + reset buff")
+                    return "SoupeScreen" #lance le jeu
+
+                elif mos_x> 415 and mos_x < 605 and mos_y > 180 and mos_y < 230:
                     return "Play" #lance le jeu
-                if self.buttonPasBu.click(mos_x,mos_y):
-                    pygame.mixer.music.stop()
-                    #Lancement de la musique
-                    pygame.mixer.music.load('../sound/music.wav')
-                    pygame.mixer.music.play(-1) #pour tourner a l'infini
-                    pygame.mixer.music.set_volume(0.05)
-                    return "Play" #lance le jeu
-                if self.buttonBestiaire.click(mos_x,mos_y):
-                    return "Bestiare"
-                if self.buttonUpgrade.click(mos_x,mos_y):
+                if mos_x> 530 and mos_x < 640 and mos_y > 270 and mos_y < 300:
+                    return "Bestiaire"
+                if mos_x> 390 and mos_x < 480 and mos_y > 270 and mos_y < 300:
                     return "Upgrade"
-                if self.buttonQuit.click(mos_x,mos_y): 
+                if mos_x> 0 and mos_x < 170 and mos_y > 703 and mos_y < 768:
                     return "Quit"
                     pygame.quit()
                 
 
-        return "pause"
+        return "SoupeScreen"
 
 class Score:
 
@@ -154,6 +138,7 @@ class Credit:
         self.text8 = smallfont.render("Pour la musique  :   \n Des gens randoms que juliens à volé " , True , (250,250,250))
         self.text9 = smallfont.render("                     \n Rick ashley" , True , (250,250,250))
         self.text10 = smallfont.render("                     \n J'aime " , True , (250,250,250))
+        self.textRetour = bigfont.render("RETOUR" , True , (250,250,250))
     
     def render(self,screen):
         screen.fill((20,0,0))
@@ -172,6 +157,26 @@ class Credit:
         screen.blit(self.text9,(70,475))
         screen.blit(self.text10,(70,500))
 
+        #pygame.draw.rect(screen,(250,0,0),(410,645,200,50))
+        screen.blit(self.textRetour,(425,650))
+        
+    
+    def action(self):
+
+        for event in pygame.event.get():
+            #ragequit
+            if event.type == pygame.QUIT:
+                return "Quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "menu"
+            
+            elif(event.type == pygame.MOUSEBUTTONDOWN):
+                mos_x, mos_y = pygame.mouse.get_pos()
+                if(mos_x > 410 and mos_x < 610 and mos_y > 645 and mos_y < 695):
+                    return "menu"
+            
+        return "Credit"
+
 
 class bestiaire:
 
@@ -179,13 +184,24 @@ class bestiaire:
         smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
         tinyfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',13)
         self.verybigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',100)
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
         background = pygame.image.load("../textures/fontbestiaire.png")
         self.background = pygame.transform.scale(background,(screenWidth+755,screenHeight+50))
+        self.titre = self.bigfont.render("Bestiaire" , True , (250,250,250))
+        self.retour = self.bigfont.render("Retour" , True , (250,250,250))
         
-        self.carotte = """attaque : au corp a corp ! se déplace :    viiiiite ! vie :           moyenne  !"""
-        self.tomate = """attaque : explose        ! se déplace : normalement ! vie :          moyenne+  !"""
-        self.ail = """attaque : au corp a corp ! se déplace :   lentement ! vie :           élevée   !"""
-        self.bananne = """attaque : 'cune idée     ! se déplace :    idunno   ! vie :           ptetre   !"""       
+        self.carotte = """attaque :  corps a corps !
+vitesse :       viiiiite !
+vie     :       moyenne  !"""
+        self.tomate  = """attaque :        explose !
+vitesse :    normalement ! 
+vie     :      moyenne+  !"""
+        self.ail     = """attaque : au corp a corp !
+vitesse :      lentement !
+vie     :         Tonk   !"""
+        self.bananne = """attaque : 'cune idée     !
+vitesse :       idunno   ! 
+vie     :       ptetre   !"""       
         x=50
         y=150
         i=0
@@ -224,7 +240,7 @@ class bestiaire:
         self.text2 = smallfont.render("LA TOMATE" , True , (250,250,250))
         self.text3 = smallfont.render("L'AIL" , True , (250,250,250))
         self.text4 = smallfont.render("LA BANANNE" , True , (250,250,250))
-        self.buttonMenu = Boutton(screenWidth*0.25,screenHeight*0.75,245,80,"Revenir à table")
+        #self.buttonMenu = Boutton(screenWidth*0.25,screenHeight*0.75,245,80,"Revenir à table")
     
 
     def render(self,screen):
@@ -237,7 +253,14 @@ class bestiaire:
         self.background.blit(self.imagetomate,(330,170))
         self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(610,300))
         self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(860,300))
-        self.background.blit(self.buttonMenu.text,(1024*0.25,768*0.75))
+
+        pygame.draw.rect(screen,(41,41,41),(750,0,200,50)) #chingchong
+
+        #pygame.draw.rect(screen,(0,0,0),(395,25,260,50))
+        screen.blit(self.titre,(400,25))
+        #pygame.draw.rect(screen,(0,0,0),(420,575,175,50))
+        screen.blit(self.retour,(425,575))
+        
  
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -247,19 +270,22 @@ class bestiaire:
             #ragequit
             if event.type == pygame.QUIT:
                 return "Quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "SoupeScreen"
             if event.type == pygame.MOUSEBUTTONDOWN:  
             #if the mouse is clicked on the  
             # button the game is terminated  
-                if self.buttonMenu.click(mos_x,mos_y):  
-                    return "menu" #lance le jeu
+                if  mos_x > 420 and mos_x < 595 and mos_y > 575 and mos_y < 625:
+                    return "SoupeScreen" 
         return "Bestiaire"
 
 class regles:
 
     def __init__(self,screenWidth,screenHeight):
         self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
-        self.tinyfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',13)
-        self.verybigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        self.titrePage = self.bigfont.render("Règles" , True , (250,250,250))
+        self.boutonRetour = self.bigfont.render("RETOUR" , True , (250,250,250))
         self.rules = """
                     [utilisez Z-Q-S-D pour vous déplacer]
 
@@ -295,21 +321,21 @@ class regles:
 
        [un score élevé signifie que vous avez longtemps cauchemardé] """
 
-
-        self.buttonMenu = Boutton(screenWidth*0.25,screenHeight*0.75,245,80,"Revenir à table")
-    
+        
 
     def render(self,screen):
         screen.fill((20,20,20))
         i=0
         x=-45
-        y=5
+        y=100
         for ligne in self.rules.splitlines():
             i+=1
-            screen.blit(self.smallfont.render(ligne,1,(200,50,50)),(x,y+i*20))
+            screen.blit(self.smallfont.render(ligne,1,(200,50,50)),(x,y+i*15))
 
+        screen.blit(self.titrePage,(425,50))
+        #pygame.draw.rect(screen,(250,0,0),(410,670,200,50))
+        screen.blit(self.boutonRetour,(425,675))
 
-        screen.blit(self.buttonMenu.text,(1024*0.25,768*0.75))
  
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -319,9 +345,11 @@ class regles:
             #ragequit
             if event.type == pygame.QUIT:
                 return "Quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "menu"
             if event.type == pygame.MOUSEBUTTONDOWN:  
             #if the mouse is clicked on the  
             # button the game is terminated  
-                if self.buttonMenu.click(mos_x,mos_y):  
-                    return "menu" #lance le jeu
-        return "bebes"
+                if(mos_x> 425 and mos_x < 610 and mos_y > 670 and mos_y < 720):
+                    return "menu"
+        return "Regles"
