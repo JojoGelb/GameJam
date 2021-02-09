@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.health = 100
         self.maxhealth = 100
         self.attack = 10
-        self.velocity = 20
+        self.velocity = 10
         self.playerXoffset = 0
         self.playerYoffset = 0
 
@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.projectilPath = "../textures/OBUS.png"
 
         #Projectile
-        self.proj1 = Projectile(self.position[0],self.position[1],self.projectilPath,1,5)
+        self.proj1 = Projectile(self.position[0],self.position[1],self.projectilPath,"up",1,10,1500)
 
         
 
@@ -119,12 +119,14 @@ class Player(pygame.sprite.Sprite):
     def moveSprite(self,direction):
         if(direction == "Up"):
             if(self.moveLeft ==True or self.moveDown == True or self.moveRight == True):
-                self.current = 0
+                self.current 
                 self.moveLeft =False
                 self.moveDown= False
                 self.moveUp= False
-            if(self.current > 4):
+            if(self.current > 2):
                 self.current = 0
+            else:
+                self.current += 1
         elif(direction == "Right"):
             if(self.moveLeft ==True or self.moveDown == True or self.moveUp == True):
                 self.current = 0
