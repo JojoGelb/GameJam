@@ -49,7 +49,7 @@ class Game():
         self.keyPressed(screenWidth,screenHeight)
         for entite in range(len(self.entity)):
            self.entity[entite].update(self.player.position[0],self.player.position[1])
-        self.player.update()
+        self.player.update(self.entity)
 
 
 
