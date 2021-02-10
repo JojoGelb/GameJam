@@ -44,7 +44,7 @@ class Game():
      
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
-
+        self.chargementSprite()
         #self.entity.append(carotte(2000,2000))
         #self.entity.append(tomate(1000,1000))
         #self.entity.append(carotte(500,500))
@@ -68,7 +68,7 @@ class Game():
                     self.current_wave = self.wavesStat[self.waves]
                     self.engame = False        
         else:
-            wave_enemies = [carotte(random.randrange(0,4000),0),tomate(0,random.randrange(0,4000))] #définition des types d'énemies et point d'apparition
+            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate)] #définition des types d'énemies et point d'apparition
             for i in range(len(self.current_wave)):
                 if self.current_wave[i] != 0:
                     self.entity.append(wave_enemies[i]) #ajout
@@ -212,3 +212,44 @@ class Game():
                 screen.fill((20,20,20))
                 screen.blit(text, ((screenWidth/2)-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
                 pygame.display.flip()
+
+    def chargementSprite(self):
+        
+        self.spriteCarrote=[]
+        self.spriteCarroteDeath=[]
+        self.spriteTomate=[]
+        #self.spriteTomateDeath=[]
+
+        
+        #Sprite Carotte
+        try:
+            spriteCarrote = SpriteSheet('../textures/Carotte.png')
+            spriteCarroteDeath = SpriteSheet('../textures/Carottedodo.png') 
+
+            for i in range(2):
+                for j in range(2):
+                    rect = (i*416,j*1024,416,1024)
+                    tempSprite = spriteCarrote.image_at(rect)
+                    self.spriteCarrote.append(pygame.transform.scale(tempSprite,(64,160)))
+
+            for i in range(4):
+                rect = (0,i*1024,416,1024)
+                tempSprite = spriteCarroteDeath.image_at(rect)
+                self.spriteCarroteDeath.append(pygame.transform.scale(tempSprite,(64,160)))
+
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+        #Sprite Tomate
+        try:
+            spriteTomate = SpriteSheet('../textures/elTomaty.png')
+
+            for i in range(14):
+                rect = (i*350,0,350,500)
+                tempSprite = spriteTomate.image_at(rect)
+                self.spriteTomate.append(pygame.transform.scale(tempSprite,(128,256)))
+
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
