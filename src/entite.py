@@ -52,9 +52,9 @@ class carotte(entite):
 
     def render(self,screen,xOffset,yOffset):
         if self.orientation==1:
-            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y)) #affiche l'image de l'entite à la position indiqué par ses coord
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y)) #affiche l'image de l'entite à la position indiqué par ses coord
 
             
     def update(self,Xjoueur,Yjoueur):
@@ -122,7 +122,7 @@ class tomate(entite):
 
         #hit box ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
-        self.hitbox.height = self.hitbox.height-100
+        self.hitbox.height = self.hitbox.height-120
         self.hitbox.x = xx
         self.hitbox.y = yy
         #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
@@ -135,14 +135,16 @@ class tomate(entite):
         self.driftdir = 1
         self.current = 1
 
+        
+
 
 
 
     def render(self,screen,xOffset,yOffset):
         if self.orientation==0:
-            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-120)) #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
 
     def update(self,Xjoueur,Yjoueur):
         if not self.alreadyKilled:
@@ -207,6 +209,98 @@ class tomate(entite):
         if(self.timer >=50):
             self.exist = False
 
+class banane(entite):
+    #Instanciation de l'entité banane
+    def __init__(self,xx,yy,sprite):
+        entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
+
+        
+
+        #Gold de la banane :
+        self.gold= 20
+
+        #hitbox ( anciennement rect )
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.x = xx
+        self.hitbox.y = yy
+
+        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
+        self.rect = self.hitbox
+        self.mask = pygame.mask.from_surface(self.image[0])
+
+        #valeures propre a la banane:
+        self.velocity = 1
+        self.drift = 0
+        self.driftdirx = 1
+        self.driftdiry = 1
+
+
+    def render(self,screen,xOffset,yOffset):
+        #Ligne test hitbox
+            #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+
+        if self.orientation==1:
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))                             #affiche l'image de l'entite à la position indiqué par ses coord
+        else:
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
+
+
+    def update(self,Xjoueur,Yjoueur):
+
+        if not self.alreadyKilled:
+
+            if(self.timer == 10):
+                self.current=(self.current+1)%4
+                self.timer = 0
+            else:
+                self.timer +=1
+
+            self.mask = pygame.mask.from_surface(self.image[self.current])
+
+            if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
+                None
+                #self.hitbox.x -= 400
+            else:
+
+                if self.drift!=0:
+                    self.hitbox.x += self.driftdirx*2
+                    self.hitbox.y += self.driftdiry*2
+                    self.drift-=1
+                else:
+                    self.drift=random.randrange(20)
+                    self.driftdirx = random.choice((-1,1))
+                    self.driftdiry = random.choice((-1,1))
+
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+        else:
+            self.miseAMort()
+
+
+    def miseAMort(self):
+
+        death_sound = pygame.mixer.Sound("../sound/splat.wav")
+
+        if(self.alreadyKilled == False):
+
+            death_sound.set_volume(0.1)
+            pygame.mixer.Sound.play(death_sound)
+            self.alreadyKilled = True
+            self.timer = 0
+            self.current = 0
+
+        self.timer += 1
+        self.image[self.current].set_alpha(200-self.timer)
+        if(self.timer >=50):
+            self.exist = False
 
 
 

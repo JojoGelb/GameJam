@@ -53,7 +53,7 @@ class Game():
         #self.entity.append(tomate(1000,2000))
 
         #Gérer les vagues
-        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0, 0],[3, 5, 0],[5, 3, 0],[7, 2, 0],[1, 8, 0],[0, 0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]]
+        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]]
         self.waves = 0
         self.current_wave = self.wavesStat[self.waves]
         self.engame = True
@@ -68,7 +68,7 @@ class Game():
                     self.current_wave = self.wavesStat[self.waves]
                     self.engame = False        
         else:
-            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate)] #définition des types d'énemies et point d'apparition
+            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate),banane(random.randrange(0,4000),4000,self.spriteBanane)] #définition des types d'énemies et point d'apparition
             for i in range(len(self.current_wave)):
                 if self.current_wave[i] != 0:
                     self.entity.append(wave_enemies[i]) #ajout
@@ -218,6 +218,7 @@ class Game():
         self.spriteCarrote=[]
         self.spriteCarroteDeath=[]
         self.spriteTomate=[]
+        self.spriteBanane=[]
         #self.spriteTomateDeath=[]
 
         
@@ -252,4 +253,14 @@ class Game():
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+        #Sprite Banane
+        try:
+            spriteBanane = SpriteSheet('../textures/Banane.png')
 
+            for i in range(4):
+                rect = (i*350,0,350,350)
+                tempSprite = spriteBanane.image_at(rect)
+                self.spriteBanane.append(pygame.transform.scale(tempSprite,(256,256)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
