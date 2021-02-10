@@ -243,8 +243,11 @@ class banane(entite):
 
         #hitbox ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
-        self.hitbox.x = xx
+        self.hitbox.x = xx 
         self.hitbox.y = yy
+
+        self.hitbox.width -= 100
+        self.hitbox.height -= 10
 
         #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
         self.rect = self.hitbox
@@ -259,12 +262,12 @@ class banane(entite):
 
     def render(self,screen,xOffset,yOffset):
         #Ligne test hitbox
-            #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
 
         if self.orientation==1:
-            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))                             #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))                             #affiche l'image de l'entite à la position indiqué par ses coord
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
+            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x-50,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
 
 
     def update(self,entities):
