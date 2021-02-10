@@ -94,7 +94,7 @@ class Game():
 
         for i in range(len(self.entity)):
             self.entity[i].update(self.player.position[0],self.player.position[1])
-            
+        
             #Détection des collisions des ennemis avec le joueurs : NE MARCHE PAS ENCORE
             #if pygame.sprite.collide_mask(self.player, self.entity[i]):
             #print(pygame.sprite.collide_mask(self.entity[2], self.entity[i]))
