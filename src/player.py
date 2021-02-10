@@ -60,8 +60,6 @@ class Player(pygame.sprite.Sprite):
 
     def render(self,screen,xOffset,yOffset):
 
-        pygame.draw.rect(screen,(0,0,0),(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset,self.rect.width,self.rect.height))
-
 
         if(self.moveRight ==False and self.moveDown==False and self.moveUp==False and self.moveLeft==False):
             self.current = 0

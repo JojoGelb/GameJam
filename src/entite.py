@@ -262,7 +262,7 @@ class banane(entite):
 
     def render(self,screen,xOffset,yOffset):
         #Ligne test hitbox
-        pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
 
         if self.orientation==1:
             screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))                             #affiche l'image de l'entite à la position indiqué par ses coord

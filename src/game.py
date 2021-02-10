@@ -46,7 +46,7 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        #self.chargementGame(screen,screenWidth,screenHeight)
+        self.chargementGame(screen,screenWidth,screenHeight)
         self.chargementSprite()
         #self.entity.append(carotte(2000,2000))
         #self.entity.append(tomate(1000,1000))
@@ -60,7 +60,7 @@ class Game():
         #Array de build
         self.builds = []
         #Gérer les vagues
-        self.wavesStat = [[ 20, 20 , 100],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
+        self.wavesStat = [[ 5, 2 , 1],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
         self.waves = 0
         self.current_wave = self.wavesStat[self.waves]
         self.engame = True

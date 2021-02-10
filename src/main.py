@@ -90,6 +90,7 @@ while running:
 
 
     elif(GameState == "End"):
+
         if playerScore<game.score:
             playerScore=game.score
         if(menuEnd == "null"):
@@ -99,6 +100,7 @@ while running:
     elif(GameState == "restart"):
         #Enclencher la sauvegarde
         game = "null"
+        primeravez=0
         menu = Menu(screenWidth,screenHeight)
         menuSoupe = Pause(screenWidth,screenHeight)
         menuEnd = "null"
