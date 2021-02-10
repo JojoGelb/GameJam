@@ -52,6 +52,8 @@ class Game():
         #self.entity.append(carotte(3000,2000))
         #self.entity.append(tomate(1000,2000))
 
+        self.listempo = []
+        self.listempo.append(self.player)
         #Array de build
         self.builds = []
         #Gérer les vagues
@@ -103,7 +105,7 @@ class Game():
         EntiteDead = []
 
         for i in range(len(self.entity)):
-            self.entity[i].update(self.player.position[0],self.player.position[1])
+            self.entity[i].update(self.listempo)
         
             #Détection des collisions des ennemis avec le joueurs : NE MARCHE PAS ENCORE
             #if pygame.sprite.collide_mask(self.player, self.entity[i]):
@@ -196,8 +198,10 @@ class Game():
                 self.engame = True
             #Créer un build
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-                if self.player.gold >= 200:
+                if self.player.barreCompetence.morClicable:
+                    self.player.gold -= 200
                     self.builds.append(mortier(self.player.position[0],self.player.position[1],0,0,0,0))
+                    
             #elif event.type == pygame.KEYDOM and event.key == pygame.K_e:
             #    self.builds.append(mur(self.player.position[0],self.player.position[1],0,0,0,0))
             #enfoncement de touche

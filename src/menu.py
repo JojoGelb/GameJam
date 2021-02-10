@@ -99,16 +99,16 @@ class Pause:
             if event.type == pygame.MOUSEBUTTONDOWN:  
             #if the mouse is clicked on the  
             # button the game is terminated  
-                if mos_x> 430 and mos_x < 590 and mos_y > 70 and mos_y < 150:  
+                if mos_x> 430 and mos_x < 590 and mos_y > 70 and mos_y < 150: #Bouton boire 
                     pygame.mixer.music.stop()
                     #Lancement de la musique
                     pygame.mixer.music.load('../sound/music.wav')
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
                     pygame.mixer.music.set_volume(0.05)
                     print("rien ne se passe pour le moment: changement de jour + reset buff")
-                    return "SoupeScreen" #lance le jeu
+                    return "SoupeScreen" #Bouton boire
 
-                elif mos_x> 415 and mos_x < 605 and mos_y > 180 and mos_y < 230:
+                elif mos_x> 415 and mos_x < 605 and mos_y > 180 and mos_y < 230: #bouton pas boire
                     return "Play" #lance le jeu
                 if mos_x> 530 and mos_x < 640 and mos_y > 270 and mos_y < 300:
                     return "Bestiaire"

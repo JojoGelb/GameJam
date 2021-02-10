@@ -57,7 +57,9 @@ class carotte(entite):
             screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y)) #affiche l'image de l'entite à la position indiqué par ses coord
 
             
-    def update(self,Xjoueur,Yjoueur):
+    def update(self,entities):
+        Xjoueur = entities[0].position[0]
+        Yjoueur = entities[0].position[1]
         if not self.alreadyKilled:
             if(self.timer == 10):
                 self.current=(self.current+1)%4
@@ -65,34 +67,43 @@ class carotte(entite):
             else:
                 self.timer +=1
                 
-            self.mask = pygame.mask.from_surface(self.image[self.current])
+            #self.mask = pygame.mask.from_surface(self.image[self.current])
 
-            if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
-                None
-                #self.hitbox.x -= 400
+            for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            entities[0].vie -= self.degats
+                            if(entities[0].vie <= 0):
+                                entities[0].isDead = True
+                    else: #puis les objets
+                        None #faire pour objet plaçable
+
+            if self.drift!=0:
+                self.hitbox.x += self.driftdirx*2
+                self.hitbox.y += self.driftdiry*2
+                self.drift-=1
             else:
-
-                if self.drift!=0:
-                    self.hitbox.x += self.driftdirx*2
-                    self.hitbox.y += self.driftdiry*2
-                    self.drift-=1
-                else:
-                    self.drift=random.randrange(20)
-                    self.driftdirx = random.choice((-1,1))
-                    self.driftdiry = random.choice((-1,1))
-
-                if(Xjoueur < self.hitbox.x):
-                    self.hitbox.x -= self.velocity
-                    self.orientation=1
-                elif(Xjoueur > self.hitbox.x):
-                    self.hitbox.x += self.velocity
-                    self.orientation=0
-                if(Yjoueur < self.hitbox.y):
-                    self.hitbox.y -= self.velocity
-                elif(Yjoueur > self.hitbox.y):
-                    self.hitbox.y += self.velocity
+                self.drift=random.randrange(20)
+                self.driftdirx = random.choice((-1,1))
+                self.driftdiry = random.choice((-1,1))
+            if(Xjoueur < self.hitbox.x):
+                self.hitbox.x -= self.velocity
+                self.orientation=1
+            elif(Xjoueur > self.hitbox.x):
+                self.hitbox.x += self.velocity
+                self.orientation=0
+            if(Yjoueur < self.hitbox.y):
+                self.hitbox.y -= self.velocity
+            elif(Yjoueur > self.hitbox.y):
+                self.hitbox.y += self.velocity
         else:
             self.miseAMort()
+
+    def damage(self,entite):
+        entite.vie -= self.degats
+        if(entite.vie <= 0):
+            entite.exist = False
+            print("Destroy")
     
     def miseAMort(self):
         death_sound = pygame.mixer.Sound("../sound/splat.wav")
@@ -146,7 +157,9 @@ class tomate(entite):
         else:
             screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
 
-    def update(self,Xjoueur,Yjoueur):
+    def update(self,entities):
+        Xjoueur = entities[0].position[0]
+        Yjoueur = entities[0].position[1]
         if not self.alreadyKilled:
             if(self.timer == 10):
                 self.current=(self.current+1)%6
@@ -245,7 +258,10 @@ class banane(entite):
             screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
 
 
-    def update(self,Xjoueur,Yjoueur):
+    def update(self,entities):
+
+        Xjoueur = entities[0].position[0]
+        Yjoueur = entities[0].position[1]
 
         if not self.alreadyKilled:
 
@@ -301,25 +317,3 @@ class banane(entite):
         self.image[self.current].set_alpha(200-self.timer)
         if(self.timer >=50):
             self.exist = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

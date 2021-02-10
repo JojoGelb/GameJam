@@ -3,6 +3,7 @@
 import pygame
 from spritesheet import SpriteSheet
 from projectile import Projectile
+from barreComp import *
 
 class Player(pygame.sprite.Sprite):
 
@@ -10,7 +11,7 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self,screenWidth,screenHeight):
         super().__init__()
-        self.health = 100
+        self.vie = 100
         self.maxhealth = 100
         self.attack = 10
         self.velocity = 10
@@ -19,6 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.cooldown = 30
         self.gold = 100
         self.isDead = False
+        self.potate = 10
 
         #variable de gestion de l'animation des sprites
         self.current = 0
@@ -49,8 +51,11 @@ class Player(pygame.sprite.Sprite):
         self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',35)
         self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
 
-        
+        self.barreCompetence=barreComp(screenWidth,screenHeight)
 
+
+
+        
 
     def render(self,screen,xOffset,yOffset):
 
@@ -73,9 +78,15 @@ class Player(pygame.sprite.Sprite):
 
         self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
         screen.blit(self.affichageGold,(825,10))
+
+        self.barreCompetence.render(screen)
+
         
 
     def update(self,entities):
+
+        self.barreCompetence.update(self.gold)
+
         self.clearProjectiles()
         self.timer +=1
         for i in range(len(self.projectiles)):
