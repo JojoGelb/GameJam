@@ -23,13 +23,16 @@ class Game():
         self.modifGold = 1
         self.modifDeg = 1
         self.modifPV = 1
+
+        self.score=0
         #array de mobs
         self.entity=[]
         #Bordure de la map
         self.mapBorderLeft = 0
         self.mapBorderRight = 4000
         self.mapBorderTop = 0
-        self.mapBorderBottom = 4000 
+        self.mapBorderBottom = 4000
+
 
         #décalage caméra
         self.xOffset = self.mapBorderLeft - self.player.position[0] + screenWidth/2
@@ -57,7 +60,7 @@ class Game():
         #Array de build
         self.builds = []
         #Gérer les vagues
-        self.wavesStat = [[ 3, 0 , 1],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
+        self.wavesStat = [[ 20, 20 , 100],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
         self.waves = 0
         self.current_wave = self.wavesStat[self.waves]
         self.engame = True
@@ -117,6 +120,7 @@ class Game():
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
                 self.player.gold +=  self.entity[i].gold*self.modifGold
+                self.score += self.entity[i].gold*self.modifGold
                 
 
         for entite in EntiteDead:

@@ -17,6 +17,7 @@ screen = pygame.display.set_mode((screenWidth,screenHeight))
 pygame.display.set_caption("Game")
 
 running = True
+primeravez=0
 
 #creation du menu
 menu = Menu(screenWidth,screenHeight)
@@ -35,7 +36,7 @@ bestiaire = bestiaire(screenWidth,screenHeight)
 
 menuEnd = "null"
 
-playerScore = ""
+playerScore = 0
 
 clock = pygame.time.Clock() #très importantnb de frame par tick 
 
@@ -52,6 +53,7 @@ while running:
         GameState = menu.action(screenWidth,screenHeight)    
 
     elif(GameState == "Play"):
+        primeravez=1
         if(game == "null"):
             game = Game(screenWidth, screenHeight,screen)
         
@@ -77,12 +79,21 @@ while running:
     elif(GameState == "Regles"):
         menuRegle.render(screen)
         GameState = menuRegle.action(screenWidth,screenHeight)
+
     elif(GameState == "SoupeScreen"):
+   
         menuSoupe.render(screen)
+        if primeravez==1:
+            if playerScore<game.score:
+                playerScore=game.score
         GameState = menuSoupe.action(screenWidth,screenHeight)
+
+
     elif(GameState == "End"):
+        if playerScore<game.score:
+            playerScore=game.score
         if(menuEnd == "null"):
-            menuEnd = Score(screenWidth,screenHeight,game.player.gold)
+            menuEnd = Score(screenWidth,screenHeight,playerScore)
         menuEnd.render(screen)
         GameState = menuEnd.action(screenWidth,screenHeight)
     elif(GameState == "restart"):

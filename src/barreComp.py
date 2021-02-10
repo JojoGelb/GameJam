@@ -38,7 +38,6 @@ class barreComp(pygame.sprite.Sprite):
         screen.blit(self.mormor,(int(self.screenWidth*0.29),int(self.screenHeight*0.89)))
         screen.blit(self.mormorT,(int(self.screenWidth*0.29),int(self.screenHeight*0.92)))
         viepourc=100-int(((vie*100)/self.VieMax))
-        print(viepourc)
         pygame.draw.rect(screen,(41,41,41),(self.screenWidth*0.90-viepourc*2.4,self.screenHeight*0.88,viepourc*2.4,70))
 
         
