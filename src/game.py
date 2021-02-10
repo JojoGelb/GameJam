@@ -36,12 +36,16 @@ class Game():
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
 
-        #self.entity.append(carotte(2000,2000))
+        self.entity.append(carotte(2000,2000))
         self.entity.append(tomate(1000,1000))
-        #self.entity.append(carotte(500,500))
+        self.entity.append(carotte(500,500))
         self.entity.append(tomate(600,600))
-        #self.entity.append(carotte(3000,2000))
+        self.entity.append(carotte(3000,2000))
         self.entity.append(tomate(1000,2000))
+
+        #Liste des entités mortes au combat
+        self.deadList = []
+        
                
     
     def update(self,screenWidth,screenHeight):
@@ -53,8 +57,26 @@ class Game():
                 del self.entity[i]
                 break
 
+        #Dans la fonction upgrade
+        EntiteDead = []
+
         for i in range(len(self.entity)):
             self.entity[i].update(self.player.position[0],self.player.position[1])
+            
+            #Détection des collisions des ennemis avec le joueurs : NE MARCHE PAS ENCORE
+            #if pygame.sprite.collide_mask(self.player, self.entity[i]):
+            #print(pygame.sprite.collide_mask(self.entity[2], self.entity[i]))
+
+
+        #Si dans la liste des entités, une entités est morte en jeu, on l'ajoute dans la liste des entités mortes + on l'enlève de la liste des entités vivantes
+            if not self.entity[i].exist:
+                self.deadList.append(self.entity[i])
+                EntiteDead.append(self.entity[i])
+
+        for entite in EntiteDead:
+            self.entity.remove(entite)
+
+        EntiteDead.clear()
 
 
         self.player.update(self.entity)
@@ -71,6 +93,9 @@ class Game():
         
         for entite in range(len(self.entity)):
             self.entity[entite].render(screen,self.xOffset,self.yOffset)
+
+        for deadEntite in range(len(self.deadList)):
+            self.deadList[deadEntite].render(screen,self.xOffset,self.yOffset)
 
         self.player.render(screen,self.xOffset,self.yOffset)
     
