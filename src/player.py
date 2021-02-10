@@ -53,8 +53,7 @@ class Player(pygame.sprite.Sprite):
         self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',35)
         self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
 
-        self.barreCompetence=barreComp(screenWidth,screenHeight)
-        #self.barreCompetence=barreComp(screenWidth,screenHeight,self.vie)
+        self.barreCompetence=barreComp(screenWidth,screenHeight,self.vie)
 
 
         
@@ -96,8 +95,7 @@ class Player(pygame.sprite.Sprite):
         self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
         screen.blit(self.affichageGold,(825,10))
 
-        self.barreCompetence.render(screen)
-        #self.barreCompetence.render(screen,self.vie)
+        self.barreCompetence.render(screen,self.vie)
         
 
     def update(self,entities):
