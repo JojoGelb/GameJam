@@ -57,7 +57,7 @@ class mortier(entite):
                 for entite in entities:
                     if entite.hitbox.x>(self.hitbox.x-self.range) and  entite.hitbox.x<(self.hitbox.x+self.range) and entite.hitbox.y>(self.hitbox.y-self.range) and  entite.hitbox.y<(self.hitbox.y+self.range):
                         if not (entite.hitbox.x>(self.hitbox.x-self.range*0.5) and  entite.hitbox.x<(self.hitbox.x+self.range*0.5) and entite.hitbox.y>(self.hitbox.y-self.range*0.5) and  entite.hitbox.y<(self.hitbox.y+self.range*0.5)):
-                            shoot = ProjectileMortier(self.hitbox.x + self.hitbox.width/2,self.hitbox.y + self.hitbox.height/2,5,3,entite.hitbox.x,entite.hitbox.y)
+                            shoot = ProjectileMortier(self.hitbox.x + self.hitbox.width/2,self.hitbox.y + self.hitbox.height/2,5,5,entite.hitbox.x,entite.hitbox.y)
                             self.projectiles.append(shoot)
                             break
                 self.timer=0
@@ -92,13 +92,14 @@ class mortier(entite):
 class mur(entite):
 
     def __init__(self,x,y,pointDeVie, spriteMur):
+
         entite.__init__(self,"DIST",pointDeVie,"NULL",0,"ALLIE",x,y, spriteMur)
 
         self.coutGold = 100
         self.hitbox = self.image[0].get_rect()
         self.hitbox.x = self.x
         self.hitbox.y = self.y
-
+        self.VieMax = int(pointDeVie)
 
 
     def update(self,entities):
@@ -113,6 +114,8 @@ class mur(entite):
                     #print("Contact !")
                     entities[i].velocity = 0
                     self.takeDamage(entities[i].degats)
+                    if self.vie<=(4-self.current)*int(self.VieMax/5):
+                        self.current+=1
 
         else:
             self.exist = False

@@ -17,6 +17,7 @@ class entite(pygame.sprite.Sprite):
         self.velocity = 1
         self.timer = 0
         self.orientation=0
+        self.baseVelocity=0
         self.hitbox=None
         self.alreadyKilled = False
         self.exist = True
@@ -50,7 +51,7 @@ class carotte(entite):
         self.drift = 10
         self.driftdirx = 1
         self.driftdiry = 1
-
+        self.baseVelocity=self.velocity
 
 
 
@@ -74,25 +75,25 @@ class carotte(entite):
             #self.mask = pygame.mask.from_surface(self.image[self.current])
 
             self.isHittingSomething(entities)
-
-            if self.drift!=0:
-                self.hitbox.x += self.driftdirx*2
-                self.hitbox.y += self.driftdiry*2
-                self.drift-=1
-            else:
-                self.drift=random.randrange(20)
-                self.driftdirx = random.choice((-1,1))
-                self.driftdiry = random.choice((-1,1))
-            if(Xjoueur < self.hitbox.x):
-                self.hitbox.x -= self.velocity
-                self.orientation=1
-            elif(Xjoueur > self.hitbox.x):
-                self.hitbox.x += self.velocity
-                self.orientation=0
-            if(Yjoueur < self.hitbox.y):
-                self.hitbox.y -= self.velocity
-            elif(Yjoueur > self.hitbox.y):
-                self.hitbox.y += self.velocity
+            if self.velocity != 0:
+                if self.drift!=0:
+                    self.hitbox.x += self.driftdirx*2
+                    self.hitbox.y += self.driftdiry*2
+                    self.drift-=1
+                else:
+                    self.drift=random.randrange(20)
+                    self.driftdirx = random.choice((-1,1))
+                    self.driftdiry = random.choice((-1,1))
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
         else:
             self.miseAMort()
 
@@ -145,7 +146,7 @@ class tomate(entite):
         self.drift = 10
         self.driftdir = 1
         self.current = 1
-
+        self.baseVelocity=self.velocity
         #a refaire autre part
         self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
         self.attack_sound.set_volume(0.1)
@@ -181,27 +182,27 @@ class tomate(entite):
             #self.mask = pygame.mask.from_surface(self.image[self.current])
 
             self.isHittingSomething(entities)
-        
-            if self.drift==0:
-                self.drift=random.randrange(20)
-                self.driftdir = random.randrange(-5,5)
-            else:
-                self.drift-=1
             if self.velocity != 0:
-                if(Xjoueur < self.hitbox.x):
-                    self.hitbox.x -= self.velocity
-                    self.hitbox.y += self.driftdir
-                    self.orientation=1
-                elif(Xjoueur > self.hitbox.x):
-                    self.hitbox.x += self.velocity
-                    self.hitbox.y += self.driftdir
-                    self.orientation=0
-                if(Yjoueur < self.hitbox.y):
-                    self.hitbox.y -= self.velocity
-                    self.hitbox.x += self.driftdir
-                elif(Yjoueur > self.hitbox.y):
-                    self.hitbox.y += self.velocity
-                    self.hitbox.x += self.driftdir
+                if self.drift==0:
+                    self.drift=random.randrange(20)
+                    self.driftdir = random.randrange(-5,5)
+                else:
+                    self.drift-=1
+                if self.velocity != 0:
+                    if(Xjoueur < self.hitbox.x):
+                        self.hitbox.x -= self.velocity
+                        self.hitbox.y += self.driftdir
+                        self.orientation=1
+                    elif(Xjoueur > self.hitbox.x):
+                        self.hitbox.x += self.velocity
+                        self.hitbox.y += self.driftdir
+                        self.orientation=0
+                    if(Yjoueur < self.hitbox.y):
+                        self.hitbox.y -= self.velocity
+                        self.hitbox.x += self.driftdir
+                    elif(Yjoueur > self.hitbox.y):
+                        self.hitbox.y += self.velocity
+                        self.hitbox.x += self.driftdir
         else:
             self.miseAMort()
 
@@ -258,7 +259,7 @@ class banane(entite):
         self.drift = 0
         self.driftdirx = 1
         self.driftdiry = 1
-
+        self.baseVelocity=self.velocity
 
     def render(self,screen,xOffset,yOffset):
         #Ligne test hitbox
@@ -286,25 +287,25 @@ class banane(entite):
             #self.mask = pygame.mask.from_surface(self.image[self.current])
 
             self.isHittingSomething(entities)
-
-            if self.drift!=0:
-                self.hitbox.x += self.driftdirx*2
-                self.hitbox.y += self.driftdiry*2
-                self.drift-=1
-            else:
-                self.drift=random.randrange(20)
-                self.driftdirx = random.choice((-1,1))
-                self.driftdiry = random.choice((-1,1))
-            if(Xjoueur < self.hitbox.x):
-                self.hitbox.x -= self.velocity
-                self.orientation=1
-            elif(Xjoueur > self.hitbox.x):
-                self.hitbox.x += self.velocity
-                self.orientation=0
-            if(Yjoueur < self.hitbox.y):
-                self.hitbox.y -= self.velocity
-            elif(Yjoueur > self.hitbox.y):
-                self.hitbox.y += self.velocity
+            if self.velocity != 0:
+                if self.drift!=0:
+                    self.hitbox.x += self.driftdirx*2
+                    self.hitbox.y += self.driftdiry*2
+                    self.drift-=1
+                else:
+                    self.drift=random.randrange(20)
+                    self.driftdirx = random.choice((-1,1))
+                    self.driftdiry = random.choice((-1,1))
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
         else:
             self.miseAMort()
 

@@ -46,8 +46,8 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        self.chargementGame(screen,screenWidth,screenHeight)
-        self.chargementSprite()
+        #self.chargementGame(screen,screenWidth,screenHeight)
+        self.chargementSprite(screen,screenWidth,screenHeight)
         #self.entity.append(carotte(2000,2000))
         #self.entity.append(tomate(1000,1000))
         #self.entity.append(carotte(500,500))
@@ -205,9 +205,11 @@ class Game():
                 if self.player.barreCompetence.morClicable:
                     self.player.gold -= 200
                     self.builds.append(mortier(self.player.position[0],self.player.position[1],0,0,0,0))
-                    
-            #elif event.type == pygame.KEYDOM and event.key == pygame.K_e:
-            #    self.builds.append(mur(self.player.position[0],self.player.position[1],0,0,0,0))
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+                if self.player.barreCompetence.murClicable:
+                    self.player.gold -= 50
+                    self.builds.append(mur(self.player.position[0],self.player.position[1],1000,self.spriteMur))
+
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = True
@@ -226,6 +228,10 @@ class Game():
         screen.fill((20,20,20))
         compteur=0
         font = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 36)
+        fontiny = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 20)
+        randomessage=["LE SAVIEZ-VOUS : Les Carottes sont polies, elle disent toujours bonjour","LE SAVIEZ-VOUS : Les Bannanes sont très dangeureuse, mais très lentes","ATTENTION les tomates exploses en mourant et font très mal","Dormez bien, pour un rythme plus sain","Mangez 5 fruits et légumes par jours !","La guerre c'est la paix","Ce jeu vous est proposé par Soviet entertainment","Jordy est salé","ET DIS MOI JAMMY !","Pour poser un mur taper [E] quand vous possèdez 50 gold","Pour poser un mortier taper [A] quand vous possèdez 200 gold"]
+        texxxt=fontiny.render(randomessage[random.randrange(len(randomessage))], 1, (200,50,50))
+        
         for undecor in range(1250):
             rand=random.randrange(5)
             if rand<2:
@@ -237,13 +243,26 @@ class Game():
             if undecor%12==0:
                 compteur+=1
                 if compteur > 100 : compteur = 100
-                text = font.render("chargement : "+str(compteur)+" % ", 1, (200,50,50))
+                text = font.render("génération du terrain : "+str(compteur)+" % ", 1, (200,50,50))
                 screen.fill((20,20,20))
-                screen.blit(text, ((screenWidth/2)-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+                screen.blit(text, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+                screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))
                 pygame.display.flip()
 
-    def chargementSprite(self):
+    def chargementSprite(self,screen,screenWidth,screenHeight):
         
+        #ecran charge
+        font = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 36)
+        text = font.render("chargement des sprites : "+str(0)+" % ", 1, (200,50,50))
+        fontiny = pygame.font.Font("../textures/Perfect DOS VGA 437 Win.ttf", 20)
+        texxxt=fontiny.render("Preparez vous !", 1, (200,50,50))
+        screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))
+        screen.fill((20,20,20))
+        screen.blit(text, (((int(screenWidth*0.75)))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+        pygame.display.flip()
+        pygame.time.wait(300)
+        #ecran charge
+
         self.spriteCarrote=[]
         self.spriteCarroteDeath=[]
         self.spriteTomate=[]
@@ -263,6 +282,15 @@ class Game():
                     tempSprite = spriteCarrote.image_at(rect)
                     self.spriteCarrote.append(pygame.transform.scale(tempSprite,(64,160)))
 
+            #ecran charge
+            text = font.render("chargement des sprites : "+str(20)+" % ", 1, (200,50,50))
+            screen.fill((20,20,20))
+            screen.blit(text, (((int(screenWidth*0.75)))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+            screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))
+            pygame.display.flip()
+            pygame.time.wait(300)
+            #ecran charge
+
             for i in range(4):
                 rect = (0,i*1024,416,1024)
                 tempSprite = spriteCarroteDeath.image_at(rect)
@@ -271,6 +299,16 @@ class Game():
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+
+        #ecran charge
+        text = font.render("chargement des sprites : "+str(40)+" % ", 1, (200,50,50))
+        screen.fill((20,20,20))
+        screen.blit(text, (((int(screenWidth*0.75)))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+        screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))
+        pygame.display.flip()
+        pygame.time.wait(300)
+        #ecran charge
+
         #Sprite Tomate
         try:
             spriteTomate = SpriteSheet('../textures/elTomaty.png')
@@ -283,6 +321,16 @@ class Game():
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+
+        #ecran charge
+        text = font.render("chargement des sprites : "+str(60)+" % ", 1, (200,50,50))
+        screen.fill((20,20,20))
+        screen.blit(text, (((int(screenWidth*0.75)))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+        screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))      
+        pygame.display.flip()
+        pygame.time.wait(300)
+        #ecran charge
+
         #Sprite Banane
         try:
             spriteBanane = SpriteSheet('../textures/Banane.png')
@@ -294,7 +342,7 @@ class Game():
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
-
+       
         #Sprite mur
         try:
             spriteMur = SpriteSheet('../textures/Barricade.png')
@@ -307,3 +355,17 @@ class Game():
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+
+       
+        #ecran charge
+        wololo=60
+        while wololo<=100:
+            pygame.time.wait(28)
+            text = font.render("chargement des sprites : "+str(wololo)+" % ", 1, (200,50,50))
+            screen.fill((20,20,20))
+            screen.blit(text, (((int(screenWidth*0.75)))-text.get_rect().width, (screenHeight/2)-text.get_rect().height))
+            screen.blit(texxxt, ((int(screenWidth*0.75))-text.get_rect().width, (screenHeight/2)-text.get_rect().height-100))           
+            pygame.display.flip()
+            wololo+=1
+        #ecran charge
+
