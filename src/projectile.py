@@ -121,22 +121,23 @@ class ProjectileMortier(pygame.sprite.Sprite):
         self.rect = self.image[0].get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.mask = pygame.mask.from_surface(self.image[0])
         
     def render(self,screen,xOffset,yOffset):
         if(self.exist != False):
             screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
+        #pygame.draw.rect(screen,(250,250,250),(self.cibleX -100 + xOffset ,self.cibleY -100 + yOffset,200,200))
                         
     def asArrive(self,entitie):
         self.hasHit=True
 
-        self.mask = pygame.mask.from_surface(self.image[1])
-        ennemisTouches = pygame.sprite.spritecollide(self, entitie, False)
-        if ennemisTouches :
-            for entite in ennemisTouches:
-                entite.vie -= self.damage
-                if entite.vie <= 0:
-                    entite.miseAMort() # tout va bien carotte n'a pas encore de mise à mort
+        print(self.cibleX -100 ,self.cibleX +100,self.cibleY -100,self.cibleY +100)
+        for i in range(len(entitie)):
+            print(entitie[i].hitbox.x,entitie[i].hitbox.y)
+            if((entitie[i].hitbox.x + entitie[i].hitbox.width > self.cibleX -100 and entitie[i].hitbox.x < self.cibleX +100 and entitie[i].hitbox.y + entitie[i].hitbox.height > self.cibleY -100 and entitie[i].hitbox.y < self.cibleY +100 )):
+                entitie[i].vie -= self.damage
+                print("damage")
+                if entitie[i].vie <= 0:
+                    entitie[i].miseAMort()
                     print("Dead")
 
         
