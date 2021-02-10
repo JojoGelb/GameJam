@@ -42,8 +42,10 @@ class carotte(entite):
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+
+
        
-       
+        self.spriteDeath = SpriteSheet('../textures/Carottedodo.png')
         self.hitbox = self.image[0].get_rect()
         self.hitbox.x = xx
         self.hitbox.y = yy
@@ -62,39 +64,64 @@ class carotte(entite):
 
             
     def update(self,Xjoueur,Yjoueur):
-        
-        if(self.timer == 10):
-            self.current=(self.current+1)%4
-            self.timer = 0
-        else:
-            self.timer +=1
-            
-        self.mask = pygame.mask.from_surface(self.image[self.current])
-
-        if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
-            None
-            #self.hitbox.x -= 400
-        else:
-
-            if self.drift!=0:
-                self.hitbox.x += self.driftdirx*2
-                self.hitbox.y += self.driftdiry*2
-                self.drift-=1
+        if not self.alreadyKilled:
+            if(self.timer == 10):
+                self.current=(self.current+1)%4
+                self.timer = 0
             else:
-                self.drift=random.randrange(20)
-                self.driftdirx = random.choice((-1,1))
-                self.driftdiry = random.choice((-1,1))
+                self.timer +=1
+                
+            self.mask = pygame.mask.from_surface(self.image[self.current])
 
-            if(Xjoueur < self.hitbox.x):
-                self.hitbox.x -= self.velocity
-                self.orientation=1
-            elif(Xjoueur > self.hitbox.x):
-                self.hitbox.x += self.velocity
-                self.orientation=0
-            if(Yjoueur < self.hitbox.y):
-                self.hitbox.y -= self.velocity
-            elif(Yjoueur > self.hitbox.y):
-                self.hitbox.y += self.velocity
+            if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
+                None
+                #self.hitbox.x -= 400
+            else:
+
+                if self.drift!=0:
+                    self.hitbox.x += self.driftdirx*2
+                    self.hitbox.y += self.driftdiry*2
+                    self.drift-=1
+                else:
+                    self.drift=random.randrange(20)
+                    self.driftdirx = random.choice((-1,1))
+                    self.driftdiry = random.choice((-1,1))
+
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+        else:
+            self.miseAMort()
+    
+    def miseAMort(self):
+        death_sound = pygame.mixer.Sound("../sound/splat.wav")
+        if(self.alreadyKilled == False):
+            death_sound.set_volume(0.1)
+            pygame.mixer.Sound.play(death_sound)
+            self.alreadyKilled = True
+            self.timer = 0
+            self.current = 0
+
+        self.image=[]
+        for i in range(4):
+                rect = (0,i*1024,416,1024)
+                tempSprite = self.spriteDeath.image_at(rect)
+                self.image.append(pygame.transform.scale(tempSprite,(64,160)))
+        
+        self.timer += 1
+        self.image[self.current].set_alpha(200-self.timer)
+        if(self.timer%10 == 0 and self.current < 3 ):
+                self.current+=1
+        if(self.timer >=50):
+            self.exist = False
+            
 
 
 class tomate(entite):
@@ -126,6 +153,7 @@ class tomate(entite):
         self.current = 1
         self.rect = self.hitbox
         self.mask = pygame.mask.from_surface(self.image[1])
+        
 
 
 
@@ -186,11 +214,15 @@ class tomate(entite):
             self.miseAMort()
 
     def miseAMort(self):
+        death_sound = pygame.mixer.Sound("../sound/splat.wav")
         if(self.alreadyKilled == False):
+            death_sound.set_volume(0.1)
+            pygame.mixer.Sound.play(death_sound)
             self.alreadyKilled = True
             self.timer = 0
         self.current= 0
         self.timer += 1
+        self.image[self.current].set_alpha(200-self.timer)
         if(self.timer >=50):
             self.exist = False
 
