@@ -104,7 +104,6 @@ class Game():
             if not self.entity[i].exist:
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
-                EntiteDead.append(self.entity[i])
                 self.player.gold +=  self.entity[i].gold*self.modifGold
 
         for entite in EntiteDead:
