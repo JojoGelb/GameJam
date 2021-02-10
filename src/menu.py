@@ -13,6 +13,19 @@ class Menu:
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
+        try:
+            fichier = open("../HighScore.txt", "r")
+            self.scores = fichier.readlines()
+            fichier.close
+        except:
+            print("Erreur pas de fichier Highscore")
+        val = 0
+        for i in range (len(self.scores)):
+            self.scores[i] = self.scores[i].split(':')
+            if(int(self.scores[i][1])>val):
+                val = int(self.scores[i][1])
+            
+        print(val)
     
 
     def render(self,screen):
@@ -91,36 +104,63 @@ class Pause:
 
 class Score:
 
-    def __init__(self,screenWidth, screenHeight):
-        self.buttonSave = Boutton(390,332,80,40,"Play")
-        self.buttonSkip = Boutton(560,332,70,40,"Quit")
+    def __init__(self,screenWidth, screenHeight, score):
+        #self.buttonSave = Boutton(390,332,80,40,"Play")
+        #self.buttonSkip = Boutton(560,332,70,40,"Quit")
         self.background = pygame.transform.scale(pygame.image.load('../textures/score.png'),(screenWidth,screenHeight)) 
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
+        self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
+        self.textName = ""
+        self.score = score
+        bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        self.affichageScore = bigfont.render(str(score), True , (250,250,250))
+        
 
     def render(self,screen):
         screen.blit(self.background, (0,0))
-        self.buttonSave.render(screen)
-        self.buttonSkip.render(screen)
+        #pygame.draw.rect(screen,(250,0,0),(510,175,80,40))
+
+        affichageName = self.smallfont.render(self.textName, True , (250,250,250))
+        
+        screen.blit(self.affichageScore,(510,85))
+        screen.blit(affichageName,(510,182))
+        
+
+        #self.buttonSave.render(screen)
+        #self.buttonSkip.render(screen)
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
         mos_x, mos_y = pygame.mouse.get_pos()
-
         for event in pygame.event.get():
             #ragequit
             if event.type == pygame.QUIT:
                 return "Quit"
+            if event.type == pygame.KEYDOWN:
+                if( event.key == pygame.K_ESCAPE):
+                    return "restart"
+                elif(event.key == pygame.K_BACKSPACE):
+                    self.textName = self.textName[:-1]
+                else:
+                    if(len(self.textName)<12):
+                        self.textName += event.unicode
             if event.type == pygame.MOUSEBUTTONDOWN:  
             #if the mouse is clicked on the  
             # button the game is terminated 
-                if self.buttonSave.click(mos_x,mos_y):
-                    return "Save"
-                if self.buttonSkip.click(mos_x,mos_y):
-                    return "Skip"
+                if mos_x > 390 and mos_x < 470 and mos_y > 332 and mos_y < 372:
+
+                    #ICI POUR SAUVEGARDER LES DONNEES DE JEUX
+                    if(self.textName != ""):
+                        fichier = open("../HighScore.txt","a")
+                        fichier.write(self.textName + ":" + str(self.score) + "\n")
+                        fichier.close
+                        return "restart"
+                if mos_x > 560 and mos_x < 630 and mos_y > 332 and mos_y < 372:
+                    return "restart"
         
-        return "score"
+        return "End"
 
 class Credit:
 

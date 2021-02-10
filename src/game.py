@@ -125,6 +125,9 @@ class Game():
             #Soulevement de touche
             elif event.type == pygame.KEYUP and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = False
+
+        if(self.player.isDead == True):
+            return "End"
         return "Play"
 
     def chargementGame(self,screen,screenWidth,screenHeight):

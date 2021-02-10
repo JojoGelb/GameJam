@@ -33,6 +33,10 @@ menuSoupe = Pause(screenWidth,screenHeight)
 
 bestiaire = bestiaire(screenWidth,screenHeight)
 
+menuEnd = "null"
+
+playerScore = ""
+
 clock = pygame.time.Clock() #très importantnb de frame par tick 
 
 while running:
@@ -76,7 +80,18 @@ while running:
     elif(GameState == "SoupeScreen"):
         menuSoupe.render(screen)
         GameState = menuSoupe.action(screenWidth,screenHeight)
-
+    elif(GameState == "End"):
+        if(menuEnd == "null"):
+            menuEnd = Score(screenWidth,screenHeight,game.player.gold)
+        menuEnd.render(screen)
+        GameState = menuEnd.action(screenWidth,screenHeight)
+    elif(GameState == "restart"):
+        #Enclencher la sauvegarde
+        game == "null"
+        menu = Menu(screenWidth,screenHeight)
+        menuSoupe = Pause(screenWidth,screenHeight)
+        menuEnd = "null"
+        GameState = "menu"
 
 
     
