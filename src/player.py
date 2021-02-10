@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.playerYoffset = 0
         self.cooldown = 30
         self.gold = 100
-        self.isDead = True
+        self.isDead = False
 
         #variable de gestion de l'animation des sprites
         self.current = 0
@@ -46,8 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.timer = 0
 
         #affichage gold
-        bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',35)
-        self.affichageGold = bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',35)
+        self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
 
         
 
@@ -70,7 +70,8 @@ class Player(pygame.sprite.Sprite):
         #pygame.draw.rect(screen,(250,250,250),(self.rect.x+self.playerXoffset,self.rect.y+self.playerYoffset,self.rect.width, self.rect.height))
         for i in range(len(self.projectiles)):
             self.projectiles[i].render(screen,xOffset,yOffset)
-        
+
+        self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
         screen.blit(self.affichageGold,(825,10))
         
 

@@ -26,7 +26,11 @@ class carotte(entite):
 
     def __init__(self,xx,yy):
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy)
-       
+    
+    
+    
+        #sprites :
+        self.spriteDeath = SpriteSheet('../textures/Carottedodo.png') 
         try:
             sprite = SpriteSheet('../textures/Carotte.png')
 
@@ -43,18 +47,26 @@ class carotte(entite):
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
+        
+        #or de la carotte :
+        self.gold=5
 
-       
-        self.spriteDeath = SpriteSheet('../textures/Carottedodo.png')
+        #hit box ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
         self.hitbox.x = xx
         self.hitbox.y = yy
+        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
+        self.rect = self.hitbox
+        self.mask = pygame.mask.from_surface(self.image[0])
+
+        #valeures propre a la carotte:
         self.velocity = 4
         self.drift = 10
         self.driftdirx = 1
         self.driftdiry = 1
-        self.rect = self.hitbox
-        self.mask = pygame.mask.from_surface(self.image[0])
+
+
+
 
     def render(self,screen,xOffset,yOffset):
         if self.orientation==1:
@@ -126,8 +138,11 @@ class carotte(entite):
 
 class tomate(entite):
 
+
     def __init__(self,xx,yy):
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy)
+        
+        #sprites :
         
         try:
             sprite = SpriteSheet('../textures/elTomaty.png')
@@ -143,17 +158,25 @@ class tomate(entite):
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
+
+        #or de la tomate :
+        self.gold=10
+
+        #hit box ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
         self.hitbox.height = self.hitbox.height-150
         self.hitbox.x = xx
         self.hitbox.y = yy
+        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
+        self.rect = self.hitbox
+        self.mask = pygame.mask.from_surface(self.image[1])
+
+        #valeures propre a la tomate:
         self.velocity = 3
         self.drift = 10
         self.driftdir = 1
         self.current = 1
-        self.rect = self.hitbox
-        self.mask = pygame.mask.from_surface(self.image[1])
-        
+
 
 
 
