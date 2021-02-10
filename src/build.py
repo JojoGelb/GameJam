@@ -89,6 +89,48 @@ class mortier(entite):
                     del self.projectiles[i]
                     break
 
+class mur(entite):
+
+    def __init__(self,x,y,pointDeVie, spriteMur):
+        entite.__init__(self,"DIST",pointDeVie,"NULL",0,"ALLIE",x,y, spriteMur)
+
+        self.coutGold = 100
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.x = self.x
+        self.hitbox.y = self.y
+
+
+
+    def update(self,entities):
+
+        #print(self.vie)
+        if self.vie > 0:
+
+            #La collision entre la hitbox du mur et la hitbox des enemies
+            for i in range(len(entities)):
+
+                if(self.hitbox.x + self.hitbox.width >= entities[i].hitbox.x and self.hitbox.x < entities[i].hitbox.x + entities[i].hitbox.width) and (self.hitbox.y + self.hitbox.height > entities[i].hitbox.y and self.hitbox.y < entities[i].hitbox.y + entities[i].hitbox.height):
+                    #print("Contact !")
+                    entities[i].velocity = 0
+                    self.takeDamage(entities[i].degats)
+
+        else:
+            self.exist = False
+            for i in range(len(entities)):
+                entities[i].velocity = entities[i].baseVelocity
+
+
+    def render(self,screen,xOffset,yOffset):
+
+
+        if self.exist:
+
+            #pygame.draw.rect(screen,(250,250,250),(xOffset +  self.hitbox.x, yOffset + self.hitbox.y ,100, 100)) #pour tester
+            screen.blit(self.image[self.current],(xOffset + self.hitbox.x, yOffset + self.hitbox.y))
+
+    def takeDamage(self,amount):
+        self.vie -= amount
+        pass
 
 
 
