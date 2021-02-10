@@ -248,6 +248,7 @@ class Game():
         self.spriteCarroteDeath=[]
         self.spriteTomate=[]
         self.spriteBanane=[]
+        self.spriteMur=[]
         #self.spriteTomateDeath=[]
 
         
@@ -290,6 +291,19 @@ class Game():
                 rect = (i*350,0,350,350)
                 tempSprite = spriteBanane.image_at(rect)
                 self.spriteBanane.append(pygame.transform.scale(tempSprite,(256,256)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
+        #Sprite mur
+        try:
+            spriteMur = SpriteSheet('../textures/Barricade.png')
+
+            for i in range(6):
+                rect = (0,i*704,704,704)
+                tempSprite = spriteMur.image_at(rect)
+                self.spriteMur.append(pygame.transform.scale(tempSprite,(100,100)))
+
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
