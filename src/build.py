@@ -40,6 +40,7 @@ class mortier(entite):
         self.degats=1
         self.vie=10
         self.projectiles = []
+        self.exist = True
 
     def render(self,screen,xOffset,yOffset):
         #pygame.draw.rect(screen,(250,100,100),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
