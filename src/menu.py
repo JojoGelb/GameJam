@@ -10,26 +10,45 @@ class Menu:
         self.buttonCredit = Boutton(0,708,120,60,"Credit") #possiblement retirable
         self.buttonRegles = Boutton(914,688,110,80,"regles")
         self.background = pygame.transform.scale(pygame.image.load('../textures/Menu1.png'),(screenWidth,screenHeight)) 
+        smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
+        scores2 = []
         try:
             fichier = open("../HighScore.txt", "r")
-            self.scores = fichier.readlines()
+            scores = fichier.readlines()
+            print(scores)
             fichier.close
-        except:
-            print("Erreur pas de fichier Highscore")
-        val = 0
-        for i in range (len(self.scores)):
-            self.scores[i] = self.scores[i].split(':')
-            if(int(self.scores[i][1])>val):
-                val = int(self.scores[i][1])
+
+            for i in range (len(scores)):
+                scores2.append(scores[i].split(':'))
             
-        print(val)
+            trie = False
+            self.scoresAffichage = []
+            while(trie == False):
+                trie = True
+                for j in range(len(scores2)-1):
+                    val = int(scores2[j][1]) < int(scores2[j+1][1])
+                    if val == True:
+                        scores2[j],scores2[j+1] = scores2[j+1],scores2[j]
+                        trie  = False 
+                        break
+            for i in range(5):
+                val = scores2[i][0] +" : " + scores2[i][1]
+                self.scoresAffichage.append(smallfont.render(val[:-1], True , (250,250,250)))
+
+        except:
+            print("Erreur fichier highscore")
+                
+
+            
     
 
     def render(self,screen):
         screen.blit(self.background, (0,0))
+        for i in range(len(self.scoresAffichage)):
+            screen.blit(self.scoresAffichage[i],(375,i*50 + 400))
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
