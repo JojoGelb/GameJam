@@ -3,6 +3,12 @@ import random
 from player import Player
 from entite import *
 
+
+# waves are in form
+# frequency of enemies
+# (# carrote, # tomate, # banane, # oignion)
+
+
 class Game():
 
     def __init__(self,screenWidth,screenHeight,screen):
@@ -13,7 +19,10 @@ class Game():
         
         #creation joueur
         self.player = Player(screenWidth,screenHeight)
-
+        #Argent joueur
+        self.modifGold = 1
+        self.modifDeg = 1
+        self.modifPV = 1
         #array de mobs
         self.entity=[]
         #Bordure de la map
@@ -36,19 +45,42 @@ class Game():
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
 
-        self.entity.append(carotte(2000,2000))
-        self.entity.append(tomate(1000,1000))
-        self.entity.append(carotte(500,500))
-        self.entity.append(tomate(600,600))
-        self.entity.append(carotte(3000,2000))
-        self.entity.append(tomate(1000,2000))
+        #self.entity.append(carotte(2000,2000))
+        #self.entity.append(tomate(1000,1000))
+        #self.entity.append(carotte(500,500))
+        #self.entity.append(tomate(600,600))
+        #self.entity.append(carotte(3000,2000))
+        #self.entity.append(tomate(1000,2000))
 
+        #Gérer les vagues
+        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0, 0],[3, 5, 0],[5, 3, 0],[7, 2, 0],[1, 8, 0],[0, 0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]]
+        self.waves = 0
+        self.current_wave = self.wavesStat[self.waves]
+        self.engame = True
         #Liste des entités mortes au combat
         self.deadList = []
         
-               
-    
+    def gen_enemies(self):
+        
+        if sum(self.current_wave) == 0: #Tout les entity on été créer  
+            if len(self.entity) == 0: #Tous les entity sont 
+                    self.waves +=1 #vague suivante
+                    self.current_wave = self.wavesStat[self.waves]
+                    self.engame = False        
+        else:
+            wave_enemies = [carotte(random.randrange(0,4000),0),tomate(0,random.randrange(0,4000))] #définition des types d'énemies et point d'apparition
+            for i in range(len(self.current_wave)):
+                if self.current_wave[i] != 0:
+                    self.entity.append(wave_enemies[i]) #ajout
+                    self.current_wave[i] = self.current_wave[i]-1
+                    break
+                    
+
+
     def update(self,screenWidth,screenHeight):
+        if self.engame:
+            self.gen_enemies()
+       
         #detection si la touche est enfoncé ou non => deplacement joueur
         self.keyPressed(screenWidth,screenHeight)
 
@@ -72,6 +104,8 @@ class Game():
             if not self.entity[i].exist:
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
+                EntiteDead.append(self.entity[i])
+                self.player.gold +=  self.entity[i].gold*self.modifGold
 
         for entite in EntiteDead:
             self.entity.remove(entite)
@@ -144,6 +178,8 @@ class Game():
                 return "Quit"
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return "SoupeScreen"
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.engame = True
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = True
