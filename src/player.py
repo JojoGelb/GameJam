@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self,screenWidth,screenHeight):
         super().__init__()
-        self.vie = 100
+        self.vie = 10
         self.maxhealth = 100
         self.attack = 10
         self.velocity = 10
@@ -20,8 +20,8 @@ class Player(pygame.sprite.Sprite):
         self.cooldown = 30
         self.gold = 100
         self.isDead = False
-        self.potate = 10
-
+        self.invincibility = False
+        self.TimerInvincibility = 0
         #variable de gestion de l'animation des sprites
         self.current = 0
 
@@ -32,14 +32,16 @@ class Player(pygame.sprite.Sprite):
         self.moveDown = False
 
         #position du joueur par rapport à la carte [x,y] 0,0 = spawn
-        self.position = [2000,2000]
+       
         
         #generation images
         self.generationSprite()
         
         self.rect = self.billy_Droite[0].get_rect()
-        self.rect.x = screenWidth/2 
-        self.rect.y = screenHeight/2
+        self.rect.x = screenWidth/2 #-1/2*self.rect.width
+        self.rect.y = screenHeight/2 #- 1/2*self.rect.height
+
+        self.position = [2000,2000]
 
         self.projectilPath = "../textures/OBUS.png"
 
@@ -52,24 +54,39 @@ class Player(pygame.sprite.Sprite):
         self.affichageGold = self.bigfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
 
         self.barreCompetence=barreComp(screenWidth,screenHeight)
-
+        #self.barreCompetence=barreComp(screenWidth,screenHeight,self.vie)
 
 
         
 
     def render(self,screen,xOffset,yOffset):
 
+        pygame.draw.rect(screen,(0,0,0),(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset,self.rect.width,self.rect.height))
+
+
         if(self.moveRight ==False and self.moveDown==False and self.moveUp==False and self.moveLeft==False):
             self.current = 0
-            screen.blit(self.billy_Gauche[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            if(self.TimerInvincibility != 0):
+                screen.blit(self.billy_Gauche_Trans[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            else:
+                screen.blit(self.billy_Gauche[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
         if(self.moveUp == True):
-            screen.blit(self.billy_Monte[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            if(self.TimerInvincibility != 0):
+                screen.blit(self.billy_Monte_Trans[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            else:
+                screen.blit(self.billy_Monte[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
             self.moveUp = False
         elif(self.moveLeft == True):
-            screen.blit(self.billy_Gauche[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            if(self.TimerInvincibility != 0):
+                screen.blit(self.billy_Gauche_Trans[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            else:
+                screen.blit(self.billy_Gauche[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
             self.moveLeft = False
         elif(self.moveRight == True):
-            screen.blit(self.billy_Droite[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            if(self.TimerInvincibility != 0):
+                screen.blit(self.billy_Droite_Trans[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
+            else:
+                screen.blit(self.billy_Droite[self.current],(self.rect.x+self.playerXoffset,self.rect.y + self.playerYoffset))
             self.moveRight = False
         #hitbox
         #pygame.draw.rect(screen,(250,250,250),(self.rect.x+self.playerXoffset,self.rect.y+self.playerYoffset,self.rect.width, self.rect.height))
@@ -80,17 +97,21 @@ class Player(pygame.sprite.Sprite):
         screen.blit(self.affichageGold,(825,10))
 
         self.barreCompetence.render(screen)
-
+        #self.barreCompetence.render(screen,self.vie)
         
 
     def update(self,entities):
 
+        self.TimerInvincibilityUpdate()
+
         self.barreCompetence.update(self.gold)
 
         self.clearProjectiles()
+
         self.timer +=1
         for i in range(len(self.projectiles)):
             self.projectiles[i].update(entities)
+
 
     
     def shoot_right(self,mapBorderRight):
@@ -129,8 +150,6 @@ class Player(pygame.sprite.Sprite):
             self.position[0] -= self.velocity
         else:
             print("can't left")
-        
-        
 
     def move_right(self,mapBorderRight,bord):
         self.moveSprite("Right")
@@ -170,6 +189,20 @@ class Player(pygame.sprite.Sprite):
         else:
             print("can't down")
 
+
+
+    #gere le timer invincibilité
+    def TimerInvincibilityUpdate(self):
+        if(self.TimerInvincibility != 0):
+            self.TimerInvincibility += 1
+            if(self.TimerInvincibility >= 50):
+                #print("endInvincibilité")
+                self.velocity -=5
+                self.TimerInvincibility = 0
+                self.invincibility = False
+
+
+
     def clearProjectiles(self):
         #print(self.projectiles)
         if (self.projectiles):
@@ -177,7 +210,8 @@ class Player(pygame.sprite.Sprite):
                 if(self.projectiles[i].exist == False):
                     del self.projectiles[i]
                     break
-
+    
+    #cette fonction gere le numero et type de sprite affiché dans render
     def moveSprite(self,direction):
         if(direction == "Up"):
             if(self.moveLeft ==True or self.moveDown == True or self.moveRight == True):
@@ -216,29 +250,58 @@ class Player(pygame.sprite.Sprite):
     #generation des sprites et stockage 
     def generationSprite(self):
         try:
-            sprite = SpriteSheet('../textures/BILLY_AVANCE.png')
 
+            sprite = SpriteSheet('../textures/BILLY_AVANCE.png')
+            self.billy_Droite_Trans= []
             self.billy_Droite=[]
             for i in range(8):
                 rect = (i*704,0,704,1152)
                 tempSprite = sprite.image_at(rect)
                 self.billy_Droite.append(pygame.transform.scale(tempSprite,(70,115)))
+                self.billy_Droite_Trans.append(pygame.transform.scale(tempSprite,(70,115)))
+                self.billy_Droite_Trans[i].set_alpha(75)
 
             sprite.flipHorizontaly()
+
+            self.billy_Gauche_Trans = []
             self.billy_Gauche=[]
             for i in range(8):
                 rect = (i*704,0,704,1152)
                 tempSprite = sprite.image_at(rect)
                 self.billy_Gauche.append(pygame.transform.scale(tempSprite,(70,115)))
-            
+                self.billy_Gauche_Trans.append(pygame.transform.scale(tempSprite,(70,115)))
+                self.billy_Gauche_Trans[i].set_alpha(75)
+
             sprite = SpriteSheet('../textures/BILLY_MONTE.png')
+            self.billy_Monte_Trans= []
             self.billy_Monte=[]
             for i in range(4):
                 rect = (i*576,0,576,1152)
                 tempSprite = sprite.image_at(rect)
                 self.billy_Monte.append(pygame.transform.scale(tempSprite,(70,115)))
+                self.billy_Monte_Trans.append(pygame.transform.scale(tempSprite,(70,115)))
+                self.billy_Monte_Trans[i].set_alpha(75)
+            
 
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
+
+        
+
+    #fonction importante: applique les changements de vie externe + rend le joueur invincible sur une periode de temps
+    def takeDamage(self,amount):
+        if(self.invincibility ==False):
+            self.vie -= amount
+            self.velocity += 5
+            if(self.vie <= 0):
+                #ici pour animation mort
+                self.isDead = True
+            else:
+                self.invincibility = True
+                self.TimerInvincibility =1
+            return True
+        else:
+            #sous invincibilité les dmgs sont annulé
+            return False
 

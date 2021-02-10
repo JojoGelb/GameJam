@@ -26,9 +26,13 @@ class carotte(entite):
 
     def __init__(self,xx,yy,sprite,death):
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
-    
+
+        #image affiché à la mort de l'entité
         self.imageMort = death
 
+        #a refaire autre part
+        self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
+        self.attack_sound.set_volume(0.1)
         
         #or de la carotte :
         self.gold=5
@@ -69,14 +73,7 @@ class carotte(entite):
                 
             #self.mask = pygame.mask.from_surface(self.image[self.current])
 
-            for i in range(len(entities)):
-                    if(i == 0): #on gere le joueur
-                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
-                            entities[0].vie -= self.degats
-                            if(entities[0].vie <= 0):
-                                entities[0].isDead = True
-                    else: #puis les objets
-                        None #faire pour objet plaçable
+            self.isHittingSomething(entities)
 
             if self.drift!=0:
                 self.hitbox.x += self.driftdirx*2
@@ -99,11 +96,14 @@ class carotte(entite):
         else:
             self.miseAMort()
 
-    def damage(self,entite):
-        entite.vie -= self.degats
-        if(entite.vie <= 0):
-            entite.exist = False
-            print("Destroy")
+    def isHittingSomething(self,entities):
+        for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            if(entities[0].takeDamage(self.degats)):
+                                pygame.mixer.Sound.play(self.attack_sound)
+                    else: #puis les objets
+                        None #faire pour objet plaçable
     
     def miseAMort(self):
         death_sound = pygame.mixer.Sound("../sound/splat.wav")
@@ -146,6 +146,10 @@ class tomate(entite):
         self.driftdir = 1
         self.current = 1
 
+        #a refaire autre part
+        self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
+        self.attack_sound.set_volume(0.1)
+
         
 
 
@@ -174,40 +178,41 @@ class tomate(entite):
             else:
                 self.timer +=1
                 
-            self.mask = pygame.mask.from_surface(self.image[self.current])
+            #self.mask = pygame.mask.from_surface(self.image[self.current])
 
-
-            if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
-                None
-                #self.hitbox.x -= 400
+            self.isHittingSomething(entities)
+        
+            if self.drift==0:
+                self.drift=random.randrange(20)
+                self.driftdir = random.randrange(-5,5)
             else:
-
-                if self.drift==0:
-                    self.drift=random.randrange(20)
-                    self.driftdir = random.randrange(-5,5)
-                else:
-                    self.drift-=1
-
-                if self.velocity != 0:
-                    if(Xjoueur < self.hitbox.x):
-                        self.hitbox.x -= self.velocity
-                        self.hitbox.y += self.driftdir
-
-                        self.orientation=1
-                    elif(Xjoueur > self.hitbox.x):
-                        self.hitbox.x += self.velocity
-                        self.hitbox.y += self.driftdir
-
-                        self.orientation=0
-                    if(Yjoueur < self.hitbox.y):
-                        self.hitbox.y -= self.velocity
-                        self.hitbox.x += self.driftdir
-
-                    elif(Yjoueur > self.hitbox.y):
-                        self.hitbox.y += self.velocity
-                        self.hitbox.x += self.driftdir
+                self.drift-=1
+            if self.velocity != 0:
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.hitbox.y += self.driftdir
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.hitbox.y += self.driftdir
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                    self.hitbox.x += self.driftdir
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+                    self.hitbox.x += self.driftdir
         else:
             self.miseAMort()
+
+    def isHittingSomething(self,entities):
+        for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            if(entities[0].takeDamage(self.degats)):
+                                pygame.mixer.Sound.play(self.attack_sound)
+                    else: #puis les objets
+                        None #faire pour objet plaçable
 
     def miseAMort(self):
         death_sound = pygame.mixer.Sound("../sound/splat.wav")
@@ -226,6 +231,10 @@ class banane(entite):
     #Instanciation de l'entité banane
     def __init__(self,xx,yy,sprite):
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
+
+        #a refaire autre part
+        self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
+        self.attack_sound.set_volume(0.1)
 
         
 
@@ -271,35 +280,40 @@ class banane(entite):
             else:
                 self.timer +=1
 
-            self.mask = pygame.mask.from_surface(self.image[self.current])
+            #self.mask = pygame.mask.from_surface(self.image[self.current])
 
-            if(self.hitbox.x == Xjoueur and self.hitbox.y == Yjoueur):
-                None
-                #self.hitbox.x -= 400
+            self.isHittingSomething(entities)
+
+            if self.drift!=0:
+                self.hitbox.x += self.driftdirx*2
+                self.hitbox.y += self.driftdiry*2
+                self.drift-=1
             else:
-
-                if self.drift!=0:
-                    self.hitbox.x += self.driftdirx*2
-                    self.hitbox.y += self.driftdiry*2
-                    self.drift-=1
-                else:
-                    self.drift=random.randrange(20)
-                    self.driftdirx = random.choice((-1,1))
-                    self.driftdiry = random.choice((-1,1))
-
-                if(Xjoueur < self.hitbox.x):
-                    self.hitbox.x -= self.velocity
-                    self.orientation=1
-                elif(Xjoueur > self.hitbox.x):
-                    self.hitbox.x += self.velocity
-                    self.orientation=0
-                if(Yjoueur < self.hitbox.y):
-                    self.hitbox.y -= self.velocity
-                elif(Yjoueur > self.hitbox.y):
-                    self.hitbox.y += self.velocity
+                self.drift=random.randrange(20)
+                self.driftdirx = random.choice((-1,1))
+                self.driftdiry = random.choice((-1,1))
+            if(Xjoueur < self.hitbox.x):
+                self.hitbox.x -= self.velocity
+                self.orientation=1
+            elif(Xjoueur > self.hitbox.x):
+                self.hitbox.x += self.velocity
+                self.orientation=0
+            if(Yjoueur < self.hitbox.y):
+                self.hitbox.y -= self.velocity
+            elif(Yjoueur > self.hitbox.y):
+                self.hitbox.y += self.velocity
         else:
             self.miseAMort()
 
+
+    def isHittingSomething(self,entities):
+        for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            if(entities[0].takeDamage(self.degats)):
+                                pygame.mixer.Sound.play(self.attack_sound)
+                    else: #puis les objets
+                        None #faire pour objet plaçable
 
     def miseAMort(self):
 

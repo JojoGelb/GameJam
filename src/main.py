@@ -87,7 +87,7 @@ while running:
         GameState = menuEnd.action(screenWidth,screenHeight)
     elif(GameState == "restart"):
         #Enclencher la sauvegarde
-        game == "null"
+        game = "null"
         menu = Menu(screenWidth,screenHeight)
         menuSoupe = Pause(screenWidth,screenHeight)
         menuEnd = "null"
