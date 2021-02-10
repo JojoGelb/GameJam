@@ -2,7 +2,7 @@ import pygame
 import random
 from player import Player
 from entite import *
-
+from build import *
 
 # waves are in form
 # frequency of enemies
@@ -52,8 +52,11 @@ class Game():
         #self.entity.append(carotte(3000,2000))
         #self.entity.append(tomate(1000,2000))
 
+        #array composé du player et de ses constructions
+        self.friendlyEntity = []
+        self.friendlyEntity.append(self.player)
         #Gérer les vagues
-        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]]
+        self.wavesStat = [[ 3, 0 , 1],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
         self.waves = 0
         self.current_wave = self.wavesStat[self.waves]
         self.engame = True
@@ -64,11 +67,15 @@ class Game():
         
         if sum(self.current_wave) == 0: #Tout les entity on été créer  
             if len(self.entity) == 0: #Tous les entity sont 
+                if self.waves == 12:
+                    self.current_wave = self.wavesStat[self.waves]
+                    self.engame = False 
+                else:    
                     self.waves +=1 #vague suivante
                     self.current_wave = self.wavesStat[self.waves]
                     self.engame = False        
         else:
-            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate),banane(random.randrange(0,4000),4000,self.spriteBanane)] #définition des types d'énemies et point d'apparition
+            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate),banane(random.randrange(0,4000),3500,self.spriteBanane)] #définition des types d'énemies et point d'apparition
             for i in range(len(self.current_wave)):
                 if self.current_wave[i] != 0:
                     self.entity.append(wave_enemies[i]) #ajout
@@ -88,6 +95,10 @@ class Game():
             if(self.entity[i].exist == False):
                 del self.entity[i]
                 break
+            
+        #update friendlyentity
+        for i in range(len(self.entity)):
+            self.entity[i].update(self.friendlyEntity)
 
         #Dans la fonction upgrade
         EntiteDead = []
@@ -105,6 +116,7 @@ class Game():
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
                 self.player.gold +=  self.entity[i].gold*self.modifGold
+                
 
         for entite in EntiteDead:
             self.entity.remove(entite)
@@ -129,6 +141,9 @@ class Game():
 
         for deadEntite in range(len(self.deadList)):
             self.deadList[deadEntite].render(screen,self.xOffset,self.yOffset)
+        
+        for build in self.friendlyEntity:
+            build.render(screen,self.xOffset,self.yOffset)
 
         self.player.render(screen,self.xOffset,self.yOffset)
     
@@ -177,8 +192,15 @@ class Game():
                 return "Quit"
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return "SoupeScreen"
+            #nouvelle vague
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.engame = True
+            #Créer un build
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+                if self.player.gold >= 200:
+                    self.friendlyEntity.append(mortier(self.player.position[0],self.player.position[1],0,0,0,0))
+            #elif event.type == pygame.KEYDOM and event.key == pygame.K_e:
+            #    self.friendlyEntity.append(mur(self.player.position[0],self.player.position[1],0,0,0,0))
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 self.pressed[event.key] = True

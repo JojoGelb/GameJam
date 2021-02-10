@@ -8,7 +8,7 @@ from projectile import *
 class mortier(entite):
 
     def __init__(self,xx,yy,cooldown,degats,rangge,vie):
-        entite.__init__(self,"DIST",vie,"NULL",degats,"ALLIE",xx,yy)
+        entite.__init__(self,"DIST",vie,"NULL",degats,"ALLIE",xx,yy,[])
 
         try:
             sprite = SpriteSheet('../textures/MORTIER.png')
