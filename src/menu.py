@@ -422,7 +422,7 @@ class Upgrade:
         self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
         self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
         tinyfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',13)
-
+        self.retour = self.bigfont.render("Retour" , True , (250,250,250))
         self.gold = gold
         self.upgrade = upgrade
 
@@ -450,6 +450,11 @@ class Upgrade:
         tempSprite = spriteMur.image_at(rect)
         self.spriteMur =pygame.transform.scale(tempSprite,(125,125))
 
+        sprite = SpriteSheet('../textures/Turret.png')
+        rect = (0,0,640,640)
+        tempSprite = sprite.image_at(rect)
+        self.imageMitra = pygame.transform.scale(tempSprite,(125,125))
+
 
         self.text1 = self.smallfont.render("JOUEUR" , True , (250,250,250))
         self.playerUpgrade = """Augmentation du player :  
@@ -470,7 +475,7 @@ Changement: +1PV /1 upgrade
         self.barricadeUpgrade = """Augmentation de la barricade :  
 coût      :  50PO 
 Changement: +100PV /1 upgrade"""
-        x=300
+        x=290
         y=150
         i=0
         for ligne in self.barricadeUpgrade.splitlines():
@@ -490,6 +495,17 @@ Changement: +1DMG /1 upgrade"""
             self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
         
 
+        self.text4 = self.smallfont.render("MITRAILLETTE" , True , (250,250,250))
+        self.mitraUpgrade = """Augmentation de la Mitraille :  
+coût      :  100PO 
+Changement: +1DMG /1 upgrade"""
+        x=785
+        y=150
+        i=0
+        for ligne in self.mitraUpgrade.splitlines():
+            i+=1
+            self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
+
 
 
     def render(self,screen):
@@ -499,6 +515,7 @@ Changement: +1DMG /1 upgrade"""
         screen.blit(self.background,(0,0))
         pygame.draw.rect(screen,(41,41,41),(750,0,200,50)) #chingchong
         screen.blit(self.titre,(425,25))
+        screen.blit(self.retour,(425,650))
 
         pygame.draw.rect(self.background,(0,0,0),(100,490,75,60))
         pygame.draw.rect(self.background,(0,0,0),(350,490,75,60))
@@ -519,6 +536,11 @@ Changement: +1DMG /1 upgrade"""
 
         screen.blit(self.imageMortier,(580,300))
         screen.blit(self.text3,(550,100))
+
+        screen.blit(self.imageMitra,(825,300))
+        screen.blit(self.text4,(800,100))
+
+        
         
     def action(self,screenWidth,screenHeight):
         mos_x, mos_y = pygame.mouse.get_pos()
@@ -542,5 +564,7 @@ Changement: +1DMG /1 upgrade"""
                 elif mos_x > 850 and mos_x < 925 and mos_y > 490 and mos_y < 550 and self.gold > 100:
                     self.gold -= 100
                     self.upgrade[3][1] += 1
+                elif(mos_x > 425 and mos_x < 610 and mos_y > 650 and mos_y < 700):
+                    return "SoupeScreen"
 
         return "Upgrade"
