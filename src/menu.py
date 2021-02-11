@@ -86,12 +86,12 @@ class Pause:
         pygame.mixer.music.play(-1) #pour tourner a l'infini
         self.Abus = False
 
-        self.clickTips1 = True
-
+        self.clickTips1 = False
+        
         self.verybigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',60)
         self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',18)
         self.tips1 = """ 
-        Cliquer sur boîte vous 
+        Cliquer sur boire vous 
          permettra de passer 
             une bonne nuit
 
@@ -99,11 +99,20 @@ class Pause:
     Difficulté cauchemard remis à 0
    Multiplicateur de Gold remis à 0"""
 
+        self.clickTips2 = False
 
+        self.tips2 = """
+        Cliquer sur ne pas boire
+      vous enverra dans un cauchemar
 
+        Point de vie inchangé
+    Difficulté augmente doucement
+   Multiplicateur de Gold augmente"""
     def render(self,screen):
         screen.blit(self.background, (0,0))
-        pygame.draw.rect (self.background,(250,250,250),(660,75,30,50))
+        #pygame.draw.rect (self.background,(250,250,250),(660,75,30,50))
+        #pygame.draw.rect (self.background,(250,250,250),(660,175,30,50))
+
         self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,75))
         self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,175))
         
@@ -113,6 +122,15 @@ class Pause:
             x=675
             y=25
             for ligne in self.tips1.splitlines():
+                i+=1
+                screen.blit(self.smallfont.render(ligne,1,(0,0,0)),(x,y+i*15))
+        
+        if(self.clickTips2):
+            pygame.draw.rect(screen,(250,250,250),(700,175,325,125))
+            i=0
+            x=675
+            y=150
+            for ligne in self.tips2.splitlines():
                 i+=1
                 screen.blit(self.smallfont.render(ligne,1,(0,0,0)),(x,y+i*15))
 
@@ -136,7 +154,7 @@ class Pause:
                     pygame.mixer.music.set_volume(0.05)
                     print("rien ne se passe pour le moment: changement de jour + reset buff")
                     self.Abus =True
-                    return "SoupeScreen" #Bouton boire
+                    return "Horloge" #Bouton boire
 
                 elif mos_x> 415 and mos_x < 605 and mos_y > 180 and mos_y < 230: #bouton pas boire
                     return "Play" #lance le jeu
@@ -146,6 +164,17 @@ class Pause:
                     return "Upgrade"
                 if mos_x> 0 and mos_x < 170 and mos_y > 703 and mos_y < 768:
                     return "restart"
+                if mos_x> 660 and mos_x < 690 and mos_y > 75 and mos_y < 125:
+                    if self.clickTips1 == True:
+                        self.clickTips1 = False
+                    elif self.clickTips1 == False:
+                        self.clickTips1=True
+                if mos_x> 660 and mos_x < 690 and mos_y > 175 and mos_y < 225:
+                    if self.clickTips2 == True:
+                        self.clickTips2 = False
+                    elif self.clickTips2 == False:
+                        self.clickTips2=True
+                
                 
 
         return "SoupeScreen"
@@ -220,12 +249,8 @@ class Credit:
         self.text2 = smallfont.render("Graphiste et game designer:      Sévan Mulin, Alexa Angermann" , True , (250,250,250))
         self.text3 = smallfont.render("Developpeur Gameplay:            Jordy Gelb" , True , (250,250,250))
         self.text4 = bigfont.render("On Remercie Aussi: " , True , (250,250,250))
-        self.text5 = smallfont.render("Pour le graphisme:   \n Mariluz pour ses sur nos couleurs " , True , (250,250,250))
-        self.text6 = smallfont.render("                     \n Un gas dans la rue qui semblait gentil" , True , (250,250,250))
-        self.text7 = smallfont.render("                     \n La maman de Alexa qui aime les carrotes de Sevan" , True , (250,250,250))
-        self.text8 = smallfont.render("Pour la musique  :   \n Des gens randoms que juliens à volé " , True , (250,250,250))
-        self.text9 = smallfont.render("                     \n Rick ashley" , True , (250,250,250))
-        self.text10 = smallfont.render("                     \n J'aime " , True , (250,250,250))
+        self.text8 = smallfont.render("Pour la musique  :   \n Kevin MacLeod pour la musique en jeu " , True , (250,250,250))
+        self.text9 = smallfont.render(" Dar Golan pour celle du menu. Les deux étant 'no copyrights' ",True, (250,250,250))
         self.textRetour = bigfont.render("RETOUR" , True , (250,250,250))
     
     def render(self,screen):
@@ -237,13 +262,9 @@ class Credit:
 
         screen.blit(self.text4,(300,250))
 
-        screen.blit(self.text5,(70,350))
-        screen.blit(self.text6,(70,375))
-        screen.blit(self.text7,(70,400))
-
         screen.blit(self.text8,(70,450))
         screen.blit(self.text9,(70,475))
-        screen.blit(self.text10,(70,500))
+        
 
         #pygame.draw.rect(screen,(250,0,0),(410,645,200,50))
         screen.blit(self.textRetour,(425,650))
@@ -594,3 +615,32 @@ Changement: +1DMG /1 upgrade"""
                     return "SoupeScreen"
 
         return "Upgrade"
+
+
+class horloge:
+
+    def __init__(self,screenWidth,screenHeight):
+        self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        self.titrePage = self.bigfont.render("Et la nuit se déroula tranquilement" , True , (250,250,250))
+        self.spriteclock=[]
+        try:
+            clo = SpriteSheet("../textures/clock.png")
+            for j in range(24):
+                rect = (0,j*672,672,672)
+                tempSprite = clo.image_at(rect)
+                self.spriteclock.append(pygame.transform.rotate(pygame.transform.scale(tempSprite,(500,500)),90))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
+
+    def render(self,screen,screenWidth,screenHeight):
+
+        for i in range(24):
+            screen.fill((41,41,41))
+            screen.blit(self.titrePage,(10,50))
+            screen.blit(self.spriteclock[i],(screenWidth/2-220,screenHeight/2-271))
+            pygame.display.flip()
+            pygame.time.wait(120)
+        return "SoupeScreen"
