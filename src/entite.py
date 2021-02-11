@@ -26,6 +26,7 @@ class entite(pygame.sprite.Sprite):
 class carotte(entite):
 
     def __init__(self,xx,yy,sprite,death,vie,damage,vitesse,gold):
+        
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
 
         #image affiché à la mort de l'entité

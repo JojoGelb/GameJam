@@ -251,6 +251,10 @@ class Game():
                 if self.player.barreCompetence.murClicable:
                     self.player.gold -= 50
                     self.builds.append(mur(self.player.position[0],self.player.position[1],1000,self.spriteMur))
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_f:
+                if self.player.barreCompetence.murClicable:
+                    self.player.gold -= 100
+                    self.builds.append(mitraillette(self.player.position[0],self.player.position[1],0,0,0,0,self.spriteRolling))
 
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
@@ -310,6 +314,7 @@ class Game():
         self.spriteTomate=[]
         self.spriteBanane=[]
         self.spriteMur=[]
+        self.spriteRolling=[]
         #self.spriteTomateDeath=[]
 
         
@@ -398,7 +403,18 @@ class Game():
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
-       
+        try:
+            spriteRollin = SpriteSheet("../textures/Rolling_Stone.png")
+
+            for j in range(10):
+                rect = (j*200,0,200,200)
+                tempSprite = spriteRollin.image_at(rect)
+                self.spriteRolling.append(pygame.transform.scale(tempSprite,(64,64)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
+
         #ecran charge
         wololo=60
         while wololo<=100:

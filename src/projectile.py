@@ -91,6 +91,8 @@ class Projectile(pygame.sprite.Sprite):
             self.distance -= self.vitesse
 
 
+#=================================================================================================================================================
+
 
 class ProjectileMortier(pygame.sprite.Sprite):
 
@@ -178,12 +180,13 @@ class ProjectileMortier(pygame.sprite.Sprite):
         self.rect.x=self.rect.x+math.cos(self.angle)*self.vitesse
         self.rect.y=self.rect.y+math.sin(self.angle)*self.vitesse
 
+#=================================================================================================================================================
 
           
 class ProjectileMitraille(pygame.sprite.Sprite):
 
 
-    def __init__(self,x,y,damage,vitesse_proj,dirx,diry):
+    def __init__(self,x,y,damage,vitesse_proj,dirx,diry,PATH):
         super().__init__()
         self.damage = damage
         self.vitesse = vitesse_proj
@@ -196,12 +199,7 @@ class ProjectileMitraille(pygame.sprite.Sprite):
        
    
         try:
-            sprite = SpriteSheet("../textures/OBUS.png")
-            self.image=[]
-            for j in range(17):
-                rect = (0,j*200,200,200)
-                tempSprite = sprite.image_at(rect)
-                self.image.append(pygame.transform.scale(tempSprite,(50,50)))
+            self.image=PATH
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
@@ -222,15 +220,19 @@ class ProjectileMitraille(pygame.sprite.Sprite):
                 screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
         #pygame.draw.rect(screen,(250,250,250),(self.cibleX -100 + xOffset ,self.cibleY -100 + yOffset,200,200))
                         
-    def doesTouche(self,entitie):
+    def doesTouche(self,entities):
         
-        for i in range(len(entitie)):
-            print(entitie[i].hitbox.x,entitie[i].hitbox.y)
-            ennemisTouches = pygame.sprite.spritecollide(self, entitie, False)
-            if ennemisTouches :
-                ennemisTouches[0].vie -= self.damage
-                if ennemisTouches[0].vie <= 0:
-                    ennemisTouches[0].miseAMort() # tout va bien carotte n'a pas encore de mise à mort
+        for i in range(len(entities)):
+            print(entities[i].hitbox.x,entities[i].hitbox.y)
+
+            if(self.rect.x + self.rect.width >= entities[i].rect.x and self.rect.x < entities[i].rect.x + entities[i].rect.width) and (self.rect.y + self.rect.height > entities[i].rect.y and self.rect.y < entities[i].rect.y + entities[i].rect.height):
+                entities[i].vie -= self.damage
+                print("DAMAGE ffffffffffffffffffff")
+                print(self.damage)
+                print(entities[i].vie)
+                print("DAMAGE ffffffffffffffffffff")                
+                if entities[i].vie <= 0:
+                    entities[i].miseAMort() # tout va bien carotte n'a pas encore de mise à mort
                     print("Dead")
                 self.hasHit=True
 
@@ -239,8 +241,9 @@ class ProjectileMitraille(pygame.sprite.Sprite):
         #for entities check si touché ou non temp = entitie touché
          #print(self.distance,self.vitesse)
 
-        self.doesTouche(entities)
-        print(self.hasHit)
+        if self.hasHit==False:
+            self.doesTouche(entities)
+
     
         if(self.timer>=250):
             self.hasHit=True
@@ -251,7 +254,7 @@ class ProjectileMitraille(pygame.sprite.Sprite):
         if(self.hasHit == True and self.current>=0):
             self.current += 1
 
-        if(self.current > 16):
+        if(self.current > 9):
             self.exist = False
             self.current = -1
 
