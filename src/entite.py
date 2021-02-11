@@ -139,7 +139,7 @@ class tomate(entite):
         self.gold=10 + gold
         self.degats = 2 + damage
         self.baseVelocity += vitesse
-        self.velocity = 3 +vitesse
+        self.velocity = 2 +vitesse
         self.vie += vie
 
         #hit box ( anciennement rect )
@@ -169,6 +169,7 @@ class tomate(entite):
     def render(self,screen,xOffset,yOffset):
        
         if(self.mortype==True):
+            self.image[self.current].set_alpha(200-self.timer)
             screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100))
             if self.current < 20:
                 self.current+=1
@@ -290,12 +291,19 @@ class banane(entite):
     def render(self,screen,xOffset,yOffset):
         #Ligne test hitbox
         #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        if self.alreadyKilled:
+            self.image[self.current].set_alpha(200-self.timer)
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))
 
-        if self.orientation==1:
-            screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))                             #affiche l'image de l'entite à la position indiqué par ses coord
-        else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x-50,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
-
+            if(self.current<7):
+                self.current+=1
+        else:       
+            if self.orientation==1:
+                screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))                       #affiche l'image de l'entite à la position indiqué par ses coord
+            else:
+                screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x-50,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
+            if(self.current==3):
+                self.current=0
 
     def update(self,entities):
 
@@ -355,9 +363,9 @@ class banane(entite):
             pygame.mixer.Sound.play(death_sound)
             self.alreadyKilled = True
             self.timer = 0
-            self.current = 0
+            self.current = 4
 
         self.timer += 1
-        self.image[self.current].set_alpha(200-self.timer)
+
         if(self.timer >=50):
             self.exist = False

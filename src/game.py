@@ -47,8 +47,8 @@ class Game():
         self.background = pygame.transform.scale(background,(self.mapBorderRight - self.mapBorderLeft,self.mapBorderBottom-self.mapBorderTop))
      
         #Chargement
-        self.chargementGame(screen,screenWidth,screenHeight)
         self.chargementSprite(screen,screenWidth,screenHeight)
+        #self.chargementGame(screen,screenWidth,screenHeight)
 
 
         self.listempo = []
@@ -59,7 +59,7 @@ class Game():
         self.DmgMitraille = 2
         self.DmgMortier = 10
         #Gérer les vagues
-        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[5, 5, 0],[10, 0, 0],[5, 5, 5]]
+        self.wavesStat = [[ 3, 1 , 0],[ 5, 1 , 1],[0, 5, 0],[5, 5, 2],[10, 0, 3],[5, 5, 5]]
         self.waves = 0
         self.current_wave = []
         self.engame = True
@@ -351,7 +351,7 @@ class Game():
             #ecran charge
 
             for i in range(4):
-                rect = (0,i*1024,416,1024)
+                rect = (0,i*224,91,224)
                 tempSprite = spriteCarroteDeath.image_at(rect)
                 self.spriteCarroteDeath.append(pygame.transform.scale(tempSprite,(64,160)))
 
@@ -394,7 +394,7 @@ class Game():
         try:
             spriteBanane = SpriteSheet('../textures/Banane.png')
 
-            for i in range(4):
+            for i in range(8):
                 rect = (i*350,0,350,350)
                 tempSprite = spriteBanane.image_at(rect)
                 self.spriteBanane.append(pygame.transform.scale(tempSprite,(256,256)))

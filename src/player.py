@@ -112,26 +112,26 @@ class Player(pygame.sprite.Sprite):
     
     def shoot_right(self,mapBorderRight):
         if(self.timer >= self.cooldown):
-            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"right",10,10,1500)
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"right",10,12,1500)
             self.projectiles.append(shoot)
             self.timer = 0
         
     def shoot_left(self,mapBorderLeft):
         if(self.timer >= self.cooldown):
-            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"left",10,10,1500)
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"left",10,12,1500)
             self.projectiles.append(shoot)
             self.timer = 0
 
     def shoot_up(self,mapBorderDown):
         if(self.timer >= self.cooldown):
 
-            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"up",10,10,1500)
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"up",10,12,1500)
             self.projectiles.append(shoot)
             self.timer = 0
 
     def shoot_down(self,mapBorderUp):
         if(self.timer >= self.cooldown):
-            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"down",10,10,1500)
+            shoot = Projectile(self.position[0],self.position[1],self.projectilPath,"down",10,12,1500)
             self.projectiles.append(shoot)
             self.timer = 0
 
