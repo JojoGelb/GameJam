@@ -76,7 +76,7 @@ class Game():
         self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
 
         self.upgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
-        
+        self.dejaupgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
     def gen_enemies(self):
         if self.reset:
             self.difficult = 1
@@ -144,7 +144,7 @@ class Game():
             if(self.builds[i].exist == False):
                 del self.builds[i]
                 break
-
+        
         #Dans la fonction upgrade
         EntiteDead = []
 
@@ -259,7 +259,7 @@ class Game():
                     self.player.gold -= 50
                     self.builds.append(mur(self.player.position[0],self.player.position[1],self.PvMur,self.spriteMur))
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_f:
-                if self.player.barreCompetence.murClicable:
+                if self.player.barreCompetence.mitrClicable:
                     self.player.gold -= 100
                     self.builds.append(mitraillette(self.player.position[0],self.player.position[1],0,self.DmgMitraille,0,0,self.spriteRolling))
 
@@ -437,17 +437,29 @@ class Game():
 
     def applyUpgrade(self,Upgrade):
         self.upgrade = Upgrade
+        for i in range(len(self.dejaupgrade)):
+            self.dejaupgrade[i][1] -= Upgrade[i][1]
 
         for i in range(len(self.upgrade)):
             if i == 0:
-               self.player.vie = self.player.vie + self.upgrade[i][2]
-               if self.upgrade[i][2]%5 == 0:
-                   self.player.attack = self.player.attack + (self.upgrade[i][2]/5)
-                   self.player.velocity = self.player.velocity + (self.upgrade[i][2]/5)
+               self.player.vie = self.player.vie + self.upgrade[i][1]
+               if self.upgrade[i][1]%5 == 0:
+                   self.player.attack = self.player.attack + (self.upgrade[i][1]/5)
+                   self.player.velocity = self.player.velocity + (self.upgrade[i][1]/5)
             elif i == 1:
-                self.PvMur = self.PvMur + (self.upgrade[i][2]*100)                  
+                self.PvMur = self.PvMur + (self.upgrade[i][1]*100)
+                for i in range(len(self.builds)):
+                    if self.builds[i].__class__.__name__ == "mur":
+                        self.builds[i].vie = self.PvMur
             elif i == 2:
-                self.DmgMortier = self.DmgMortier + self.upgrade[i][2]
+                self.DmgMortier = self.DmgMortier + self.upgrade[i][1]
+                for i in range(len(self.builds)):
+                    if self.builds[i].__class__.__name__== "mortier":
+                        self.builds[i].degats = self.DmgMortier
             elif i ==3:
-                self.DmgMitraille = self.DmgMitraille + self.upgrade[i][2]
+                self.DmgMitraille = self.DmgMitraille + self.upgrade[i][1]
+                for i in range(len(self.builds)):
+                    if self.builds[i].__class__.__name__== "mitraillette":
+                        self.builds[i].degats = self.DmgMitraille
+        
                 
