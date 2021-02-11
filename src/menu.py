@@ -345,6 +345,9 @@ vie     : Tentacule de fer !"""
 
         sprite = SpriteSheet('../textures/Banane.png')
         self.imageBanane=(pygame.transform.scale(sprite.image_at((350,0,350,500)),(256,256)))
+        
+        sprite = SpriteSheet('../textures/AIL.png')
+        self.imageAil=(pygame.transform.scale(sprite.image_at((0,0,224,217)),(128,160)))
 
 
 
@@ -365,7 +368,7 @@ vie     : Tentacule de fer !"""
         self.background.blit(self.imagecarotte,(110,260))
         self.background.blit(self.imagetomate,(330,200))
         self.background.blit(self.imageBanane,(510,250))
-        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(860,300))
+        self.background.blit(self.imageAil,(830,250))
 
         pygame.draw.rect(screen,(41,41,41),(750,0,200,50)) #chingchong
 
