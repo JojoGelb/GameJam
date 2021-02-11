@@ -402,13 +402,13 @@ class regles:
         self.rules = """
                     [utilisez Z-Q-S-D pour vous déplacer]
 
-                      [utilisez les fleches pour tirer]
+                      [utilisez les flèches pour tirer]
 
-                 [Pour lancer la partie appuyez sur start] 
+                 [Pour lancer la partie, appuyez sur start] 
 
-              [en premier lieu, boire la soupe n'a aucun effets]
+              [En premier lieu, boire la soupe n'a aucun effet]
 
-            [Quand vous ne buvez pas la soupe la partie est lancée] 
+            [Quand vous ne buvez pas la soupe, la partie est lancée] 
 
                           [enfin, votre cauchemar] 
 
@@ -420,17 +420,17 @@ class regles:
 
          [si vous acceptez, vous pourrez alors dépenser votre argent]
 
-    [Dans ce cas la Boire la soupe vous garantira une bonne nuit de sommeil] 
+    [Dans ce cas "Boire la soupe" vous garantira une bonne nuit de sommeil] 
 
         [Vous perdrez ainsi vos malus, mais aussi votre multiplicateur]
 
-        [Ne pas boire la soupe aura pour effet de conserver les effets]
+        ["Ne pas boire la soupe" aura pour effet de conserver les effets]
 
             [Bah ouais, mal dormir n'est pas bon pour la santé]
 
                [votre score se calcule sur l'argent gagné]
 
-         [ou plutot: le maximum d'argent engrangé dans la partie]
+         [ou plutôt: le maximum d'argent engrangés dans la partie]
 
        [un score élevé signifie que vous avez longtemps cauchemardé] """
 
@@ -683,26 +683,26 @@ class Cinematique:
             screen.blit(self.BILLY,(0,0))
             
             
-            temptext=self.smallfont.render("mais, mais j'ai pas faim !" , True , (250,250,250))
+            temptext=self.smallfont.render("Mais, mais j'ai pas faim !" , True , (250,250,250))
             screen.blit(temptext,(425,200))
         if(self.etape==2):
             screen.fill((41,41,41))
             screen.blit(self.HIPSTER,(0,0))
             
             
-            temptext=self.smallfont.render("MANGE TA SOUPE, ou tu subira des conséquences huahaha" , True , (250,250,250))
+            temptext=self.smallfont.render("MANGE TA SOUPE, ou tu subiras les conséquences mwuahaha" , True , (250,250,250))
             screen.blit(temptext,(50,200))
         if(self.etape==3):
             screen.fill((41,41,41))
             
             
-            temptext=self.smallfont.render("*sort de la chambre*" , True , (250,250,250))
+            temptext=self.smallfont.render("*Sort de la chambre*" , True , (250,250,250))
             screen.blit(temptext,(425,200))
         if(self.etape==4):
             screen.fill((41,41,41))
             
             screen.blit(self.BILLY,(0,0))
-            temptext=self.smallfont.render("allé, zou, à la poubelle, jvais dodo" , True , (250,250,250))
+            temptext=self.smallfont.render("Allé, zou, à la poubelle, j'vais dodo" , True , (250,250,250))
             screen.blit(temptext,(425,200))
         if(self.etape==5):
             screen.fill((41,41,41))
