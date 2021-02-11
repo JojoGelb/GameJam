@@ -372,7 +372,7 @@ class Game():
         try:
             spriteTomate = SpriteSheet('../textures/elTomaty.png')
 
-            for i in range(14):
+            for i in range(21):
                 rect = (i*350,0,350,500)
                 tempSprite = spriteTomate.image_at(rect)
                 self.spriteTomate.append(pygame.transform.scale(tempSprite,(128,256)))
