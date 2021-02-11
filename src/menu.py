@@ -84,12 +84,14 @@ class Pause:
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
+        self.Abus = False
 
     def render(self,screen):
         screen.blit(self.background, (0,0))
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
+
         mos_x, mos_y = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
@@ -106,6 +108,7 @@ class Pause:
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
                     pygame.mixer.music.set_volume(0.05)
                     print("rien ne se passe pour le moment: changement de jour + reset buff")
+                    self.Abus =True
                     return "SoupeScreen" #Bouton boire
 
                 elif mos_x> 415 and mos_x < 605 and mos_y > 180 and mos_y < 230: #bouton pas boire

@@ -56,6 +56,9 @@ while running:
         primeravez=1
         if(game == "null"):
             game = Game(screenWidth, screenHeight,screen)
+        if(menuSoupe.Abus == True):
+            menuSoupe.Abus = False
+            game.reset = True
         
         game.render(screen,screenWidth,screenHeight)
 
