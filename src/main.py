@@ -36,6 +36,12 @@ bestiaire = bestiaire(screenWidth,screenHeight)
 
 menuEnd = "null"
 
+begining = False
+
+#menuUpgrade = Upgrade(screenWidth,screenHeight,0)
+
+instantiate = False
+
 playerScore = 0
 
 clock = pygame.time.Clock() #très importantnb de frame par tick 
@@ -100,6 +106,7 @@ while running:
             menuEnd = Score(screenWidth,screenHeight,playerScore)
         menuEnd.render(screen)
         GameState = menuEnd.action(screenWidth,screenHeight)
+
     elif(GameState == "restart"):
         #Enclencher la sauvegarde
         game = "null"
@@ -108,6 +115,31 @@ while running:
         menuSoupe = Pause(screenWidth,screenHeight)
         menuEnd = "null"
         GameState = "menu"
+
+    elif(GameState == "Upgrade"):
+        if(game == "null" ):
+            if(instantiate != True):
+                menuUpgrade = Upgrade(screenWidth,screenHeight,0,None)
+                instantiate = True
+                begining = True
+        else:
+            if (instantiate != True):
+                menuUpgrade = Upgrade(screenWidth,screenHeight,game.player.gold,game.upgrade)
+                instantiate = True
+        GameState = menuUpgrade.action(screenWidth,screenHeight)
+        menuUpgrade.render(screen)
+
+        if(GameState != "Upgrade"):
+            instantiate = False
+            if begining == False:
+                game.player.gold = menuUpgrade.gold
+                for i in range(4):
+                    game.upgrade[i][1] = menuUpgrade.upgrade[i][1]
+
+            else:
+                begining = False
+                
+            #mettre a jour le jeu game
 
 
     

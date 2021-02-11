@@ -71,6 +71,8 @@ class Game():
         self.affichageEntre2vague = bigfont.render("la vague suivante", True , (250,250,250))
         self.affichageEntre3vague = bigfont.render("Tappez sur ECHAP pour vous réveiller", True , (250,250,250))
         self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
+
+        self.upgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
         
     def gen_enemies(self):
         if self.reset:

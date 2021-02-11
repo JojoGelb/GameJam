@@ -415,3 +415,132 @@ class regles:
                 if(mos_x> 425 and mos_x < 610 and mos_y > 670 and mos_y < 720):
                     return "menu"
         return "Regles"
+
+class Upgrade:
+    def __init__(self,screenWidth,screenHeight,gold,upgrade):
+        self.verybigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',150)
+        self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        tinyfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',13)
+
+        self.gold = gold
+        self.upgrade = upgrade
+
+
+        #generation sprite/images
+
+        background = pygame.image.load("../textures/fontbestiaire.png")
+        
+        self.background = pygame.transform.scale(background,(screenWidth+755,screenHeight+50))
+        self.titre = self.bigfont.render("Upgrade" , True , (250,250,250))
+
+
+        sprite = SpriteSheet('../textures/BILLY_AVANCE.png')
+        rect = (0,0,704,1152)
+        tempSprite = sprite.image_at(rect)
+        self.billy = pygame.transform.scale(tempSprite,(70,115))
+
+        sprite = SpriteSheet('../textures/MORTIER.png')  
+        rect = (0,0,672,672)
+        tempSprite = sprite.image_at(rect)
+        self.imageMortier = pygame.transform.scale(tempSprite,(125,125))
+
+        spriteMur = SpriteSheet('../textures/Barricade.png')
+        rect = (0,0,704,704)
+        tempSprite = spriteMur.image_at(rect)
+        self.spriteMur =pygame.transform.scale(tempSprite,(125,125))
+
+
+        self.text1 = self.smallfont.render("JOUEUR" , True , (250,250,250))
+        self.playerUpgrade = """Augmentation du player :  
+coût      :  50PO 
+Changement: +1PV /1 upgrade
+            +1DMG /5 upgrades
+            +1VIT /5 upgrades"""
+
+        x=40
+        y=150
+        i=0
+        for ligne in self.playerUpgrade.splitlines():
+            i+=1
+            self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
+
+
+        self.text2 = self.smallfont.render("BARRICADE" , True , (250,250,250))
+        self.barricadeUpgrade = """Augmentation de la barricade :  
+coût      :  50PO 
+Changement: +100PV /1 upgrade"""
+        x=300
+        y=150
+        i=0
+        for ligne in self.barricadeUpgrade.splitlines():
+            i+=1
+            self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
+
+
+        self.text3 = self.smallfont.render("MORTIER" , True , (250,250,250))
+        self.mortierUpgrade = """Augmentation du Mortier :  
+coût      :  100PO 
+Changement: +1DMG /1 upgrade"""
+        x=550
+        y=150
+        i=0
+        for ligne in self.mortierUpgrade.splitlines():
+            i+=1
+            self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
+        
+
+
+
+    def render(self,screen):
+        self.affichageGold = self.smallfont.render("Gold: "+ str(self.gold) , True , (250,250,250))
+        
+        screen.fill((20,20,20))
+        screen.blit(self.background,(0,0))
+        pygame.draw.rect(screen,(41,41,41),(750,0,200,50)) #chingchong
+        screen.blit(self.titre,(425,25))
+
+        pygame.draw.rect(self.background,(0,0,0),(100,490,75,60))
+        pygame.draw.rect(self.background,(0,0,0),(350,490,75,60))
+        pygame.draw.rect(self.background,(0,0,0),(600,490,75,60))
+        pygame.draw.rect(self.background,(0,0,0),(850,490,75,60))
+
+        self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(100,450))
+        self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(350,450))
+        self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(600,450))
+        self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(850,450))
+        screen.blit(self.affichageGold,(850,10))
+
+        screen.blit(self.billy,(100,300))
+        screen.blit(self.text1,(50,100))
+
+        screen.blit(self.spriteMur,(330,300))
+        screen.blit(self.text2,(300,100))
+
+        screen.blit(self.imageMortier,(580,300))
+        screen.blit(self.text3,(550,100))
+        
+    def action(self,screenWidth,screenHeight):
+        mos_x, mos_y = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            #ragequit
+            if event.type == pygame.QUIT:
+                return "Quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "SoupeScreen"
+            if event.type == pygame.MOUSEBUTTONDOWN:  
+                if  mos_x > 100 and mos_x < 175 and mos_y > 490 and mos_y < 550 and self.gold > 50:
+                    self.gold -= 50
+                    self.upgrade[0][1] += 1
+                elif mos_x > 350 and mos_x < 425 and mos_y > 490 and mos_y < 550 and self.gold > 50:
+                    self.gold -= 50
+                    self.upgrade[1][1] += 1
+                elif mos_x > 600 and mos_x < 675 and mos_y > 490 and mos_y < 550 and self.gold > 100:
+                    self.gold -= 100
+                    self.upgrade[2][1] += 1
+                elif mos_x > 850 and mos_x < 925 and mos_y > 490 and mos_y < 550 and self.gold > 100:
+                    self.gold -= 100
+                    self.upgrade[3][1] += 1
+
+        return "Upgrade"
