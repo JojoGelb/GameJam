@@ -55,10 +55,13 @@ class Game():
         #Array de build
         self.builds = []
         #Gérer les vagues
-        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[5, 5, 0],[10, 0, 0],[5, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
+        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[5, 5, 0],[10, 0, 0],[5, 5, 5]]
         self.waves = 0
-        self.current_wave = self.wavesStat[self.waves]
+        self.current_wave = []
         self.engame = True
+        self.difficult = 1
+        self.compVague = 0
+        self.reset = False
         #Liste des entités mortes au combat
         self.deadList = []
 
@@ -70,30 +73,52 @@ class Game():
         self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
         
     def gen_enemies(self):
-        
-        if sum(self.current_wave) == 0: #Tout les entity on été créer  
-            if len(self.entity) == 0: #Tous les entity sont 
-                if self.waves == 12:
-                    self.current_wave = self.wavesStat[self.waves]
-                    self.engame = False 
-                else:    
-                    self.waves +=1 #vague suivante
-                    self.current_wave = self.wavesStat[self.waves]
-                    self.engame = False        
-        else:
-            wave_enemies = [carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath),tomate(0,random.randrange(0,4000),self.spriteTomate),banane(random.randrange(0,4000),3500,self.spriteBanane)] #définition des types d'énemies et point d'apparition
-            for i in range(len(self.current_wave)):
-                if self.current_wave[i] != 0:
-                    self.entity.append(wave_enemies[i]) #ajout
-                    self.current_wave[i] = self.current_wave[i]-1
-                    break
+        if self.reset:
+            self.difficult = 1
+
+        if len(self.entity) == 0: #Tous les entity sont 
+            if self.waves == 6:
+                self.waves = 0
+                self.difficlut += 1
+                self.current_wave = self.wavesStat[self.waves]
+                self.engame = False 
+                print(self.waves)
+            else:   
+                self.current_wave = self.wavesStat[self.waves]
+                if self.difficult >=5:
+                    for i in range(len(self.current_wave)):
+                        self.current_wave[i] = self.current_wave[i]*(self.difficult-3)
+                for i in range(len(self.current_wave)):
+                    for j in range(self.current_wave[i]):
+                        if self.difficult == 1:
+                            if i == 0:
+                                val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,0,0,0,0)
+                            elif i == 1:
+                                val = tomate(0,random.randrange(0,4000),self.spriteTomate,0,0,0,0)
+                            elif i == 2:
+                                val = banane(random.randrange(0,4000),3500,self.spriteBanane,0,0,0,0)
+                        else:
+                            if i == 0:
+                                val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                            elif i == 1:
+                                val = tomate(0,random.randrange(0,4000),self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                            elif i == 2:
+                                val = banane(random.randrange(0,4000),3500,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                        self.entity.append(val)
+                self.engame = False
+                print(self.waves)
+                self.compVague += 1  
+                self.waves +=1 #vague suivante      
+                    
+                    
                     
 
 
     def update(self,screenWidth,screenHeight):
-
+        
         if self.engame:
             self.gen_enemies()
+       
        
         #detection si la touche est enfoncé ou non => deplacement joueur
         self.keyPressed(screenWidth,screenHeight)
@@ -108,9 +133,10 @@ class Game():
             build.update(self.entity)
 
         #destruction des construction
-        for build in self.builds:
-            if(build.exist == False):
-                del build
+        for i in range(len(self.builds)):
+            if(self.builds[i].exist == False):
+                del self.builds[i]
+                break
 
         #Dans la fonction upgrade
         EntiteDead = []
@@ -214,14 +240,14 @@ class Game():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not self.entity:
                 return "SoupeScreen"
             #nouvelle vague
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not self.entity:
                 self.engame = True
             #Créer un build
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_e:
                 if self.player.barreCompetence.morClicable:
                     self.player.gold -= 200
                     self.builds.append(mortier(self.player.position[0],self.player.position[1],0,0,0,0))
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 if self.player.barreCompetence.murClicable:
                     self.player.gold -= 50
                     self.builds.append(mur(self.player.position[0],self.player.position[1],1000,self.spriteMur))

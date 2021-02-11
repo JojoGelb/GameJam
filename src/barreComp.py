@@ -21,9 +21,9 @@ class barreComp(pygame.sprite.Sprite):
 
         smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
         self.mormor = smallfont.render("Mortier" , True , (250,250,250))
-        self.mormorT = smallfont.render("200g  [A]" , True , (250,250,250))        
+        self.mormorT = smallfont.render("200g  [E]" , True , (250,250,250))        
         self.murmur = smallfont.render("Mur" , True , (250,250,250))
-        self.murmurT = smallfont.render("50g   [E]" , True , (250,250,250))
+        self.murmurT = smallfont.render("50g   [A]" , True , (250,250,250))
         self.morClicable = True
         self.murClicable = True
         self.VieMax=vie
