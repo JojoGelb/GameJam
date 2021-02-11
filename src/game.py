@@ -76,6 +76,8 @@ class Game():
         self.affichageEntre3vague = bigfont.render("Tappez sur ECHAP pour vous réveiller", True , (250,250,250))
         self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
 
+        self.TimerAffichageVague = 0
+
         self.upgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
         self.dejaupgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
 
@@ -236,11 +238,15 @@ class Game():
         self.player.render(screen,self.xOffset,self.yOffset)
 
         if not(self.entity):
-            screen.blit(self.affichageEntrevague,(375,50))
-            screen.blit(self.affichageEntre1vague,(125,100))
-            screen.blit(self.affichageEntre2vague,(275,150))
-            screen.blit(self.affichageEntre3vague,(10,200))
-            screen.blit(self.affichageEntre4vague,(100,250))
+            if self.TimerAffichageVague < 300:
+                self.TimerAffichageVague += 1
+                screen.blit(self.affichageEntrevague,(375,50))
+                screen.blit(self.affichageEntre1vague,(125,100))
+                screen.blit(self.affichageEntre2vague,(275,150))
+                screen.blit(self.affichageEntre3vague,(10,200))
+                screen.blit(self.affichageEntre4vague,(100,250))
+        else:
+            self.TimerAffichageVague = 0
 
     #Fonction de verification des inputs
     def keyPressed(self,screenWidth,screenHeight):
