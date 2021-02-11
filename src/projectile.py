@@ -18,8 +18,8 @@ class Projectile(pygame.sprite.Sprite):
             sprite = SpriteSheet(PATH)
 
             self.image=[]
-            for j in range(17):
-                rect = (0,j*200,200,200)
+            for j in range(10):
+                rect = (j*200,0,200,200)
                 tempSprite = sprite.image_at(rect)
                 self.image.append(pygame.transform.scale(tempSprite,(64,64)))
  
@@ -50,8 +50,10 @@ class Projectile(pygame.sprite.Sprite):
             self.current += 1
         else:
             #print(self.distance,self.vitesse)
+            self.current += 1
+            self.current = self.current % 4
             self.move()
-        if(self.current > 16):
+        if(self.current > 9):
             self.exist = False
             self.current = -1
 
