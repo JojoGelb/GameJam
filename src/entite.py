@@ -25,7 +25,7 @@ class entite(pygame.sprite.Sprite):
 
 class carotte(entite):
 
-    def __init__(self,xx,yy,sprite,death):
+    def __init__(self,xx,yy,sprite,death,vie,damage,vitesse,gold):
         entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
 
         #image affiché à la mort de l'entité
@@ -35,8 +35,13 @@ class carotte(entite):
         self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
         self.attack_sound.set_volume(0.1)
         
-        #or de la carotte :
-        self.gold=5
+        #Modification des variables initiale selon la difficulté de jeu
+        #or de la carotte : de base = 5
+        self.gold=5 + gold
+        self.degats = 1 + damage
+        self.baseVelocity += vitesse
+        self.velocity += vitesse
+        self.vie += vie
 
         #hit box ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
@@ -126,11 +131,15 @@ class carotte(entite):
 class tomate(entite):
 
 
-    def __init__(self,xx,yy,sprite):
-        entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
+    def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
+        entite.__init__(self,"CAC",10,"NULL",2,"ENNEMIS",xx,yy,sprite)
         
         #or de la tomate :
-        self.gold=10
+        self.gold=10 + gold
+        self.degats = 2 + damage
+        self.baseVelocity += vitesse
+        self.velocity = 3 +vitesse
+        self.vie += vie
 
         #hit box ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
@@ -142,7 +151,6 @@ class tomate(entite):
         self.mask = pygame.mask.from_surface(self.image[1])
 
         #valeures propre a la tomate:
-        self.velocity = 3
         self.drift = 10
         self.driftdir = 1
         self.current = 1
@@ -230,17 +238,18 @@ class tomate(entite):
 
 class banane(entite):
     #Instanciation de l'entité banane
-    def __init__(self,xx,yy,sprite):
-        entite.__init__(self,"CAC",10,"NULL",1,"ENNEMIS",xx,yy,sprite)
+    def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
+        entite.__init__(self,"CAC",10,"NULL",4,"ENNEMIS",xx,yy,sprite)
 
         #a refaire autre part
         self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
         self.attack_sound.set_volume(0.1)
 
-        
-
-        #Gold de la banane :
-        self.gold= 20
+        self.gold= 20 + gold
+        self.degats = 4 + damage
+        self.baseVelocity = 1+ vitesse
+        self.velocity =1+ vitesse
+        self.vie += vie
 
         #hitbox ( anciennement rect )
         self.hitbox = self.image[0].get_rect()
@@ -255,7 +264,6 @@ class banane(entite):
         self.mask = pygame.mask.from_surface(self.image[0])
 
         #valeures propre a la banane:
-        self.velocity = 1
         self.drift = 0
         self.driftdirx = 1
         self.driftdiry = 1

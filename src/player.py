@@ -12,8 +12,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self,screenWidth,screenHeight):
         super().__init__()
         self.vie = 10
-        self.maxhealth = 100
-        self.attack = 10
+        self.maxhealth = 10
+        self.attack = 2
         self.velocity = 10
         self.playerXoffset = 0
         self.playerYoffset = 0

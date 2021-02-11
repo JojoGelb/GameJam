@@ -39,7 +39,7 @@ class mortier(entite):
         self.exist = True
 
     def render(self,screen,xOffset,yOffset):
-        pygame.draw.rect(screen,(250,100,100),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        #pygame.draw.rect(screen,(250,100,100),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
         #pygame.draw.rect(screen,(250,100,100),(self.hitbox.x-self.range+xOffset,self.hitbox.y-self.range+yOffset,self.range*2+self.hitbox.height, self.range*2+self.hitbox.height))
         screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y)) #affiche l'image de l'entite à la position indiqué par ses coord
         for i in range(len(self.projectiles)):
