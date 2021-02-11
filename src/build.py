@@ -17,33 +17,29 @@ class mortier(entite):
             
             rect = (0*672,0,672,672)
             tempSprite = sprite.image_at(rect)
-            self.image.append(pygame.transform.scale(tempSprite,(50,50)))
+            self.image.append(pygame.transform.scale(tempSprite,(100,100)))
 
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
         self.hitbox = self.image[0].get_rect()
-        self.hitbox.height
+        
         self.hitbox.x = xx
         self.hitbox.y = yy
         self.current = 0
-
-        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION
-        self.rect = self.hitbox
-        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION
 
         self.mask = pygame.mask.from_surface(self.image[0])
         self.range=rangge
         self.range=600
         self.cooldown=100
         self.degats=1
-        self.vie=10
+        self.vie=500
         self.projectiles = []
         self.exist = True
 
     def render(self,screen,xOffset,yOffset):
-        #pygame.draw.rect(screen,(250,100,100),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        pygame.draw.rect(screen,(250,100,100),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
         #pygame.draw.rect(screen,(250,100,100),(self.hitbox.x-self.range+xOffset,self.hitbox.y-self.range+yOffset,self.range*2+self.hitbox.height, self.range*2+self.hitbox.height))
         screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y)) #affiche l'image de l'entite à la position indiqué par ses coord
         for i in range(len(self.projectiles)):
@@ -62,7 +58,13 @@ class mortier(entite):
                             break
                 self.timer=0
             else:
-                self.timer+=1               
+                self.timer+=1     
+
+            for i in range(len(entities)):
+
+                if(self.hitbox.x + self.hitbox.width >= entities[i].hitbox.x and self.hitbox.x < entities[i].hitbox.x + entities[i].hitbox.width) and (self.hitbox.y + self.hitbox.height > entities[i].hitbox.y and self.hitbox.y < entities[i].hitbox.y + entities[i].hitbox.height):
+                    entities[i].velocity = 0
+                    self.takeDamage(entities[i].degats)          
         else:
             self.timer+=1
             self.miseAMort()
@@ -88,6 +90,11 @@ class mortier(entite):
                 if(self.projectiles[i].exist == False):
                     del self.projectiles[i]
                     break
+
+    def takeDamage(self,amount):
+        self.vie -= amount
+        if(self.vie <= 0):
+            self.miseAMort()
 
 class mur(entite):
 

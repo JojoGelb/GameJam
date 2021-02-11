@@ -48,24 +48,26 @@ class Game():
         #Chargement
         #self.chargementGame(screen,screenWidth,screenHeight)
         self.chargementSprite(screen,screenWidth,screenHeight)
-        #self.entity.append(carotte(2000,2000))
-        #self.entity.append(tomate(1000,1000))
-        #self.entity.append(carotte(500,500))
-        #self.entity.append(tomate(600,600))
-        #self.entity.append(carotte(3000,2000))
-        #self.entity.append(tomate(1000,2000))
+
 
         self.listempo = []
         self.listempo.append(self.player)
         #Array de build
         self.builds = []
         #Gérer les vagues
-        self.wavesStat = [[ 5, 2 , 1],[ 5, 1 , 0],[0, 5, 0],[3, 3, 0],[10, 0, 0],[3, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
+        self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[5, 5, 0],[10, 0, 0],[5, 5, 1],[5, 3, 2],[7, 2, 1],[1, 8, 1],[3, 5, 2],[0, 6, 3],[0, 0, 5],[5, 5, 2]]
         self.waves = 0
         self.current_wave = self.wavesStat[self.waves]
         self.engame = True
         #Liste des entités mortes au combat
         self.deadList = []
+
+        bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
+        self.affichageEntrevague = bigfont.render("Vague finit", True , (250,250,250))
+        self.affichageEntre1vague = bigfont.render("Tappez sur ESPACE pour lancer", True , (250,250,250))
+        self.affichageEntre2vague = bigfont.render("la vague suivante", True , (250,250,250))
+        self.affichageEntre3vague = bigfont.render("Tappez sur ECHAP pour vous réveiller", True , (250,250,250))
+        self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
         
     def gen_enemies(self):
         
@@ -89,6 +91,7 @@ class Game():
 
 
     def update(self,screenWidth,screenHeight):
+
         if self.engame:
             self.gen_enemies()
        
@@ -103,6 +106,11 @@ class Game():
         #update des construction
         for build in self.builds:
             build.update(self.entity)
+
+        #destruction des construction
+        for build in self.builds:
+            if(build.exist == False):
+                del build
 
         #Dans la fonction upgrade
         EntiteDead = []
@@ -134,6 +142,7 @@ class Game():
 
 
 
+
     #FONCTION D'AFFICHAGE ECRAN
     def render(self,screen,screenWidth,screenHeight):
         
@@ -151,7 +160,14 @@ class Game():
             build.render(screen,self.xOffset,self.yOffset)
 
         self.player.render(screen,self.xOffset,self.yOffset)
-    
+
+        if not(self.entity):
+            screen.blit(self.affichageEntrevague,(375,50))
+            screen.blit(self.affichageEntre1vague,(125,100))
+            screen.blit(self.affichageEntre2vague,(275,150))
+            screen.blit(self.affichageEntre3vague,(10,200))
+            screen.blit(self.affichageEntre4vague,(100,250))
+
     #Fonction de verification des inputs
     def keyPressed(self,screenWidth,screenHeight):
 
@@ -195,7 +211,7 @@ class Game():
             #rage quit
             if event.type == pygame.QUIT:
                 return "Quit"
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not self.entity:
                 return "SoupeScreen"
             #nouvelle vague
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
