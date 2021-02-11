@@ -59,7 +59,7 @@ class Game():
         self.DmgMitraille = 2
         self.DmgMortier = 10
         #Gérer les vagues
-        self.wavesStat = [[ 3, 1 , 0],[ 5, 1 , 1],[0, 5, 0],[5, 5, 2],[10, 0, 3],[5, 5, 5]]
+        self.wavesStat = [[ 0, 0 , 0,1],[ 5, 1 , 0],[0, 5, 0],[5, 5, 1,0],[10, 0, 3],[10, 0, 0,1],[1, 6, 2,2],[0, 15, 0,0],[7, 7, 5,2],[15, 0, 2,0],[0,10,0,8]]
         self.waves = 0
         self.current_wave = []
         self.engame = True
@@ -78,13 +78,16 @@ class Game():
 
         self.upgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
         self.dejaupgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
+
+
     def gen_enemies(self):
 
-
+        
         if len(self.entity) == 0: #Tous les entity sont 
-            if self.waves == 6:
+            if(self.waves%5 == 0 and self.waves!=0):
+               self.difficult += 1
+            if self.waves == 10:
                 self.waves = 0
-                self.difficult += 1
                 self.current_wave = self.wavesStat[self.waves]
                 self.engame = False 
                 #print(self.waves)
@@ -96,12 +99,16 @@ class Game():
                 for i in range(len(self.current_wave)):
                     for j in range(self.current_wave[i]):
                         if self.difficult == 1:
+                            
                             if i == 0:
                                 val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,0,0,0,0)
                             elif i == 1:
                                 val = tomate(0,random.randrange(0,4000),self.spriteTomate,0,0,0,0)
                             elif i == 2:
                                 val = banane(random.randrange(0,4000),3500,self.spriteBanane,0,0,0,0)
+                            elif i == 3:
+                                val = ail(random.randrange(0,4000),3500,self.spriteAil,0,0,0,0)
+
                         else:
                             if i == 0:
                                 val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
@@ -109,6 +116,8 @@ class Game():
                                 val = tomate(0,random.randrange(0,4000),self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                             elif i == 2:
                                 val = banane(random.randrange(0,4000),3500,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                            elif i == 3:
+                                val = ail(random.randrange(0,4000),3500,self.spriteAil,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                         self.entity.append(val)
                 self.engame = False
                 #print(self.waves)
@@ -163,6 +172,10 @@ class Game():
 
         #Si dans la liste des entités, une entités est morte en jeu, on l'ajoute dans la liste des entités mortes + on l'enlève de la liste des entités vivantes
             if not self.entity[i].exist:
+                if(self.entity[i].__class__.__name__ == "ail"):
+                    self.entity.append(gousse(self.entity[i].hitbox.x,self.entity[i].hitbox.y,self.spriteGousse,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
+                    self.entity.append(gousse(self.entity[i].hitbox.x,self.entity[i].hitbox.y,self.spriteGousse,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
+                    self.entity.append(gousse(self.entity[i].hitbox.x,self.entity[i].hitbox.y,self.spriteGousse,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
                 self.player.gold +=  self.entity[i].gold*self.modifGold
@@ -327,9 +340,35 @@ class Game():
         self.spriteBanane=[]
         self.spriteMur=[]
         self.spriteRolling=[]
+        self.spriteAil =[]
+        self.spriteGousse=[]
         #self.spriteTomateDeath=[]
 
         
+        #Sprite Ail
+
+        try:
+            spriteAil = SpriteSheet('../textures/AIL.png')
+
+            for i in range(10):
+                rect = (i*224,0,224,217)
+                tempSprite = spriteAil.image_at(rect)
+                self.spriteAil.append(pygame.transform.scale(tempSprite,(150,150)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
+        #Sprite Gousse
+        try:
+            spriteGousse = SpriteSheet('../textures/GOUSSE.png')
+            for i in range(6):
+                rect = (i*91,0,91,161)
+                tempSprite = spriteGousse.image_at(rect)
+                self.spriteGousse.append(pygame.transform.scale(tempSprite,(50,100)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+
         #Sprite Carotte
         try:
             spriteCarrote = SpriteSheet('../textures/Carotte.png')

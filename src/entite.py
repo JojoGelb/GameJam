@@ -369,3 +369,225 @@ class banane(entite):
 
         if(self.timer >=50):
             self.exist = False
+
+
+    #=======================================================================================================================
+
+class ail(entite):
+    #Instanciation de l'entité banane
+    def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
+        entite.__init__(self,"CAC",75,"NULL",4,"ENNEMIS",xx,yy,sprite)
+
+        #a refaire autre part
+        self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
+        self.attack_sound.set_volume(0.1)
+
+        self.gold= 15 + gold
+        self.degats = 1 + damage
+        self.baseVelocity = 2+ vitesse
+        self.velocity =2+ vitesse
+        self.vie += vie
+
+        #hitbox ( anciennement rect )
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.x = xx 
+        self.hitbox.y = yy
+
+        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
+        self.rect = self.hitbox
+        self.mask = pygame.mask.from_surface(self.image[0])
+
+        #valeures propre a la banane:
+        self.drift = 0
+        self.driftdirx = 0
+        self.driftdiry = 0
+        self.baseVelocity=self.velocity
+
+    def render(self,screen,xOffset,yOffset):
+        #Ligne test hitbox
+        #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        if self.alreadyKilled:
+            self.image[self.current].set_alpha(200-self.timer)
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))
+
+            if(self.current<9):
+                self.current+=1
+        else:       
+            if self.orientation==1:
+                screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))                       #affiche l'image de l'entite à la position indiqué par ses coord
+            else:
+                screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
+            if(self.current==3):
+                self.current=0
+
+    def update(self,entities):
+
+        Xjoueur = entities[0].position[0]
+        Yjoueur = entities[0].position[1]
+
+        if not self.alreadyKilled:
+
+            if(self.timer == 10):
+                self.current=(self.current+1)%4
+                self.timer = 0
+            else:
+                self.timer +=1
+
+            #self.mask = pygame.mask.from_surface(self.image[self.current])
+
+            self.isHittingSomething(entities)
+            if self.velocity != 0:
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+        else:
+            self.miseAMort()
+
+
+    def isHittingSomething(self,entities):
+        for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            if(entities[0].takeDamage(self.degats)):
+                                pygame.mixer.Sound.play(self.attack_sound)
+                    else: #puis les objets
+                        None #faire pour objet plaçable
+
+    def miseAMort(self):
+
+        death_sound = pygame.mixer.Sound("../sound/splat.wav")
+
+        if(self.alreadyKilled == False):
+
+            death_sound.set_volume(0.1)
+            pygame.mixer.Sound.play(death_sound)
+            self.alreadyKilled = True
+            self.timer = 0
+            self.current = 4
+
+        self.timer += 1
+
+        if(self.timer >=50):
+            self.exist = False
+
+#=======================================================================================================================
+
+class gousse(entite):
+    #Instanciation de l'entité banane
+    def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
+        entite.__init__(self,"CAC",10,"NULL",4,"ENNEMIS",xx,yy,sprite)
+
+        #a refaire autre part
+        self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
+        self.attack_sound.set_volume(0.1)
+
+        self.gold= 5 + gold
+        self.degats = 2 + damage
+        self.baseVelocity = 5+ vitesse
+        self.velocity =5+ vitesse
+        self.vie += vie
+
+        #hitbox ( anciennement rect )
+        self.hitbox = self.image[0].get_rect()
+        self.hitbox.x = xx 
+        self.hitbox.y = yy
+
+
+        #NE PAS UTILISER RECT POUR AUTRE CHOSE QUE LA GESTION DE COLLISION  + masque
+        self.rect = self.hitbox
+        self.mask = pygame.mask.from_surface(self.image[0])
+
+        #valeures propre a la banane:
+        self.drift = 0
+        self.driftdirx = 1
+        self.driftdiry = 1
+        self.baseVelocity=self.velocity
+
+    def render(self,screen,xOffset,yOffset):
+        #Ligne test hitbox
+        #pygame.draw.rect(screen,(250,250,250),(self.hitbox.x+xOffset,self.hitbox.y+yOffset,self.hitbox.width, self.hitbox.height))
+        if self.alreadyKilled:
+            self.image[self.current].set_alpha(200-self.timer)
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))
+
+            if(self.current<3):
+                self.current+=1
+        else:       
+            if self.orientation==1:
+                screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))                       #affiche l'image de l'entite à la position indiqué par ses coord
+            else:
+                screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y))  #affiche l'image de l'entite à la position indiqué par ses coord
+            if(self.current==3):
+                self.current=0
+
+    def update(self,entities):
+
+        Xjoueur = entities[0].position[0]
+        Yjoueur = entities[0].position[1]
+
+        if not self.alreadyKilled:
+
+            if(self.timer == 10):
+                self.current=(self.current+1)%4
+                self.timer = 0
+            else:
+                self.timer +=1
+
+            #self.mask = pygame.mask.from_surface(self.image[self.current])
+
+            self.isHittingSomething(entities)
+            if self.velocity != 0:
+                if self.drift!=0:
+                    self.hitbox.x += self.driftdirx*2
+                    self.hitbox.y += self.driftdiry*2
+                    self.drift-=1
+                else:
+                    self.drift=random.randrange(20)
+                    self.driftdirx = random.choice((-1,1))
+                    self.driftdiry = random.choice((-1,1))
+                if(Xjoueur < self.hitbox.x):
+                    self.hitbox.x -= self.velocity
+                    self.orientation=1
+                elif(Xjoueur > self.hitbox.x):
+                    self.hitbox.x += self.velocity
+                    self.orientation=0
+                if(Yjoueur < self.hitbox.y):
+                    self.hitbox.y -= self.velocity
+                elif(Yjoueur > self.hitbox.y):
+                    self.hitbox.y += self.velocity
+        else:
+            self.miseAMort()
+
+
+    def isHittingSomething(self,entities):
+        for i in range(len(entities)):
+                    if(i == 0): #on gere le joueur
+                        if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
+                            if(entities[0].takeDamage(self.degats)):
+                                pygame.mixer.Sound.play(self.attack_sound)
+                    else: #puis les objets
+                        None #faire pour objet plaçable
+
+    def miseAMort(self):
+
+        death_sound = pygame.mixer.Sound("../sound/splat.wav")
+
+        if(self.alreadyKilled == False):
+
+            death_sound.set_volume(0.1)
+            pygame.mixer.Sound.play(death_sound)
+            self.alreadyKilled = True
+            self.timer = 0
+            self.current = 4
+
+        self.timer += 1
+
+        if(self.timer >=50):
+            self.exist = False

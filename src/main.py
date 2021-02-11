@@ -47,7 +47,7 @@ begining = False
 
 instantiate = False
 
-playerScore = 0
+
 
 clock = pygame.time.Clock() #très importantnb de frame par tick 
 
@@ -67,7 +67,6 @@ while running:
         cinematique.render(screen)
         GameState = cinematique.action(screenWidth,screenHeight)
     elif(GameState == "Play"):
-        primeravez=1
         if(game == "null"):
             game = Game(screenWidth, screenHeight,screen)
         if(menuSoupe.Abus == True):
@@ -100,18 +99,13 @@ while running:
     elif(GameState == "SoupeScreen"):
    
         menuSoupe.render(screen)
-        if primeravez==1:
-            if playerScore<game.score:
-                playerScore=game.score
         GameState = menuSoupe.action(screenWidth,screenHeight)
 
 
     elif(GameState == "End"):
 
-        if playerScore<game.score:
-            playerScore=game.score
         if(menuEnd == "null"):
-            menuEnd = Score(screenWidth,screenHeight,playerScore)
+            menuEnd = Score(screenWidth,screenHeight,game.score)
         menuEnd.render(screen)
         GameState = menuEnd.action(screenWidth,screenHeight)
 

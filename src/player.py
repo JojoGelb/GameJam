@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.playerXoffset = 0
         self.playerYoffset = 0
         self.cooldown = 30
-        self.gold = 1000
+        self.gold = 250
         self.isDead = False
         self.invincibility = False
         self.TimerInvincibility = 0
