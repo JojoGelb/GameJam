@@ -48,7 +48,7 @@ class Game():
      
         #Chargement
         self.chargementSprite(screen,screenWidth,screenHeight)
-        #self.chargementGame(screen,screenWidth,screenHeight)
+        self.chargementGame(screen,screenWidth,screenHeight)
 
 
         self.listempo = []
@@ -69,11 +69,13 @@ class Game():
         #Liste des entités mortes au combat
         self.deadList = []
 
+        self.normalFont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',35)
+
         bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',50)
-        self.affichageEntrevague = bigfont.render("Vague finit", True , (250,250,250))
-        self.affichageEntre1vague = bigfont.render("Tappez sur ESPACE pour lancer", True , (250,250,250))
+        self.affichageEntrevague = bigfont.render("Vague finie", True , (250,250,250))
+        self.affichageEntre1vague = bigfont.render("Taper sur ESPACE pour lancer", True , (250,250,250))
         self.affichageEntre2vague = bigfont.render("la vague suivante", True , (250,250,250))
-        self.affichageEntre3vague = bigfont.render("Tappez sur ECHAP pour vous réveiller", True , (250,250,250))
+        self.affichageEntre3vague = bigfont.render("Taper sur ECHAP pour vous réveiller", True , (250,250,250))
         self.affichageEntre4vague = bigfont.render("et ameliorer vos constructions", True , (250,250,250))
 
         self.TimerAffichageVague = 0
@@ -88,6 +90,7 @@ class Game():
         if len(self.entity) == 0: #Tous les entity sont 
             if(self.waves%5 == 0 and self.waves!=0):
                self.difficult += 1
+               self.modifGold += 0.5
             if self.waves == 10:
                 self.waves = 0
                 self.current_wave = self.wavesStat[self.waves]
@@ -95,9 +98,9 @@ class Game():
                 #print(self.waves)
             else:   
                 self.current_wave = self.wavesStat[self.waves]
-                if self.difficult >=5:
-                    for i in range(len(self.current_wave)):
-                        self.current_wave[i] = self.current_wave[i]*(self.difficult-3)
+                #if self.difficult >=5:
+                    #for i in range(len(self.current_wave)):
+                    #self.current_wave[i] = self.current_wave[i]*(self.difficult-3)
                 for i in range(len(self.current_wave)):
                     for j in range(self.current_wave[i]):
                         whereX = random.randrange(0,2)
@@ -116,7 +119,7 @@ class Game():
                             else:
                                 whereX = 4000
 
-                        if self.difficult != 1:
+                        if self.difficult == 1:
                             if i == 0:
                                 val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,0,0,0,0)
                             elif i == 1:
@@ -130,15 +133,15 @@ class Game():
                             if i == 0:
                                 val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                                 for i in range(random.randrange(0,self.difficult)):
-                                    self.entity.append(val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
+                                    self.entity.append(carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 1:
                                 val = tomate(whereX,whereY,self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                                 for i in range(random.randrange(0,self.difficult)):
-                                    self.entity.append(val = tomate(whereX,whereY,self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
+                                    self.entity.append(tomate(whereX,whereY,self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 2:
                                 val = banane(whereX,whereY,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                                 for i in range(random.randrange(0,self.difficult)):
-                                    self.entity.append(val = banane(whereX,whereY,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
+                                    self.entity.append(banane(whereX,whereY,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 3:
                                 val = ail(whereX,whereY,self.spriteAil,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                                 for i in range(random.randrange(0,self.difficult)):
@@ -159,6 +162,7 @@ class Game():
             self.difficult = 1
             self.player.vie = self.player.maxhealth
             self.deadList = []
+            self.modifGold = 1
             self.reset = False
             
         
@@ -203,8 +207,8 @@ class Game():
                     self.entity.append(gousse(self.entity[i].hitbox.x,self.entity[i].hitbox.y,self.spriteGousse,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                 self.deadList.append(self.entity[i])
                 EntiteDead.append(self.entity[i])
-                self.player.gold +=  self.entity[i].gold*self.modifGold
-                self.score += self.entity[i].gold*self.modifGold
+                self.player.gold +=  round( self.entity[i].gold*self.modifGold)
+                self.score += round(self.entity[i].gold*self.modifGold)
                 
 
         for entite in EntiteDead:
@@ -237,7 +241,7 @@ class Game():
 
         self.player.render(screen,self.xOffset,self.yOffset)
 
-        if not(self.entity):
+        if not(self.entity) and self.score != 0:
             if self.TimerAffichageVague < 300:
                 self.TimerAffichageVague += 1
                 screen.blit(self.affichageEntrevague,(375,50))
@@ -247,6 +251,9 @@ class Game():
                 screen.blit(self.affichageEntre4vague,(100,250))
         else:
             self.TimerAffichageVague = 0
+
+        affichageMultGold = self.normalFont.render("Mult: "+ str(self.modifGold) , True , (250,250,250))
+        screen.blit(affichageMultGold,(825,50))
 
     #Fonction de verification des inputs
     def keyPressed(self,screenWidth,screenHeight):

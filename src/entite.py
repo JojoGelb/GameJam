@@ -295,7 +295,7 @@ class banane(entite):
             self.image[self.current].set_alpha(200-self.timer)
             screen.blit(self.image[self.current],(xOffset+self.hitbox.x - 50,yOffset+self.hitbox.y))
 
-            if(self.current<7):
+            if(self.current<7) and self.timer%2 == 0:
                 self.current+=1
         else:       
             if self.orientation==1:
@@ -374,7 +374,7 @@ class banane(entite):
     #=======================================================================================================================
 
 class ail(entite):
-    #Instanciation de l'entité banane
+    #Instanciation de l'entité ail
     def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
         entite.__init__(self,"CAC",75,"NULL",4,"ENNEMIS",xx,yy,sprite)
 
@@ -409,8 +409,8 @@ class ail(entite):
         if self.alreadyKilled:
             self.image[self.current].set_alpha(200-self.timer)
             screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y))
-
-            if(self.current<9):
+    
+            if(self.current<9 and self.timer%2 == 0 ):
                 self.current+=1
         else:       
             if self.orientation==1:
@@ -474,7 +474,7 @@ class ail(entite):
 
         self.timer += 1
 
-        if(self.timer >=50):
+        if(self.timer >=25):
             self.exist = False
 
 #=======================================================================================================================
