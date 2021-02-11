@@ -27,6 +27,8 @@ class barreComp(pygame.sprite.Sprite):
         self.morClicable = True
         self.murClicable = True
         self.mitrClicable = True
+        self.mitrmitr = smallfont.render("Gatling" , True , (250,250,250))
+        self.mitrmitrT = smallfont.render("100g  [F]" , True , (250,250,250))
         self.VieMax=vie
         self.screenHeight=screenHeight
         self.screenWidth=screenWidth
@@ -38,6 +40,9 @@ class barreComp(pygame.sprite.Sprite):
         screen.blit(self.murmurT,(int(self.screenWidth*0.12),int(self.screenHeight*0.92)))
         screen.blit(self.mormor,(int(self.screenWidth*0.29),int(self.screenHeight*0.89)))
         screen.blit(self.mormorT,(int(self.screenWidth*0.29),int(self.screenHeight*0.92)))
+        screen.blit(self.mitrmitr,(int(self.screenWidth*0.455),int(self.screenHeight*0.89)))
+        screen.blit(self.mitrmitrT,(int(self.screenWidth*0.455),int(self.screenHeight*0.92)))
+
         viepourc=100-int(((vie*100)/self.VieMax))
         pygame.draw.rect(screen,(41,41,41),(self.screenWidth*0.90-viepourc*2.4,self.screenHeight*0.88,viepourc*2.4,70))
 
@@ -64,12 +69,12 @@ class barreComp(pygame.sprite.Sprite):
             self.mormor.set_alpha(255)
             self.morClicable=True
         #MitrailleOk?
-        if gold<200:
-            self.mormorT.set_alpha(50)            
-            self.mormor.set_alpha(50)
+        if gold<100:
+            self.mitrmitrT.set_alpha(50)            
+            self.mitrmitr.set_alpha(50)
             self.mitrClicable = False
         else:
-            self.mormorT.set_alpha(255)            
-            self.mormor.set_alpha(255)
+            self.mitrmitrT.set_alpha(255)            
+            self.mitrmitr.set_alpha(255)
             self.mitrClicable=True
         
