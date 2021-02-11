@@ -145,7 +145,8 @@ class Player(pygame.sprite.Sprite):
                 self.playerXoffset = 0
             self.position[0] -= self.velocity
         else:
-            print("can't left")
+            pass
+            #print("can't left")
 
     def move_right(self,mapBorderRight,bord):
         self.moveSprite("Right")
@@ -157,7 +158,8 @@ class Player(pygame.sprite.Sprite):
                 self.playerXoffset = 0
             self.position[0] += self.velocity
         else:
-            print("can't right")
+            pass
+            #print("can't right")
             
     
     def move_up(self,mapBorderTop,bord):
@@ -172,7 +174,8 @@ class Player(pygame.sprite.Sprite):
 
             self.position[1] -= self.velocity
         else:
-            print("can't up")
+            pass
+            #print("can't up")
     
     def move_down(self,mapBorderBottom,bord):
 
@@ -183,7 +186,8 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.playerYoffset = 0
         else:
-            print("can't down")
+            pass
+            #print("can't down")
 
 
 

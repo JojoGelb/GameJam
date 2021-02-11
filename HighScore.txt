@@ -1,10 +1,5 @@
-test:100
-test3:200
-test:1000
-test3:2000
-test:10
-test3:20
-test:1
-jambon:100000
+Sevan:200
+Jordy:300
+Alexa:100
 Zgegman:100
 Mariluz:245

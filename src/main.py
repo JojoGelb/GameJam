@@ -136,7 +136,6 @@ while running:
         else:
             if (instantiate != True):
                 menuUpgrade = Upgrade(screenWidth,screenHeight,game.player.gold,game.upgrade)
-                print(game.upgrade)
                 instantiate = True
 
         GameState = menuUpgrade.action(screenWidth,screenHeight)
@@ -151,9 +150,3 @@ while running:
 
             else:
                 begining = False
-                
-            #mettre a jour le jeu game
-
-
-    
-    #print(GameState)

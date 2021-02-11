@@ -18,7 +18,7 @@ class Menu:
         try:
             fichier = open("../HighScore.txt", "r")
             scores = fichier.readlines()
-            print(scores)
+            #print(scores)
             fichier.close
 
             for i in range (len(scores)):
@@ -34,7 +34,12 @@ class Menu:
                         scores2[j],scores2[j+1] = scores2[j+1],scores2[j]
                         trie  = False 
                         break
-            for i in range(5):
+
+            val = len(scores2)
+            if val > 9 :
+                val = 9
+
+            for i in range(val):
                 val = scores2[i][0] +" : " + scores2[i][1]
                 self.scoresAffichage.append(smallfont.render(val[:-1], True , (250,250,250)))
 
@@ -48,7 +53,7 @@ class Menu:
     def render(self,screen):
         screen.blit(self.background, (0,0))
         for i in range(len(self.scoresAffichage)):
-            screen.blit(self.scoresAffichage[i],(375,i*50 + 400))
+            screen.blit(self.scoresAffichage[i],(375,i*50 + 300))
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -595,16 +600,16 @@ Changement: +1DMG /1 upgrade"""
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return "SoupeScreen"
             if event.type == pygame.MOUSEBUTTONDOWN:  
-                if  mos_x > 100 and mos_x < 175 and mos_y > 490 and mos_y < 550 and self.gold > 50:
+                if  mos_x > 100 and mos_x < 175 and mos_y > 490 and mos_y < 550 and self.gold >= 50:
                     self.gold -= 50
                     self.upgrade[0][1] += 1
-                elif mos_x > 350 and mos_x < 425 and mos_y > 490 and mos_y < 550 and self.gold > 50:
+                elif mos_x > 350 and mos_x < 425 and mos_y > 490 and mos_y < 550 and self.gold >= 50:
                     self.gold -= 50
                     self.upgrade[1][1] += 1
-                elif mos_x > 600 and mos_x < 675 and mos_y > 490 and mos_y < 550 and self.gold > 100:
+                elif mos_x > 600 and mos_x < 675 and mos_y > 490 and mos_y < 550 and self.gold >= 100:
                     self.gold -= 100
                     self.upgrade[2][1] += 1
-                elif mos_x > 850 and mos_x < 925 and mos_y > 490 and mos_y < 550 and self.gold > 100:
+                elif mos_x > 850 and mos_x < 925 and mos_y > 490 and mos_y < 550 and self.gold >= 100:
                     self.gold -= 100
                     self.upgrade[3][1] += 1
                 elif(mos_x > 425 and mos_x < 610 and mos_y > 650 and mos_y < 700):

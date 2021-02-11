@@ -87,7 +87,7 @@ class Game():
                 self.difficult += 1
                 self.current_wave = self.wavesStat[self.waves]
                 self.engame = False 
-                print(self.waves)
+                #print(self.waves)
             else:   
                 self.current_wave = self.wavesStat[self.waves]
                 if self.difficult >=5:
@@ -111,7 +111,7 @@ class Game():
                                 val = banane(random.randrange(0,4000),3500,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
                         self.entity.append(val)
                 self.engame = False
-                print(self.waves)
+                #print(self.waves)
                 self.compVague += 1  
                 self.waves +=1 #vague suivante      
                     
@@ -124,7 +124,9 @@ class Game():
         if self.reset:
             self.difficult = 1
             self.player.vie = self.player.maxhealth
+            self.deadList = []
             self.reset = False
+            
         
         if self.engame:
             self.gen_enemies()

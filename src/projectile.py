@@ -67,7 +67,7 @@ class Projectile(pygame.sprite.Sprite):
                     entite.vie -= self.damage
                     if entite.vie <= 0:
                         entite.miseAMort() # tout va bien carotte n'a pas encore de mise à mort
-                        print("Dead")
+                        #print("Dead")
 
                 return True
             else:
@@ -139,15 +139,15 @@ class ProjectileMortier(pygame.sprite.Sprite):
     def asArrive(self,entitie):
         self.hasHit=True
 
-        print(self.cibleX -100 ,self.cibleX +100,self.cibleY -100,self.cibleY +100)
+        #print(self.cibleX -100 ,self.cibleX +100,self.cibleY -100,self.cibleY +100)
         for i in range(len(entitie)):
-            print(entitie[i].hitbox.x,entitie[i].hitbox.y)
+            #print(entitie[i].hitbox.x,entitie[i].hitbox.y)
             if((entitie[i].hitbox.x + entitie[i].hitbox.width > self.cibleX -100 and entitie[i].hitbox.x < self.cibleX +100 and entitie[i].hitbox.y + entitie[i].hitbox.height > self.cibleY -100 and entitie[i].hitbox.y < self.cibleY +100 )):
                 entitie[i].vie -= self.damage
-                print("damage")
+                #print("damage")
                 if entitie[i].vie <= 0:
                     entitie[i].miseAMort()
-                    print("Dead")
+                    #print("Dead")
 
         
     def update(self,entities):
@@ -223,17 +223,11 @@ class ProjectileMitraille(pygame.sprite.Sprite):
     def doesTouche(self,entities):
         
         for i in range(len(entities)):
-            print(entities[i].hitbox.x,entities[i].hitbox.y)
 
             if(self.rect.x + self.rect.width >= entities[i].rect.x and self.rect.x < entities[i].rect.x + entities[i].rect.width) and (self.rect.y + self.rect.height > entities[i].rect.y and self.rect.y < entities[i].rect.y + entities[i].rect.height):
-                entities[i].vie -= self.damage
-                print("DAMAGE ffffffffffffffffffff")
-                print(self.damage)
-                print(entities[i].vie)
-                print("DAMAGE ffffffffffffffffffff")                
+                entities[i].vie -= self.damage              
                 if entities[i].vie <= 0:
                     entities[i].miseAMort() # tout va bien carotte n'a pas encore de mise à mort
-                    print("Dead")
                 self.hasHit=True
 
         
