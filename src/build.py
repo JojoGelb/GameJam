@@ -72,6 +72,10 @@ class mortier(entite):
         for i in range(len(self.projectiles)):
             self.projectiles[i].update(entities)
         
+        if(self.vie <= 0):
+            for i in range(len(entities)):
+                entities[i].velocity = entities[i].baseVelocity
+        
 
 
     def miseAMort(self):
@@ -128,6 +132,7 @@ class mur(entite):
             self.exist = False
             for i in range(len(entities)):
                 entities[i].velocity = entities[i].baseVelocity
+        
 
 
     def render(self,screen,xOffset,yOffset):

@@ -1,6 +1,6 @@
 import pygame
 from spritesheet import SpriteSheet
-
+import math
 
 class Projectile(pygame.sprite.Sprite):
 
@@ -103,10 +103,10 @@ class ProjectileMortier(pygame.sprite.Sprite):
         self.timer = 0
         self.cibleX=dirx
         self.cibleY=diry
-
+       
+   
         try:
             sprite = SpriteSheet("../textures/OBUS.png")
-
             self.image=[]
             for j in range(17):
                 rect = (0,j*200,200,200)
@@ -122,9 +122,14 @@ class ProjectileMortier(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         
+
+        
     def render(self,screen,xOffset,yOffset):
         if(self.exist != False):
-            screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
+            if(self.current>0):
+                screen.blit(self.image[self.current],(xOffset+self.rect.x-self.rect.width/2,yOffset+self.rect.y-self.rect.height/2))
+            else:
+                screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
         #pygame.draw.rect(screen,(250,250,250),(self.cibleX -100 + xOffset ,self.cibleY -100 + yOffset,200,200))
                         
     def asArrive(self,entitie):
@@ -157,13 +162,99 @@ class ProjectileMortier(pygame.sprite.Sprite):
             self.exist = False
             self.current = -1
 
-    def move(self):
-        if(self.cibleX < self.rect.x):
-            self.rect.x -= self.vitesse
-        elif(self.cibleX > self.rect.x):
-            self.rect.x += self.vitesse
-        if(self.cibleY < self.rect.y):
-            self.rect.y -= self.vitesse
-        elif(self.cibleY > self.rect.y):
-            self.rect.y += self.vitesse
 
+    def move(self):
+        self.angle = math.atan2(self.cibleY - self.rect.y, self.cibleX - self.rect.x)
+        self.angle += math.pi / 18
+
+        rex=self.rect.x
+        rey=self.rect.y
+
+        if self.angle >= 2 * math.pi:
+                self.angle = self.angle - 2 * math.pi
+
+        self.rect.x=self.rect.x+math.cos(self.angle)*self.vitesse
+        self.rect.y=self.rect.y+math.sin(self.angle)*self.vitesse
+
+
+          
+class ProjectileMitraille(pygame.sprite.Sprite):
+
+
+    def __init__(self,x,y,damage,vitesse_proj,dirx,diry):
+        super().__init__()
+        self.damage = damage
+        self.vitesse = vitesse_proj
+        self.current=0
+        self.hasHit = False
+        self.exist = True
+        self.timer = 0
+        self.cibleY=diry
+        self.cibleX=dirx
+       
+   
+        try:
+            sprite = SpriteSheet("../textures/OBUS.png")
+            self.image=[]
+            for j in range(17):
+                rect = (0,j*200,200,200)
+                tempSprite = sprite.image_at(rect)
+                self.image.append(pygame.transform.scale(tempSprite,(50,50)))
+        except pygame.error as e:
+            print(f"Unable to load spritesheet image: {filename}")
+            raise SystemExit(e)
+        self.rect = self.image[0].get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.angle = math.atan2(self.cibleY - self.rect.y, self.cibleX - self.rect.x)
+        self.angle += math.pi / 18
+        if self.angle >= 2 * math.pi:
+                self.angle = self.angle - 2 * math.pi        
+
+        
+    def render(self,screen,xOffset,yOffset):
+        if(self.exist != False):
+            if(self.current>0):
+                screen.blit(self.image[self.current],(xOffset+self.rect.x-self.rect.width/2,yOffset+self.rect.y-self.rect.height/2))
+            else:
+                screen.blit(self.image[self.current],(xOffset+self.rect.x,yOffset+self.rect.y))
+        #pygame.draw.rect(screen,(250,250,250),(self.cibleX -100 + xOffset ,self.cibleY -100 + yOffset,200,200))
+                        
+    def doesTouche(self,entitie):
+        
+        for i in range(len(entitie)):
+            print(entitie[i].hitbox.x,entitie[i].hitbox.y)
+            ennemisTouches = pygame.sprite.spritecollide(self, entitie, False)
+            if ennemisTouches :
+                ennemisTouches[0].vie -= self.damage
+                if ennemisTouches[0].vie <= 0:
+                    ennemisTouches[0].miseAMort() # tout va bien carotte n'a pas encore de mise à mort
+                    print("Dead")
+                self.hasHit=True
+
+        
+    def update(self,entities):
+        #for entities check si touché ou non temp = entitie touché
+         #print(self.distance,self.vitesse)
+
+        self.doesTouche(entities)
+        print(self.hasHit)
+    
+        if(self.timer>=250):
+            self.hasHit=True
+
+        if self.hasHit==False:
+            self.move()
+
+        if(self.hasHit == True and self.current>=0):
+            self.current += 1
+
+        if(self.current > 16):
+            self.exist = False
+            self.current = -1
+
+
+    def move(self):
+        self.timer+=1
+        self.rect.x=self.rect.x+math.cos(self.angle)*self.vitesse
+        self.rect.y=self.rect.y+math.sin(self.angle)*self.vitesse
