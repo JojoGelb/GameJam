@@ -160,16 +160,27 @@ class tomate(entite):
         self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")
         self.attack_sound.set_volume(0.1)
 
-        
+        self.mortype=False
+
 
 
 
 
     def render(self,screen,xOffset,yOffset):
-        if self.orientation==0:
-            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
+       
+        if(self.mortype==True):
+            screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100))
+            if self.current < 20:
+                self.current+=1
+        
         else:
-            screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
+    
+            if self.orientation==0:
+                screen.blit(self.image[self.current],(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
+            else:
+                screen.blit(pygame.transform.flip(self.image[self.current],1,0),(xOffset+self.hitbox.x,yOffset+self.hitbox.y-100)) #affiche l'image de l'entite à la position indiqué par ses coord
+
+
 
     def update(self,entities):
         Xjoueur = entities[0].position[0]
@@ -179,6 +190,8 @@ class tomate(entite):
                 self.current=(self.current+1)%6
                 if self.current == 0:
                     self.current += 1
+                    if(self.current>14):
+                        self.current=1
                     
                 if self.current>=2 and self.current<=6 or self.current>=9 and self.current<=12:
                     self.velocity=6
@@ -219,8 +232,10 @@ class tomate(entite):
         for i in range(len(entities)):
                     if(i == 0): #on gere le joueur
                         if(self.hitbox.x + self.hitbox.width >= entities[i].position[0] and self.hitbox.x < entities[i].position[0] + entities[i].rect.width) and (self.hitbox.y + self.hitbox.height > entities[i].position[1] and self.hitbox.y < entities[i].position[1] + entities[i].rect.height):
-                            if(entities[0].takeDamage(self.degats)):
+                            if(entities[0].takeDamage(self.degats*2)):
                                 pygame.mixer.Sound.play(self.attack_sound)
+                                self.mortype=True
+                                self.miseAMort()
                     else: #puis les objets
                         None #faire pour objet plaçable
 
@@ -231,9 +246,11 @@ class tomate(entite):
             pygame.mixer.Sound.play(death_sound)
             self.alreadyKilled = True
             self.timer = 0
-        self.current= 0
         self.timer += 1
-        self.image[self.current].set_alpha(200-self.timer)
+
+        if (self.mortype==False):
+            self.current= 0
+            self.image[self.current].set_alpha(200-self.timer)
         if(self.timer >=50):
             self.exist = False
 
