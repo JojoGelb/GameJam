@@ -20,3 +20,14 @@ Puis les activer: librairie\scripts\activate
 Installer alors la Bibliothèque Pygame: py -m pip install -U pygame
 Faite le test de la librairie: py -m pygame.examples.aliens
 
+Pour run l'application 2 choix possible.
+
+Se placer dans un terminal dans le directory src
+
+Tapper py main.src
+
+Ou dans le repertoire principal du jeu et tapper:
+
+cd src && python main.py
+
+sinon une erreur s'affichera en rapport avec le PATH des images.
