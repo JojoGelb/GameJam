@@ -59,7 +59,7 @@ class Game():
         self.DmgMitraille = 2
         self.DmgMortier = 10
         #Gérer les vagues
-        self.wavesStat = [[ 0, 0 , 0,1],[ 5, 1 , 0],[0, 5, 0],[5, 5, 1,0],[10, 0, 3],[10, 0, 0,1],[1, 6, 2,2],[0, 15, 0,0],[7, 7, 5,2],[15, 0, 2,0],[0,10,0,8]]
+        self.wavesStat = [[ 4, 0 , 0,1],[ 5, 1 , 0,0],[0, 5, 0,0],[5, 5, 1,0,0],[10, 0, 3,0],[5, 5, 2,1],[1, 6, 2,2],[0, 15, 0,0],[7, 7, 5,2],[15, 0, 2,0],[0,0,0,10]]
         self.waves = 0
         self.current_wave = []
         self.engame = True
@@ -98,26 +98,49 @@ class Game():
                         self.current_wave[i] = self.current_wave[i]*(self.difficult-3)
                 for i in range(len(self.current_wave)):
                     for j in range(self.current_wave[i]):
-                        if self.difficult == 1:
-                            
+                        whereX = random.randrange(0,2)
+                        if(whereX ==0):
+                            whereX = random.randrange(0,4000)
+                            whereY = random.randrange(0,2)
+                            if(whereY == 0):
+                                whereY = 0
+                            else:
+                                whereY = 4000
+                        else:
+                            whereY = random.randrange(0,4000)
+                            whereX = random.randrange(0,2)
+                            if(whereX == 0):
+                                whereX = 0
+                            else:
+                                whereX = 4000
+
+                        if self.difficult != 1:
                             if i == 0:
-                                val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,0,0,0,0)
+                                val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,0,0,0,0)
                             elif i == 1:
-                                val = tomate(0,random.randrange(0,4000),self.spriteTomate,0,0,0,0)
+                                val = tomate(whereX,whereY,self.spriteTomate,0,0,0,0)
                             elif i == 2:
-                                val = banane(random.randrange(0,4000),3500,self.spriteBanane,0,0,0,0)
+                                val = banane(whereX,whereY,self.spriteBanane,0,0,0,0)
                             elif i == 3:
-                                val = ail(random.randrange(0,4000),3500,self.spriteAil,0,0,0,0)
+                                val = ail(whereX,whereY,self.spriteAil,0,0,0,0)
 
                         else:
                             if i == 0:
-                                val = carotte(random.randrange(0,4000),0,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                for i in range(random.randrange(0,self.difficult)):
+                                    self.entity.append(val = carotte(whereX,whereY,self.spriteCarrote,self.spriteCarroteDeath,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 1:
-                                val = tomate(0,random.randrange(0,4000),self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                val = tomate(whereX,whereY,self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                for i in range(random.randrange(0,self.difficult)):
+                                    self.entity.append(val = tomate(whereX,whereY,self.spriteTomate,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 2:
-                                val = banane(random.randrange(0,4000),3500,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                val = banane(whereX,whereY,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                for i in range(random.randrange(0,self.difficult)):
+                                    self.entity.append(val = banane(whereX,whereY,self.spriteBanane,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                             elif i == 3:
-                                val = ail(random.randrange(0,4000),3500,self.spriteAil,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                val = ail(whereX,whereY,self.spriteAil,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2)
+                                for i in range(random.randrange(0,self.difficult)):
+                                    self.entity.append(ail(whereX,whereY,self.spriteAil,(self.compVague%5+(self.difficult-1)),self.difficult,0,self.compVague%2))
                         self.entity.append(val)
                 self.engame = False
                 #print(self.waves)
