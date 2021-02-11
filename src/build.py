@@ -33,7 +33,7 @@ class mortier(entite):
         self.range=rangge
         self.range=600
         self.cooldown=100
-        self.degats=1
+        self.degats= degats
         self.vie=500
         self.projectiles = []
         self.exist = True
@@ -53,7 +53,7 @@ class mortier(entite):
                 for entite in entities:
                     if entite.hitbox.x>(self.hitbox.x-self.range) and  entite.hitbox.x<(self.hitbox.x+self.range) and entite.hitbox.y>(self.hitbox.y-self.range) and  entite.hitbox.y<(self.hitbox.y+self.range):
                         if not (entite.hitbox.x>(self.hitbox.x-self.range*0.5) and  entite.hitbox.x<(self.hitbox.x+self.range*0.5) and entite.hitbox.y>(self.hitbox.y-self.range*0.5) and  entite.hitbox.y<(self.hitbox.y+self.range*0.5)):
-                            shoot = ProjectileMortier(self.hitbox.x + self.hitbox.width/2,self.hitbox.y + self.hitbox.height/2,5,5,entite.hitbox.x,entite.hitbox.y)
+                            shoot = ProjectileMortier(self.hitbox.x + self.hitbox.width/2,self.hitbox.y + self.hitbox.height/2,self.degats,5,entite.hitbox.x,entite.hitbox.y)
                             self.projectiles.append(shoot)
                             break
                 self.timer=0
@@ -179,7 +179,7 @@ class mitraillette(entite):
         self.range=rangge
         self.range=600
         self.cooldown=10
-        self.degats=2
+        self.degats=degats
         self.vie=500
         self.projectiles = []
         self.exist = True

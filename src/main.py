@@ -133,8 +133,7 @@ while running:
             instantiate = False
             if begining == False:
                 game.player.gold = menuUpgrade.gold
-                for i in range(4):
-                    game.upgrade[i][1] = menuUpgrade.upgrade[i][1]
+                game.applyUpgrade(menuUpgrade.upgrade)
 
             else:
                 begining = False

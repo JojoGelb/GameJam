@@ -133,7 +133,7 @@ class tomate(entite):
 
 
     def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
-        entite.__init__(self,"CAC",10,"NULL",2,"ENNEMIS",xx,yy,sprite)
+        entite.__init__(self,"CAC",20,"NULL",2,"ENNEMIS",xx,yy,sprite)
         
         #or de la tomate :
         self.gold=10 + gold
@@ -240,7 +240,7 @@ class tomate(entite):
 class banane(entite):
     #Instanciation de l'entité banane
     def __init__(self,xx,yy,sprite,vie,damage,vitesse,gold):
-        entite.__init__(self,"CAC",10,"NULL",4,"ENNEMIS",xx,yy,sprite)
+        entite.__init__(self,"CAC",50,"NULL",4,"ENNEMIS",xx,yy,sprite)
 
         #a refaire autre part
         self.attack_sound = pygame.mixer.Sound("../sound/hello_carotte.wav")

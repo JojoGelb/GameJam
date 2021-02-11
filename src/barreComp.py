@@ -26,6 +26,7 @@ class barreComp(pygame.sprite.Sprite):
         self.murmurT = smallfont.render("50g   [A]" , True , (250,250,250))
         self.morClicable = True
         self.murClicable = True
+        self.mitrClicable = True
         self.VieMax=vie
         self.screenHeight=screenHeight
         self.screenWidth=screenWidth
@@ -62,4 +63,13 @@ class barreComp(pygame.sprite.Sprite):
             self.mormorT.set_alpha(255)            
             self.mormor.set_alpha(255)
             self.morClicable=True
+        #MitrailleOk?
+        if gold<200:
+            self.mormorT.set_alpha(50)            
+            self.mormor.set_alpha(50)
+            self.mitrClicable = False
+        else:
+            self.mormorT.set_alpha(255)            
+            self.mormor.set_alpha(255)
+            self.mitrClicable=True
         

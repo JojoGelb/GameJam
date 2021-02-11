@@ -52,8 +52,11 @@ class Game():
 
         self.listempo = []
         self.listempo.append(self.player)
-        #Array de build
+        #Array de build + stat pour upgrade
         self.builds = []
+        self.PvMur = 1000
+        self.DmgMitraille = 2
+        self.DmgMortier = 10
         #Gérer les vagues
         self.wavesStat = [[ 3, 0 , 0],[ 5, 1 , 0],[0, 5, 0],[5, 5, 0],[10, 0, 0],[5, 5, 5]]
         self.waves = 0
@@ -77,11 +80,13 @@ class Game():
     def gen_enemies(self):
         if self.reset:
             self.difficult = 1
+            self.player.vie = self.player.maxhealth
+            self.reset = False
 
         if len(self.entity) == 0: #Tous les entity sont 
             if self.waves == 6:
                 self.waves = 0
-                self.difficlut += 1
+                self.difficult += 1
                 self.current_wave = self.wavesStat[self.waves]
                 self.engame = False 
                 print(self.waves)
@@ -248,15 +253,15 @@ class Game():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_e:
                 if self.player.barreCompetence.morClicable:
                     self.player.gold -= 200
-                    self.builds.append(mortier(self.player.position[0],self.player.position[1],0,0,0,0))
+                    self.builds.append(mortier(self.player.position[0],self.player.position[1],0,self.DmgMortier,0,0))
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
                 if self.player.barreCompetence.murClicable:
                     self.player.gold -= 50
-                    self.builds.append(mur(self.player.position[0],self.player.position[1],1000,self.spriteMur))
+                    self.builds.append(mur(self.player.position[0],self.player.position[1],self.PvMur,self.spriteMur))
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_f:
                 if self.player.barreCompetence.murClicable:
                     self.player.gold -= 100
-                    self.builds.append(mitraillette(self.player.position[0],self.player.position[1],0,0,0,0,self.spriteRolling))
+                    self.builds.append(mitraillette(self.player.position[0],self.player.position[1],0,self.DmgMitraille,0,0,self.spriteRolling))
 
             #enfoncement de touche
             elif event.type == pygame.KEYDOWN and (event.key == pygame.K_d or event.key == pygame.K_q or event.key == pygame.K_s or event.key == pygame.K_z or event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
@@ -429,3 +434,20 @@ class Game():
             wololo+=1
         #ecran charge
 
+
+    def applyUpgrade(self,Upgrade):
+        self.upgrade = Upgrade
+
+        for i in range(len(self.upgrade)):
+            if i == 0:
+               self.player.vie = self.player.vie + self.upgrade[i][2]
+               if self.upgrade[i][2]%5 == 0:
+                   self.player.attack = self.player.attack + (self.upgrade[i][2]/5)
+                   self.player.velocity = self.player.velocity + (self.upgrade[i][2]/5)
+            elif i == 1:
+                self.PvMur = self.PvMur + (self.upgrade[i][2]*100)                  
+            elif i == 2:
+                self.DmgMortier = self.DmgMortier + self.upgrade[i][2]
+            elif i ==3:
+                self.DmgMitraille = self.DmgMitraille + self.upgrade[i][2]
+                
