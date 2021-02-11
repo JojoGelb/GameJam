@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
 
         self.position = [2000,2000]
 
-        self.projectilPath = "../textures/OBUS.png"
+        self.projectilPath = "../textures/Rolling_Stone.png"
 
         #Projectile
         self.projectiles = []
