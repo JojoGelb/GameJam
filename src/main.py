@@ -37,6 +37,8 @@ bestiaire = bestiaire(screenWidth,screenHeight)
 
 horloge = horloge(screenWidth,screenHeight)
 
+cinematique = Cinematique(screenWidth,screenHeight)
+
 menuEnd = "null"
 
 begining = False
@@ -61,6 +63,9 @@ while running:
 
         GameState = menu.action(screenWidth,screenHeight)    
 
+    elif(GameState == "Cinematique"):
+        cinematique.render(screen)
+        GameState = cinematique.action(screenWidth,screenHeight)
     elif(GameState == "Play"):
         primeravez=1
         if(game == "null"):

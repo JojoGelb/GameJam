@@ -3,6 +3,7 @@ import random
 from player import Player
 from entite import *
 from build import *
+import copy
 
 # waves are in form
 # frequency of enemies
@@ -78,10 +79,7 @@ class Game():
         self.upgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
         self.dejaupgrade = [["Joueur",0],["Barricade",0],["Mortier",0],["Mitraillette",0]]
     def gen_enemies(self):
-        if self.reset:
-            self.difficult = 1
-            self.player.vie = self.player.maxhealth
-            self.reset = False
+
 
         if len(self.entity) == 0: #Tous les entity sont 
             if self.waves == 6:
@@ -122,6 +120,11 @@ class Game():
 
 
     def update(self,screenWidth,screenHeight):
+
+        if self.reset:
+            self.difficult = 1
+            self.player.vie = self.player.maxhealth
+            self.reset = False
         
         if self.engame:
             self.gen_enemies()
@@ -447,6 +450,7 @@ class Game():
         for i in range(len(self.upgrade)):
             if i == 0:
                 self.player.maxhealth = self.player.maxhealth + val[i]
+                self.player.barreCompetence.VieMax += val[i]
                 self.player.vie += val[i]
                 if val[i]%5 == 0:
                    self.player.attack = self.player.attack + (val[i]/5)

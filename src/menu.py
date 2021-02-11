@@ -67,7 +67,7 @@ class Menu:
                     pygame.mixer.music.load('../sound/music.wav')
                     pygame.mixer.music.play(-1) #pour tourner a l'infini
                     pygame.mixer.music.set_volume(0.05)
-                    return "SoupeScreen" #return "Play" #lance le jeu
+                    return "Cinematique" #return "Play" #lance le jeu
                 if self.buttonCredit.click(mos_x,mos_y):
                     #pygame.mixer.music.stop()
                     return "Credit"
@@ -102,33 +102,34 @@ class Pause:
         self.clickTips2 = False
 
         self.tips2 = """
-        Cliquer sur ne pas boire
-      vous enverra dans un cauchemar
+      Choisissez de ne pas boire
+       et votre nuit sera agité
 
         Point de vie inchangé
     Difficulté augmente doucement
    Multiplicateur de Gold augmente"""
     def render(self,screen):
         screen.blit(self.background, (0,0))
-        #pygame.draw.rect (self.background,(250,250,250),(660,75,30,50))
-        #pygame.draw.rect (self.background,(250,250,250),(660,175,30,50))
 
-        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,75))
-        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,175))
+        #pygame.draw.rect (self.background,(250,250,250),(350,75,30,50))
+        #pygame.draw.rect (self.background,(250,250,250),(350,175,30,50))
+
+        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(350,75))
+        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(350,175))
         
         if(self.clickTips1):
-            pygame.draw.rect(screen,(250,250,250),(700,50,325,125))
+            pygame.draw.rect(screen,(250,250,250),(5,50,340,125))
             i=0
-            x=675
+            x=-12
             y=25
             for ligne in self.tips1.splitlines():
                 i+=1
                 screen.blit(self.smallfont.render(ligne,1,(0,0,0)),(x,y+i*15))
         
         if(self.clickTips2):
-            pygame.draw.rect(screen,(250,250,250),(700,175,325,125))
+            pygame.draw.rect(screen,(250,250,250),(5,175,340,125))
             i=0
-            x=675
+            x=-20
             y=150
             for ligne in self.tips2.splitlines():
                 i+=1
@@ -164,12 +165,12 @@ class Pause:
                     return "Upgrade"
                 if mos_x> 0 and mos_x < 170 and mos_y > 703 and mos_y < 768:
                     return "restart"
-                if mos_x> 660 and mos_x < 690 and mos_y > 75 and mos_y < 125:
+                if mos_x> 350 and mos_x < 380 and mos_y > 75 and mos_y < 125:
                     if self.clickTips1 == True:
                         self.clickTips1 = False
                     elif self.clickTips1 == False:
                         self.clickTips1=True
-                if mos_x> 660 and mos_x < 690 and mos_y > 175 and mos_y < 225:
+                if mos_x> 350 and mos_x < 380 and mos_y > 175 and mos_y < 225:
                     if self.clickTips2 == True:
                         self.clickTips2 = False
                     elif self.clickTips2 == False:
@@ -326,13 +327,13 @@ vie     :       ptetre   !"""
         x=550
         y=150
         i=0
-        for ligne in self.ail.splitlines():
+        for ligne in self.bananne.splitlines():
             i+=1
             self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
         x=800
         y=150
         i=0
-        for ligne in self.bananne.splitlines():
+        for ligne in self.ail.splitlines():
             i+=1
             self.background.blit(tinyfont.render(ligne,1,(200,50,50)),(x,y+i*20))
 
@@ -342,13 +343,17 @@ vie     :       ptetre   !"""
         sprite = SpriteSheet('../textures/elTomaty.png')
         self.imagetomate=(pygame.transform.scale(sprite.image_at((350,0,350,500)),(128,256)))
 
+        sprite = SpriteSheet('../textures/Banane.png')
+        self.imageBanane=(pygame.transform.scale(sprite.image_at((350,0,350,500)),(256,256)))
+
 
 
         
         self.text1 = smallfont.render("LA CAROTTE" , True , (250,250,250))
         self.text2 = smallfont.render("LA TOMATE" , True , (250,250,250))
-        self.text3 = smallfont.render("L'AIL" , True , (250,250,250))
-        self.text4 = smallfont.render("LA BANANNE" , True , (250,250,250))
+        self.text3 = smallfont.render("LA BANANNE" , True , (250,250,250))
+        self.text4 = smallfont.render("L'AIL" , True , (250,250,250))
+        
         #self.buttonMenu = Boutton(screenWidth*0.25,screenHeight*0.75,245,80,"Revenir à table")
     
 
@@ -359,8 +364,8 @@ vie     :       ptetre   !"""
         screen.blit(self.text3,(550,100))
         screen.blit(self.text4,(800,100))
         self.background.blit(self.imagecarotte,(110,260))
-        self.background.blit(self.imagetomate,(330,170))
-        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(610,300))
+        self.background.blit(self.imagetomate,(330,200))
+        self.background.blit(self.imageBanane,(510,250))
         self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(860,300))
 
         pygame.draw.rect(screen,(41,41,41),(750,0,200,50)) #chingchong
@@ -644,3 +649,93 @@ class horloge:
             pygame.display.flip()
             pygame.time.wait(120)
         return "SoupeScreen"
+
+ 
+class Cinematique:
+
+    def __init__(self,screenWidth,screenHeight):
+        self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
+        self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',15)
+        self.HIPSTER = pygame.image.load("../textures/Hipster.png")
+        self.fantome = pygame.image.load("../textures/fantomes.png")
+        
+        self.BILLY = pygame.image.load("../textures/BILLYLY.png")
+        self.BILLY = pygame.transform.scale(self.BILLY, (1500  - screenHeight, screenHeight))
+        self.text = self.bigfont.render("[ESP] Quitter   /   [ESPACE] Suivant" , True , (250,250,250))
+        self.etape=0
+
+    def render(self,screen):
+
+        if(self.etape==0):
+            screen.fill((41,41,41))
+            screen.blit(self.HIPSTER,(0,0))
+            screen.blit(self.text,(425,50))
+
+            temptext=self.smallfont.render("MANGE TA SOUPE BILLY !" , True , (250,250,250))
+            screen.blit(temptext,(425,200))
+
+        if(self.etape==1):
+            screen.fill((41,41,41))
+            screen.blit(self.BILLY,(0,0))
+            
+            
+            temptext=self.smallfont.render("mais, mais j'ai pas faim !" , True , (250,250,250))
+            screen.blit(temptext,(425,200))
+        if(self.etape==2):
+            screen.fill((41,41,41))
+            screen.blit(self.HIPSTER,(0,0))
+            
+            
+            temptext=self.smallfont.render("MANGE TA SOUPE, ou tu subira des conséquences huahaha" , True , (250,250,250))
+            screen.blit(temptext,(50,200))
+        if(self.etape==3):
+            screen.fill((41,41,41))
+            
+            
+            temptext=self.smallfont.render("*sort de la chambre*" , True , (250,250,250))
+            screen.blit(temptext,(425,200))
+        if(self.etape==4):
+            screen.fill((41,41,41))
+            
+            screen.blit(self.BILLY,(0,0))
+            temptext=self.smallfont.render("allé, zou, à la poubelle, jvais dodo" , True , (250,250,250))
+            screen.blit(temptext,(425,200))
+        if(self.etape==5):
+            screen.fill((41,41,41))
+            screen.blit(self.BILLY,(0,0))
+            
+            
+            temptext=self.smallfont.render("[Mais, la nuiiit, les fantômes se réveillent]" , True , (250,250,250))
+            screen.blit(temptext,(100,200))
+        if(self.etape==6):
+            screen.fill((41,41,41))
+            screen.blit(self.fantome,(0,0))
+            
+            
+            temptext=self.smallfont.render("hooou, nous sommes des légumes morts pour rien, nous venons te hanter !" , True , (250,250,250))
+            screen.blit(temptext,(25,700))
+        if(self.etape==7):
+            screen.fill((41,41,41))
+            screen.blit(self.BILLY,(0,0))
+            
+            
+            temptext=self.smallfont.render("NON RENDORMEZ VOUS !" , True , (250,250,250))
+            screen.blit(temptext,(425,200))
+
+        
+    def action(self,screenWidth,screenHeight):
+        mos_x, mos_y = pygame.mouse.get_pos()
+
+        if self.etape > 7:
+            return "SoupeScreen"
+
+        for event in pygame.event.get():
+            #ragequit
+            if event.type == pygame.QUIT:
+                return "Quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "SoupeScreen"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.etape+=1
+        return "Cinematique"    
+        
