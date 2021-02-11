@@ -148,12 +148,6 @@ class Pause:
             #if the mouse is clicked on the  
             # button the game is terminated  
                 if mos_x> 430 and mos_x < 590 and mos_y > 70 and mos_y < 150: #Bouton boire 
-                    pygame.mixer.music.stop()
-                    #Lancement de la musique
-                    pygame.mixer.music.load('../sound/music.wav')
-                    pygame.mixer.music.play(-1) #pour tourner a l'infini
-                    pygame.mixer.music.set_volume(0.05)
-                    print("rien ne se passe pour le moment: changement de jour + reset buff")
                     self.Abus =True
                     return "Horloge" #Bouton boire
 
@@ -183,8 +177,6 @@ class Pause:
 class Score:
 
     def __init__(self,screenWidth, screenHeight, score):
-        #self.buttonSave = Boutton(390,332,80,40,"Play")
-        #self.buttonSkip = Boutton(560,332,70,40,"Quit")
         self.background = pygame.transform.scale(pygame.image.load('../textures/score.png'),(screenWidth,screenHeight)) 
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
@@ -255,7 +247,7 @@ class Credit:
         self.textRetour = bigfont.render("RETOUR" , True , (250,250,250))
     
     def render(self,screen):
-        screen.fill((20,0,0))
+        screen.fill((24,24,24))
         screen.blit(self.text0,(425,25))
         screen.blit(self.text1,(100,100))
         screen.blit(self.text2,(100,125))
@@ -309,9 +301,9 @@ vie     :      moyenne+  !"""
         self.ail     = """attaque : au corp a corp !
 vitesse :      lentement !
 vie     :         Tonk   !"""
-        self.bananne = """attaque : 'cune idée     !
-vitesse :       idunno   ! 
-vie     :       ptetre   !"""       
+        self.bananne = """attaque : 'Très fort       !
+vitesse : Lente et saoule  ! 
+vie     : Tentacule de fer !"""       
         x=50
         y=150
         i=0
@@ -354,7 +346,6 @@ vie     :       ptetre   !"""
         self.text3 = smallfont.render("LA BANANNE" , True , (250,250,250))
         self.text4 = smallfont.render("L'AIL" , True , (250,250,250))
         
-        #self.buttonMenu = Boutton(screenWidth*0.25,screenHeight*0.75,245,80,"Revenir à table")
     
 
     def render(self,screen):
@@ -431,7 +422,7 @@ class regles:
 
                [votre score se calcule sur l'argent gagné]
 
-                 [mais se réinitialise à chaque réveil]
+         [ou plutot: le maximum d'argent engrangé dans la partie]
 
        [un score élevé signifie que vous avez longtemps cauchemardé] """
 
@@ -569,10 +560,10 @@ Changement: +1DMG /1 upgrade"""
         screen.blit(self.titre,(425,25))
         screen.blit(self.retour,(425,650))
 
-        pygame.draw.rect(self.background,(0,0,0),(100,490,75,60))
+        """pygame.draw.rect(self.background,(0,0,0),(100,490,75,60))
         pygame.draw.rect(self.background,(0,0,0),(350,490,75,60))
         pygame.draw.rect(self.background,(0,0,0),(600,490,75,60))
-        pygame.draw.rect(self.background,(0,0,0),(850,490,75,60))
+        pygame.draw.rect(self.background,(0,0,0),(850,490,75,60))"""
 
         self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(100,450))
         self.background.blit(self.verybigfont.render("+",1,(250,250,250)),(350,450))
@@ -655,9 +646,14 @@ class Cinematique:
 
     def __init__(self,screenWidth,screenHeight):
         self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',25)
+        self.TriggerFont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',85)
         self.bigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',15)
         self.HIPSTER = pygame.image.load("../textures/Hipster.png")
-        self.fantome = pygame.image.load("../textures/fantomes.png")
+        self.fantome = pygame.image.load("../textures/HOUUUU.png")
+        self.billyDODO = pygame.image.load("../textures/BILLY_DODO.png")
+        self.billyTriger = pygame.image.load("../textures/TRIGERRED.png")
+
+        self.billyDODO=pygame.transform.scale(self.billyDODO, (1500  - screenHeight, screenHeight))
         
         self.BILLY = pygame.image.load("../textures/BILLYLY.png")
         self.BILLY = pygame.transform.scale(self.BILLY, (1500  - screenHeight, screenHeight))
@@ -702,7 +698,7 @@ class Cinematique:
             screen.blit(temptext,(425,200))
         if(self.etape==5):
             screen.fill((41,41,41))
-            screen.blit(self.BILLY,(0,0))
+            screen.blit(self.billyDODO,(0,0))
             
             
             temptext=self.smallfont.render("[Mais, la nuiiit, les fantômes se réveillent]" , True , (250,250,250))
@@ -712,21 +708,24 @@ class Cinematique:
             screen.blit(self.fantome,(0,0))
             
             
-            temptext=self.smallfont.render("hooou, nous sommes des légumes morts pour rien, nous venons te hanter !" , True , (250,250,250))
-            screen.blit(temptext,(25,700))
+            temptext=self.smallfont.render("hooou, nous sommes des légumes morts pour rien" , True , (250,250,250))
+            temptext2=self.smallfont.render("Nous venons te hanter !" , True , (250,250,250))
+            screen.blit(temptext,(25,450))
+            screen.blit(temptext2,(40,500))
         if(self.etape==7):
             screen.fill((41,41,41))
-            screen.blit(self.BILLY,(0,0))
+            screen.blit(self.billyTriger,(0,0))
             
             
-            temptext=self.smallfont.render("NON RENDORMEZ VOUS !" , True , (250,250,250))
-            screen.blit(temptext,(425,200))
+            temptext=self.TriggerFont.render("NON RENDORMEZ VOUS !" , True , (200,10,10))
+            screen.blit(temptext,(30,200))
 
         
     def action(self,screenWidth,screenHeight):
         mos_x, mos_y = pygame.mouse.get_pos()
 
         if self.etape > 7:
+            self.etape =0
             return "SoupeScreen"
 
         for event in pygame.event.get():
@@ -734,6 +733,7 @@ class Cinematique:
             if event.type == pygame.QUIT:
                 return "Quit"
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.etape =0
                 return "SoupeScreen"
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.etape+=1
