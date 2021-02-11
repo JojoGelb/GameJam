@@ -86,8 +86,35 @@ class Pause:
         pygame.mixer.music.play(-1) #pour tourner a l'infini
         self.Abus = False
 
+        self.clickTips1 = True
+
+        self.verybigfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',60)
+        self.smallfont = pygame.font.Font('../textures/Perfect DOS VGA 437 Win.ttf',18)
+        self.tips1 = """ 
+        Cliquer sur boîte vous 
+         permettra de passer 
+            une bonne nuit
+
+        Point de vie restauré
+    Difficulté cauchemard remis à 0
+   Multiplicateur de Gold remis à 0"""
+
+
+
     def render(self,screen):
         screen.blit(self.background, (0,0))
+        pygame.draw.rect (self.background,(250,250,250),(660,75,30,50))
+        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,75))
+        self.background.blit(self.verybigfont.render("?",1,(200,50,50)),(660,175))
+        
+        if(self.clickTips1):
+            pygame.draw.rect(screen,(250,250,250),(700,50,325,125))
+            i=0
+            x=675
+            y=25
+            for ligne in self.tips1.splitlines():
+                i+=1
+                screen.blit(self.smallfont.render(ligne,1,(0,0,0)),(x,y+i*15))
 
     def action(self,screenWidth,screenHeight):
         #ici récupération position de la souris
@@ -118,8 +145,7 @@ class Pause:
                 if mos_x> 390 and mos_x < 480 and mos_y > 270 and mos_y < 300:
                     return "Upgrade"
                 if mos_x> 0 and mos_x < 170 and mos_y > 703 and mos_y < 768:
-                    return "Quit"
-                    pygame.quit()
+                    return "restart"
                 
 
         return "SoupeScreen"
