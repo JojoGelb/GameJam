@@ -6,6 +6,7 @@
 
 import pygame
 pygame.init()
+import copy
 
 from game import Game
 from menu import *
@@ -33,6 +34,8 @@ menuRegle = regles(screenWidth,screenHeight)
 menuSoupe = Pause(screenWidth,screenHeight)
 
 bestiaire = bestiaire(screenWidth,screenHeight)
+
+horloge = horloge(screenWidth,screenHeight)
 
 menuEnd = "null"
 
@@ -115,6 +118,9 @@ while running:
         menuSoupe = Pause(screenWidth,screenHeight)
         menuEnd = "null"
         GameState = "menu"
+        
+    elif(GameState == "Horloge"):
+        GameState = horloge.render(screen,screenWidth,screenHeight)
 
     elif(GameState == "Upgrade"):
         if(game == "null" ):
@@ -125,15 +131,18 @@ while running:
         else:
             if (instantiate != True):
                 menuUpgrade = Upgrade(screenWidth,screenHeight,game.player.gold,game.upgrade)
+                print(game.upgrade)
                 instantiate = True
+
         GameState = menuUpgrade.action(screenWidth,screenHeight)
         menuUpgrade.render(screen)
 
         if(GameState != "Upgrade"):
             instantiate = False
             if begining == False:
+                val =  copy.deepcopy(menuUpgrade.upgrade) 
                 game.player.gold = menuUpgrade.gold
-                game.applyUpgrade(menuUpgrade.upgrade)
+                game.applyUpgrade(val)
 
             else:
                 begining = False
