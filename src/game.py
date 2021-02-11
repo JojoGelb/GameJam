@@ -436,30 +436,38 @@ class Game():
 
 
     def applyUpgrade(self,Upgrade):
-        self.upgrade = Upgrade
-        for i in range(len(self.dejaupgrade)):
-            self.dejaupgrade[i][1] -= Upgrade[i][1]
+
+        val = []
+  
+        for i in  range(len(self.upgrade)):
+            val.append(Upgrade[i][1] - self.dejaupgrade[i][1])
+
+        
 
         for i in range(len(self.upgrade)):
             if i == 0:
-               self.player.vie = self.player.vie + self.upgrade[i][1]
-               if self.upgrade[i][1]%5 == 0:
-                   self.player.attack = self.player.attack + (self.upgrade[i][1]/5)
-                   self.player.velocity = self.player.velocity + (self.upgrade[i][1]/5)
+                self.player.maxhealth = self.player.maxhealth + val[i]
+                self.player.vie += val[i]
+                if val[i]%5 == 0:
+                   self.player.attack = self.player.attack + (val[i]/5)
+                   self.player.velocity = self.player.velocity + (val[i]/5)
             elif i == 1:
-                self.PvMur = self.PvMur + (self.upgrade[i][1]*100)
+                self.PvMur = self.PvMur + (val[i]*100)
                 for i in range(len(self.builds)):
                     if self.builds[i].__class__.__name__ == "mur":
                         self.builds[i].vie = self.PvMur
             elif i == 2:
-                self.DmgMortier = self.DmgMortier + self.upgrade[i][1]
+                self.DmgMortier = self.DmgMortier + val[i]
                 for i in range(len(self.builds)):
                     if self.builds[i].__class__.__name__== "mortier":
                         self.builds[i].degats = self.DmgMortier
             elif i ==3:
-                self.DmgMitraille = self.DmgMitraille + self.upgrade[i][1]
+                self.DmgMitraille = self.DmgMitraille + val[i]
                 for i in range(len(self.builds)):
                     if self.builds[i].__class__.__name__== "mitraillette":
                         self.builds[i].degats = self.DmgMitraille
+
+        self.upgrade = copy.deepcopy(Upgrade)
+        self.dejaupgrade = copy.deepcopy(Upgrade)
         
                 
