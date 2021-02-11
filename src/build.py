@@ -202,8 +202,8 @@ class mitraillette(entite):
             if self.timer==self.cooldown:
                 for entite in entities:
                     if entite.vie>0:
-                        if entite.hitbox.x>(self.hitbox.x-self.range) and  entite.hitbox.x<(self.hitbox.x+self.range) and entite.hitbox.y>(self.hitbox.y-self.range) and  entite.hitbox.y<(self.hitbox.y+self.range):
-                            shoot = ProjectileMitraille(self.hitbox.x + self.hitbox.width/2, self.hitbox.y + self.hitbox.height/2, self.degats,10,entite.hitbox.x,entite.hitbox.y,self.spritetir)
+                        if entite.hitbox.x>(self.hitbox.x-self.range) and  entite.hitbox.x<(self.hitbox.x+self.range) and entite.hitbox.y>(self.hitbox.y-self.range) and  entite.hitbox.y<(self.hitbox.y+self.range) and not entite.alreadyKilled:
+                            shoot = ProjectileMitraille(self.hitbox.x + self.hitbox.width/2, self.hitbox.y + self.hitbox.height/2, self.degats,10,entite.hitbox.x ,entite.hitbox.y,self.spritetir)
                             self.projectiles.append(shoot)
                             if(entite.hitbox.x<self.hitbox.x):
                                 if(entite.hitbox.y<self.hitbox.y):

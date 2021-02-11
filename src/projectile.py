@@ -63,13 +63,15 @@ class Projectile(pygame.sprite.Sprite):
         if self.hasHit == False :
             ennemisTouches = pygame.sprite.spritecollide(self, entitie, False)
             if ennemisTouches :
+                val = False
                 for entite in ennemisTouches:
-                    entite.vie -= self.damage
-                    if entite.vie <= 0:
-                        entite.miseAMort() # tout va bien carotte n'a pas encore de mise à mort
-                        #print("Dead")
-
-                return True
+                    if(entite.alreadyKilled != True):
+                        val = True
+                        entite.vie -= self.damage
+                        if entite.vie <= 0:
+                            entite.miseAMort() # tout va bien carotte n'a pas encore de mise à mort
+                            #print("Dead")
+                return val
             else:
 
                 return False
@@ -223,8 +225,7 @@ class ProjectileMitraille(pygame.sprite.Sprite):
     def doesTouche(self,entities):
         
         for i in range(len(entities)):
-
-            if(self.rect.x + self.rect.width >= entities[i].rect.x and self.rect.x < entities[i].rect.x + entities[i].rect.width) and (self.rect.y + self.rect.height > entities[i].rect.y and self.rect.y < entities[i].rect.y + entities[i].rect.height):
+            if(self.rect.x + self.rect.width >= entities[i].rect.x and self.rect.x < entities[i].rect.x + entities[i].rect.width) and (self.rect.y + self.rect.height > entities[i].rect.y and self.rect.y < entities[i].rect.y + entities[i].rect.height) and entities[i].alreadyKilled == False:
                 entities[i].vie -= self.damage              
                 if entities[i].vie <= 0:
                     entities[i].miseAMort() # tout va bien carotte n'a pas encore de mise à mort

@@ -14,6 +14,7 @@ class Menu:
         #Lancement de la musique
         pygame.mixer.music.load('../sound/menu.wav')
         pygame.mixer.music.play(-1) #pour tourner a l'infini
+        pygame.mixer.music.set_volume(0.1)
         scores2 = []
         try:
             fichier = open("../HighScore.txt", "r")
@@ -248,7 +249,8 @@ class Credit:
         self.text3 = smallfont.render("Developpeur Gameplay:            Jordy Gelb" , True , (250,250,250))
         self.text4 = bigfont.render("On Remercie Aussi: " , True , (250,250,250))
         self.text8 = smallfont.render("Pour la musique  :   \n Kevin MacLeod pour la musique en jeu " , True , (250,250,250))
-        self.text9 = smallfont.render(" Dar Golan pour celle du menu. Les deux étant 'no copyrights' ",True, (250,250,250))
+        self.text9 = smallfont.render(" \n Dar Golan pour celle du menu ",True, (250,250,250))
+        self.text10 = smallfont.render(" Les deux étant 'no copyrights' ",True, (250,250,250))
         self.textRetour = bigfont.render("RETOUR" , True , (250,250,250))
     
     def render(self,screen):
@@ -260,8 +262,9 @@ class Credit:
 
         screen.blit(self.text4,(300,250))
 
-        screen.blit(self.text8,(70,450))
-        screen.blit(self.text9,(70,475))
+        screen.blit(self.text8,(70,350))
+        screen.blit(self.text9,(350,375))
+        screen.blit(self.text10,(300,450))
         
 
         #pygame.draw.rect(screen,(250,0,0),(410,645,200,50))
@@ -297,13 +300,13 @@ class bestiaire:
         self.titre = self.bigfont.render("Bestiaire" , True , (250,250,250))
         self.retour = self.bigfont.render("Retour" , True , (250,250,250))
         
-        self.carotte = """attaque :  corps a corps !
+        self.carotte = """attaque :  corps à corps !
 vitesse :       viiiiite !
 vie     :       moyenne  !"""
         self.tomate  = """attaque :        explose !
 vitesse :    normalement ! 
 vie     :      moyenne+  !"""
-        self.ail     = """attaque : au corp a corp !
+        self.ail     = """attaque : au corps à corps !
 vitesse :      lentement !
 vie     :         Tonk   !"""
         self.bananne = """attaque : 'Très fort       !
