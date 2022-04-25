@@ -31,3 +31,7 @@ Ou dans le repertoire principal du jeu et tapper:
 cd src && python main.py
 
 sinon une erreur s'affichera en rapport avec le PATH des images.
+
+# Démo: 
+
+<img src = "view.gif">
